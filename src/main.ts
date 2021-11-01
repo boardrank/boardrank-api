@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerTags } from 'libs/constants';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -10,7 +11,7 @@ async function bootstrap() {
     .setDescription('API for board rank')
     .setVersion('1.0')
     .addSecurity('bearer', { type: 'http', scheme: 'Bearer' })
-    .addTag('games')
+    .addTag(SwaggerTags.BoardGames)
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

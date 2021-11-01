@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -12,11 +13,13 @@ describe('AppController', () => {
     }).compile();
 
     appController = app.get<AppController>(AppController);
+
+    console.log(appController);
   });
 
   describe('root', () => {
-    it('should return "OK"', () => {
-      expect(appController.health()).toBe('Hello World!');
+    it('should return null', () => {
+      expect(appController.health()).toBe(null);
     });
   });
 });

@@ -1,12 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { BoardGameService } from './board-game.service';
+import { PrismaService } from '../../src/prisma/prisma.service';
 
 describe('BoardGameService', () => {
   let service: BoardGameService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [BoardGameService],
+      imports: [PrismaService],
+      providers: [BoardGameService, PrismaService],
     }).compile();
 
     service = module.get<BoardGameService>(BoardGameService);

@@ -20,7 +20,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SwaggerTags } from 'libs/constants';
+import { SwaggerTags } from '../../libs/constants';
 import { Genre } from './entities/genre.entity';
 
 @ApiTags(SwaggerTags.Genre)

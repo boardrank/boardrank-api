@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../src/prisma/prisma.service';
 import { UpdateBoardGameDto } from './dto/update-board-game.dto';
 
 @Injectable()

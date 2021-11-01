@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { BoardGameService } from './board-game.service';
 import { BoardGameController } from './board-game.controller';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { BoardGameService } from './board-game.service';
+import { Module } from '@nestjs/common';
+import { PrismaService } from '../../src/prisma/prisma.service';
 
 @Module({
   controllers: [BoardGameController],

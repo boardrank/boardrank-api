@@ -17,6 +17,11 @@ export class Genre {
   })
   name: string;
 
+  @ApiProperty({
+    example: 1,
+  })
+  order: number;
+
   @ApiProperty()
   createdAt: Date;
 

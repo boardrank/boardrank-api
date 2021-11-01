@@ -58,6 +58,7 @@ model Genre {
   code String @unique // STRATEGY, ABSTRACT, WITS, BATTLE, REASONING, CARD, TILE, THEME 
   name String // 전략, 추상, 순발력, 전투, 추리, 카드게임, 타일, 테마
   boardGameGeneres BoardGameGenre[]
+  order Int
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt 
 

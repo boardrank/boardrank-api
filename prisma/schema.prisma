@@ -16,7 +16,7 @@ model User {
   nickname String
   profileUrl String @map("profile_url")
   createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt 
+  updatedAt DateTime @map("updated_at") @updatedAt
 
   @@map("user")
 }
@@ -36,7 +36,7 @@ model BoardGame {
   grades BoardGameGrade[]
   replies BoardGameReply[]
   createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt 
+  updatedAt DateTime @map("updated_at") @updatedAt
 
   @@map("board_game")
 }
@@ -45,17 +45,17 @@ model BoardGameGenre {
   id Int @default(autoincrement()) @id
   boardGame BoardGame @relation(fields: [boardGameId], references: [id])
   boardGameId Int @map("board_game_id")
-  genre Genre @relation(fields: [genreId], references: [id])
-  genreId Int @map("genre_id")
+  genre Genre @relation(fields: [genreCode], references: [code])
+  genreCode String @map("genre_code")
   createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt 
+  updatedAt DateTime @map("updated_at") @updatedAt
 
   @@map("board_game_genre")
 }
 
 model Genre {
   id Int @default(autoincrement()) @id
-  code String // STRATEGY, ABSTRACT, WITS, BATTLE, REASONING, CARD, TILE, THEME
+  code String @unique // STRATEGY, ABSTRACT, WITS, BATTLE, REASONING, CARD, TILE, THEME 
   name String // 전략, 추상, 순발력, 전투, 추리, 카드게임, 타일, 테마
   boardGameGeneres BoardGameGenre[]
   createdAt DateTime @map("created_at") @default(now())

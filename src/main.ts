@@ -2,19 +2,25 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SwaggerTags } from 'libs/constants';
 import { AppModule } from './app.module';
+import { BoardGame } from './board-game/entities/board-game.entity';
+import { Genre } from './genre/entities/genre.entity';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
     .setTitle('Board Rank')
-    .setDescription('API for board rank')
+    .setDescription('Board Rank API')
     .setVersion('1.0')
-    .addSecurity('bearer', { type: 'http', scheme: 'Bearer' })
+    .setExternalDoc('JSON Specification', '/swagger-ui-json')
+    .addBearerAuth()
     .addTag(SwaggerTags.BoardGames)
+    .addTag(SwaggerTags.Genre)
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: [BoardGame, Genre],
+  });
   SwaggerModule.setup('swagger-ui', app, document);
 
   await app.listen(3000);

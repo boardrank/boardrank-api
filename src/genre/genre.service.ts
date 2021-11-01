@@ -11,7 +11,7 @@ import { ErrorCode } from '../../libs/http-exceptions/error-codes';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 
-const GENRES = [
+export const GENRES = [
   { code: 'STRATEGY', name: '전략' },
   { code: 'ABSTRACT', name: '추상' },
   { code: 'WITS', name: '순발력' },

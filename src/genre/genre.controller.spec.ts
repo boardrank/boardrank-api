@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { Genre } from './entities/genre.entity';
 import { GenreController } from './genre.controller';
-import { GenreService } from './genre.service';
+import { GenreModule } from './genre.module';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from '../../src/prisma/prisma.service';
 
@@ -14,9 +14,7 @@ describe('GenreController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [PrismaService],
-      controllers: [GenreController],
-      providers: [GenreService, PrismaService],
+      imports: [GenreModule],
     }).compile();
 
     controller = module.get<GenreController>(GenreController);
@@ -36,7 +34,7 @@ describe('GenreController', () => {
     testGenre.code = 'TEST_GENRE';
     testGenre.name = '테스트 장르';
 
-    beforeAll(async () => {
+    const removeTestGenres = async () => {
       try {
         const genres = await prismaService.genre.findMany({
           where: {
@@ -55,7 +53,9 @@ describe('GenreController', () => {
           }
         }
       }
-    });
+    };
+
+    beforeAll(removeTestGenres);
 
     it('should be created a genre', async () => {
       const testGenre = new CreateGenreDto();
@@ -96,5 +96,7 @@ describe('GenreController', () => {
       expect(deletedGenre.id).toEqual(createdTestGenre.id);
       expect(genre).toBeNull();
     });
+
+    afterAll(removeTestGenres);
   });
 });

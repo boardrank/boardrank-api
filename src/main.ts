@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('Board Rank')
     .setDescription('API for board rank')
     .setVersion('1.0')
+    .addSecurity('bearer', { type: 'http', scheme: 'Bearer' })
     .addTag('games')
     .build();
 

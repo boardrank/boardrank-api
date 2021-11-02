@@ -1,5 +1,8 @@
 export enum SwaggerTag {
-  BoardGames = 'BoardGames',
-  Genre = 'Genre',
   Authentication = 'Authentication',
+  BoardGame = 'BoardGame',
+  Genre = 'Genre',
+  User = 'User',
+  BoardGameGrade = 'BoardGameGrade',
+  BoardGameReply = 'BoardGameReply',
 }

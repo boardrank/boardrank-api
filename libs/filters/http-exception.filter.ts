@@ -14,7 +14,7 @@ import { Response } from 'express';
 export class HttpExceptionFilter implements ExceptionFilter {
   static ErrorUnauthorized = new ApiErrorResponse(
     ErrorCode.Unauthorized,
-    '유효하지 않은 토큰입니다.',
+    '토큰이 올바르지 않습니다.',
   );
 
   static ErrorForbidden = new ApiErrorResponse(

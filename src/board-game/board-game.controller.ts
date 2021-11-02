@@ -13,7 +13,7 @@ import { BoardGameService } from './board-game.service';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';
 import { UpdateBoardGameDto } from './dto/update-board-game.dto';
 
-@ApiTags(SwaggerTag.BoardGames)
+@ApiTags(SwaggerTag.BoardGame)
 @Controller('board-game')
 export class BoardGameController {
   constructor(private readonly boardGameService: BoardGameService) {}

@@ -8,23 +8,26 @@ import { Genre } from './genre/entities/genre.entity';
 import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerTag } from 'libs/constants';
+import { User } from './user/entities/user.entity';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+  });
 
-  const config = new DocumentBuilder()
+  const documentBuilder = new DocumentBuilder()
     .setTitle('Board Rank')
     .setDescription('Board Rank API')
     .setVersion('1.0')
     .setExternalDoc('JSON Specification', '/swagger-ui-json')
-    .addBearerAuth()
-    .addTag(SwaggerTag.Authentication)
-    .addTag(SwaggerTag.BoardGames)
-    .addTag(SwaggerTag.Genre)
-    .build();
+    .addBearerAuth();
+
+  Object.values(SwaggerTag).forEach((value) => documentBuilder.addTag(value));
+
+  const config = documentBuilder.build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [BoardGame, Genre, ApiErrorResponse, ApiAuthResponse],
+    extraModels: [BoardGame, Genre, User, ApiErrorResponse, ApiAuthResponse],
   });
   SwaggerModule.setup('swagger-ui', app, document);
 

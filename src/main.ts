@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import { BoardGame } from './board-game/entities/board-game.entity';
 import { Genre } from './genre/entities/genre.entity';
 import { NestFactory } from '@nestjs/core';
-import { SwaggerTags } from 'libs/constants';
+import { SwaggerTag } from 'libs/constants';
 import { ApiAuthResponse } from './auth/entities/api-auth-response';
 
 async function bootstrap() {
@@ -17,8 +17,9 @@ async function bootstrap() {
     .setVersion('1.0')
     .setExternalDoc('JSON Specification', '/swagger-ui-json')
     .addBearerAuth()
-    .addTag(SwaggerTags.BoardGames)
-    .addTag(SwaggerTags.Genre)
+    .addTag(SwaggerTag.Authentication)
+    .addTag(SwaggerTag.BoardGames)
+    .addTag(SwaggerTag.Genre)
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {

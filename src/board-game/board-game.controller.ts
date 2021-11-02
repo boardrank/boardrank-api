@@ -8,12 +8,12 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { SwaggerTags } from '../../libs/constants';
+import { SwaggerTag } from '../../libs/constants';
 import { BoardGameService } from './board-game.service';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';
 import { UpdateBoardGameDto } from './dto/update-board-game.dto';
 
-@ApiTags(SwaggerTags.BoardGames)
+@ApiTags(SwaggerTag.BoardGames)
 @Controller('board-game')
 export class BoardGameController {
   constructor(private readonly boardGameService: BoardGameService) {}

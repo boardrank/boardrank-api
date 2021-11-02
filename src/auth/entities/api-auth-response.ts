@@ -3,8 +3,8 @@ import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 @ApiExtraModels()
 export class ApiAuthResponse {
   @ApiProperty()
-  accessToken: string;
+  refreshToken: string;
 
   @ApiProperty()
-  refreshToken: string;
+  accessToken: string;
 }

@@ -20,10 +20,10 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SwaggerTags } from '../../libs/constants';
+import { SwaggerTag } from '../../libs/constants';
 import { Genre } from './entities/genre.entity';
 
-@ApiTags(SwaggerTags.Genre)
+@ApiTags(SwaggerTag.Genre)
 @ApiBearerAuth()
 @Controller('genre')
 export class GenreController {

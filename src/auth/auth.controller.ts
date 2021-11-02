@@ -8,7 +8,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SwaggerTag } from 'libs/constants';
+import { SwaggerTag } from '../../libs/constants';
 import { AuthService } from './auth.service';
 import { RefreshDto } from './dto/refresh.dto';
 import { SignInDto } from './dto/sign-in.dto';

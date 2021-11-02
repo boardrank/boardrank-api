@@ -10,6 +10,7 @@ import { CreateGenreDto } from './dto/create-genre.dto';
 import { ErrorCode } from '../../libs/http-exceptions/error-codes';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
+import { Prisma } from '.prisma/client';
 
 export const GENRES = [
   { code: 'STRATEGY', name: '전략' },
@@ -51,30 +52,35 @@ export class GenreService {
   }
 
   async create({ code, name }: CreateGenreDto) {
-    code = code.toUpperCase();
-    /**
-     * 코드가 중복되었을 때 Conflict Exception
-     */
-    if (await this.prismaService.genre.findFirst({ where: { code } })) {
-      throw new ConflictException(GenreService.ErrorAlreadyRegistered);
+    try {
+      const genre = await this.prismaService.genre.findFirst({
+        select: {
+          order: true,
+        },
+        orderBy: {
+          order: 'desc',
+        },
+      });
+
+      return await this.prismaService.genre.create({
+        data: {
+          code: code.toUpperCase(),
+          name,
+          order: genre?.order + 1 || 1,
+        },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          /**
+           * 코드가 중복되었을 때 Conflict Exception
+           */
+          throw new ConflictException(GenreService.ErrorAlreadyRegistered);
+        }
+      }
+
+      throw error;
     }
-
-    const genre = await this.prismaService.genre.findFirst({
-      select: {
-        order: true,
-      },
-      orderBy: {
-        order: 'desc',
-      },
-    });
-
-    return this.prismaService.genre.create({
-      data: {
-        code: code.toUpperCase(),
-        name,
-        order: genre?.order + 1 || 1,
-      },
-    });
   }
 
   findAll() {
@@ -86,34 +92,32 @@ export class GenreService {
   }
 
   async update(id: number, { code, name, order }: UpdateGenreDto) {
-    code = code?.toUpperCase();
-    const genre = await this.prismaService.genre.findFirst({ where: { id } });
-    /**
-     * 해당 id의 장르가 없을 때
-     */
-    if (!genre) {
-      throw new NotFoundException(GenreService.ErrorNotFound);
-    }
-    /**
-     * 다른 장르와 코드가 중복되었을 때 Conflict Exception
-     */
-    if (
-      code &&
-      (await this.prismaService.genre.findFirst({
-        where: { AND: { code }, NOT: { id } },
-      }))
-    ) {
-      throw new ConflictException(GenreService.ErrorAlreadyRegistered);
-    }
+    try {
+      return await this.prismaService.genre.update({
+        data: {
+          code: code?.toUpperCase(),
+          name,
+          order,
+        },
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          /**
+           * 다른 장르와 코드가 중복되었을 때 Conflict Exception
+           */
+          throw new ConflictException(GenreService.ErrorAlreadyRegistered);
+        } else if (error.code === 'P2025') {
+          /**
+           * 해당 id의 장르가 없을 때
+           */
+          throw new NotFoundException(GenreService.ErrorNotFound);
+        }
+      }
 
-    return this.prismaService.genre.update({
-      data: {
-        code,
-        name,
-        order,
-      },
-      where: { id },
-    });
+      throw error;
+    }
   }
 
   async remove(id: number) {
@@ -124,9 +128,21 @@ export class GenreService {
     if (!genre) {
       throw new NotFoundException(GenreService.ErrorNotFound);
     }
+    try {
+      return await this.prismaService.genre.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          /**
+           * 해당 id의 장르가 없을 때
+           */
+          throw new NotFoundException(GenreService.ErrorNotFound);
+        }
+      }
 
-    return this.prismaService.genre.delete({
-      where: { id },
-    });
+      throw error;
+    }
   }
 }

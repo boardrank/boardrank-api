@@ -5,6 +5,7 @@ import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { AppModule } from './app.module';
 import { BoardGame } from './board-game/entities/board-game.entity';
 import { Genre } from './genre/entities/genre.entity';
+import { HttpExceptionFilter } from '../libs/filters/http-exception.filter';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerTag } from 'libs/constants';
 
@@ -26,6 +27,8 @@ async function bootstrap() {
     extraModels: [BoardGame, Genre, ApiErrorResponse, ApiAuthResponse],
   });
   SwaggerModule.setup('swagger-ui', app, document);
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(3000);
 }

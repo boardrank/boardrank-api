@@ -1,6 +1,7 @@
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from '../../libs/strategies/jwt.strategy';
 import { Module } from '@nestjs/common';
 import { PrismaService } from '../../src/prisma/prisma.service';
 
@@ -13,6 +14,6 @@ export const DynamicJwtModule = JwtModule.register({
 @Module({
   imports: [DynamicJwtModule],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService],
+  providers: [AuthService, PrismaService, JwtStrategy],
 })
 export class AuthModule {}

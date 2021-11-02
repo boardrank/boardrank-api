@@ -1,25 +1,23 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Injectable, Logger } from '@nestjs/common';
 
-import { AccessTokenPayloadDto } from 'src/auth/dto/access-token-payload.dto';
-import { Injectable } from '@nestjs/common';
+import { AccessTokenPayloadDto } from '../../src/auth/dto/access-token-payload.dto';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from '.prisma/client';
+import { User } from '../../src/user/entities/user.entity';
 
+export type UserByAccessToken = Pick<User, 'id' | 'nickname' | 'role'>;
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  logger = new Logger('JwtStrategy');
+
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,
     });
   }
 
-  validate({
-    aud,
-    nickname,
-    role,
-  }: AccessTokenPayloadDto): Pick<User, 'id' | 'nickname' | 'role'> {
+  validate({ aud, nickname, role }: AccessTokenPayloadDto): UserByAccessToken {
     return { id: aud, nickname, role };
   }
 }

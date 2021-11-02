@@ -8,9 +8,9 @@ import {
 import { ApiErrorResponse } from '../../libs/http-exceptions/api-error-response';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { ErrorCode } from '../../libs/http-exceptions/error-codes';
+import { Prisma } from '.prisma/client';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
-import { Prisma } from '.prisma/client';
 
 export const GENRES = [
   { code: 'STRATEGY', name: '전략' },

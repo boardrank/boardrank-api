@@ -6,6 +6,7 @@ import { BoardGame } from './board-game/entities/board-game.entity';
 import { Genre } from './genre/entities/genre.entity';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerTags } from 'libs/constants';
+import { ApiAuthResponse } from './auth/entities/api-auth-response';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,7 +22,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [BoardGame, Genre, ApiErrorResponse],
+    extraModels: [BoardGame, Genre, ApiErrorResponse, ApiAuthResponse],
   });
   SwaggerModule.setup('swagger-ui', app, document);
 

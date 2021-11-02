@@ -1,12 +1,12 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { ApiAuthResponse } from './auth/entities/api-auth-response';
 import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { AppModule } from './app.module';
 import { BoardGame } from './board-game/entities/board-game.entity';
 import { Genre } from './genre/entities/genre.entity';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerTag } from 'libs/constants';
-import { ApiAuthResponse } from './auth/entities/api-auth-response';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

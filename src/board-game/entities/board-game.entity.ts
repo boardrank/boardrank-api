@@ -1,7 +1,9 @@
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 
+import { BoardGame as BoardGameType } from '.prisma/client';
+
 @ApiExtraModels()
-export class BoardGame {
+export class BoardGame implements BoardGameType {
   @ApiProperty({
     example: 1,
   })

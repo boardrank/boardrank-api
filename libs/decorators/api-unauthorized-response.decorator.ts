@@ -1,4 +1,4 @@
-import { HttpExceptionFilter } from '../filters/http-exception.filter';
+import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
 import { ApiUnauthorizedResponse as Response } from '@nestjs/swagger';
 
 export const ApiUnauthorizedResponse = () =>

@@ -5,11 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiErrorResponse } from '../../libs/http-exceptions/api-error-response';
+import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { CreateGenreDto } from './dto/create-genre.dto';
-import { ErrorCode } from '../../libs/http-exceptions/error-codes';
+import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { Prisma } from '.prisma/client';
-import { PrismaService } from '../../src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 
 export const GENRES = [

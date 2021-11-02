@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Genre } from './entities/genre.entity';
 import { GenreService } from './genre.service';
 import { HttpStatus } from '@nestjs/common';
-import { PrismaService } from '../../src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 describe('GenreService', () => {
   let service: GenreService;

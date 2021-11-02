@@ -1,9 +1,9 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, Logger } from '@nestjs/common';
 
-import { AccessTokenPayloadDto } from '../../src/auth/dto/access-token-payload.dto';
+import { AccessTokenPayloadDto } from 'src/auth/dto/access-token-payload.dto';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from '../../src/user/entities/user.entity';
+import { User } from 'src/user/entities/user.entity';
 
 export type UserByAccessToken = Pick<User, 'id' | 'nickname' | 'role'>;
 @Injectable()

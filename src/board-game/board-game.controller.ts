@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { SwaggerTag } from '../../libs/constants';
+import { SwaggerTag } from 'libs/constants';
 import { BoardGameService } from './board-game.service';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';
 import { UpdateBoardGameDto } from './dto/update-board-game.dto';

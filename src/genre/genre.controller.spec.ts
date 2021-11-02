@@ -1,11 +1,10 @@
+import { Genre, Prisma } from '.prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { CreateGenreDto } from './dto/create-genre.dto';
-import { Genre } from './entities/genre.entity';
 import { GenreController } from './genre.controller';
 import { GenreModule } from './genre.module';
-import { Prisma } from '.prisma/client';
-import { PrismaService } from '../../src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 describe('GenreController', () => {
   const prismaService = new PrismaService();

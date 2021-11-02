@@ -1,17 +1,14 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
   Logger,
+  Param,
+  Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
-import { GenreService } from './genre.service';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
 import {
   ApiBearerAuth,
   ApiConflictResponse,
@@ -21,14 +18,17 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SwaggerTag } from '../../libs/constants';
+import { SwaggerTag } from 'libs/constants';
+import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
+import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-response.decorator';
+import { Roles } from 'libs/decorators/role.decorator';
+import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
+import { RolesGuard } from 'libs/guards/roles.guard';
+import { Role } from 'src/auth/entities/role';
+import { CreateGenreDto } from './dto/create-genre.dto';
+import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Genre } from './entities/genre.entity';
-import { Roles } from '../../libs/decorators/role.decorator';
-import { JwtAuthGuard } from '../../libs/guards/jwt-auth.guard';
-import { Role } from '../auth/entities/role';
-import { RolesGuard } from '../../libs/guards/roles.guard';
-import { ApiUnauthorizedResponse } from '../../libs/decorators/api-unauthorized-response.decorator';
-import { ApiForbiddenResponse } from '../../libs/decorators/api-forbidden-response.decorator';
+import { GenreService } from './genre.service';
 
 @ApiTags(SwaggerTag.Genre)
 @ApiBearerAuth()

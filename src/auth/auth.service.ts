@@ -8,15 +8,15 @@ import {
 
 import { AccessTokenPayloadDto } from './dto/access-token-payload.dto';
 import { ApiAuthResponse } from './entities/api-auth-response';
-import { ApiErrorResponse } from '../../libs/http-exceptions/api-error-response';
+import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { CreateAccessTokenDto } from './dto/create-access-token.dto';
-import { ErrorCode } from '../../libs/http-exceptions/error-codes';
+import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '.prisma/client';
-import { PrismaService } from '../../src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
-import { verifyIdToken } from '../../libs/auth-google';
+import { verifyIdToken } from 'libs/auth-google';
 
 @Injectable()
 export class AuthService {

@@ -12,9 +12,10 @@ datasource db {
 
 model User {
   id Int @default(autoincrement()) @id
-  oauthId String @map("oauth_id")
+  oauthId String @map("oauth_id") @unique
   nickname String
   profileUrl String @map("profile_url")
+  role String // ADMIN, MEMBER
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt
 

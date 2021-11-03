@@ -35,9 +35,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         response.status(status).json(HttpExceptionFilter.ErrorForbidden);
         break;
       default:
+        response.status(status).json(exception.getResponse());
         break;
     }
-
-    response.status(status).json(response.json);
   }
 }

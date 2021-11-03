@@ -5,17 +5,39 @@ import { UpdateBoardGameDto } from './dto/update-board-game.dto';
 
 @Injectable()
 export class BoardGameService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
-  findAllByGenre(genre: string) {
-    this.prisma.boardGame.findMany({
+  findAllByGenre(genreCodes: string[]) {
+    this.prismaService.boardGame.findMany({
       where: {},
     });
     return [];
   }
 
-  create(createBoardGameDto: CreateBoardGameDto) {
-    return 'This action adds a new boardGame';
+  async create({ genreCodes, ...createBoardGameDto }: CreateBoardGameDto) {
+    try {
+      const genres = await this.prismaService.genre.findMany({
+        where: {
+          code: {
+            in: genreCodes,
+          },
+        },
+      });
+
+      return await this.prismaService.boardGame.create({
+        data: {
+          ...createBoardGameDto,
+          genres: {
+            create: genres.map(({ id }) => ({ genreId: id })),
+          },
+        },
+        include: {
+          genres: true,
+        },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   findAll() {

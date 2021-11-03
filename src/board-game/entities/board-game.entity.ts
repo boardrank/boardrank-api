@@ -20,7 +20,7 @@ export class BoardGame implements BoardGameType {
   description: string;
 
   @ApiProperty()
-  imageUrl: string;
+  thumbnailUrl: string;
 
   @ApiProperty({
     example: 'Dominique Ehrhard',

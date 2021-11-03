@@ -25,7 +25,7 @@ import { Request } from 'express';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-response.decorator';
 import { User } from './entities/user.entity';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
 
 @ApiTags(SwaggerTag.User)
@@ -37,9 +37,7 @@ export class UserController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
-  @ApiOkResponse({
-    schema: { $ref: getSchemaPath(User) },
-  })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse({
@@ -51,9 +49,7 @@ export class UserController {
   }
 
   @Get(':id')
-  @ApiOkResponse({
-    schema: { $ref: getSchemaPath(User) },
-  })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiNotFoundResponse({
     description: UserService.ErrorNotFound.toDescription(),
   })
@@ -64,9 +60,7 @@ export class UserController {
   @Patch()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
-  @ApiOkResponse({
-    schema: { $ref: getSchemaPath(User) },
-  })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse({
@@ -74,35 +68,36 @@ export class UserController {
   })
   async updateOwnProfile(
     @Req() req: Request,
-    @Body('profile') profile: UpdateProfileDto,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
-    const { id } = req.user as UserByAccessToken;
-    return await this.userService.updateProfile(id, profile);
+    const { id, role } = req.user as UserByAccessToken;
+    return await this.userService.updateProfile(
+      id,
+      updateUserDto,
+      role === Role.ADMIN,
+    );
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOkResponse({
-    schema: { $ref: getSchemaPath(User) },
-  })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
   @ApiNotFoundResponse({
     description: UserService.ErrorNotFound.toDescription(),
   })
   async updateProfile(
     @Param('id') id: string,
-    @Body('profile') profile: UpdateProfileDto,
+    @Req() req: Request,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
-    return await this.userService.updateProfile(+id, profile);
+    return await this.userService.updateProfile(+id, updateUserDto, true);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOkResponse({
-    schema: { $ref: getSchemaPath(User) },
-  })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
   @ApiNotFoundResponse({
     description: UserService.ErrorNotFound.toDescription(),

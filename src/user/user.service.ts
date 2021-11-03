@@ -1,19 +1,48 @@
 import { Prisma } from '.prisma/client';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { ErrorCode } from 'libs/http-exceptions/error-codes';
+import { Role } from 'src/auth/entities/role';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
+  static ErrorAlreadyRegistered = new ApiErrorResponse(
+    ErrorCode.AlreadyRegistered,
+    '이미 등록된 회원입니다.',
+  );
+
   static ErrorNotFound = new ApiErrorResponse(
     ErrorCode.NotFound,
     '해당 유저를 찾을 수 없습니다.',
   );
 
   constructor(private prismaService: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    try {
+      return await this.prismaService.user.create({
+        data: createUserDto,
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          /**
+           * oauth id가 중복되었을 경우
+           */
+          throw new ConflictException(UserService.ErrorAlreadyRegistered);
+        }
+      }
+    }
+  }
 
   async findOneById(id: number) {
     try {
@@ -31,10 +60,18 @@ export class UserService {
     }
   }
 
-  async updateProfile(id: number, profile: UpdateProfileDto) {
+  async updateProfile(
+    id: number,
+    updateUserDto: UpdateUserDto,
+    hasAdminPermission = false,
+  ) {
     try {
+      if (!hasAdminPermission && updateUserDto.role === Role.ADMIN) {
+        throw new ForbiddenException();
+      }
+
       return await this.prismaService.user.update({
-        data: profile,
+        data: updateUserDto,
         where: { id },
       });
     } catch (error) {

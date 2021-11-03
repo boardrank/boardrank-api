@@ -21,9 +21,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-up')
-  @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(ApiAuthResponse) },
-  })
+  @ApiCreatedResponse({ schema: { $ref: getSchemaPath(ApiAuthResponse) } })
   @ApiBadRequestResponse({
     description: AuthService.ErrorInvalidIdToken.toDescription(),
   })
@@ -36,9 +34,7 @@ export class AuthController {
 
   @Post('sign-in')
   @HttpCode(200)
-  @ApiOkResponse({
-    schema: { $ref: getSchemaPath(ApiAuthResponse) },
-  })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiAuthResponse) } })
   @ApiBadRequestResponse({
     description: AuthService.ErrorInvalidIdToken.toDescription(),
   })
@@ -51,9 +47,7 @@ export class AuthController {
 
   @Post('sign-in/refresh')
   @HttpCode(200)
-  @ApiOkResponse({
-    schema: { $ref: getSchemaPath(ApiAuthResponse) },
-  })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiAuthResponse) } })
   @ApiBadRequestResponse({
     description: AuthService.ErrorInvalidIdToken.toDescription(),
   })

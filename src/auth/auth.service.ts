@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   Logger,
   NotFoundException,
@@ -12,11 +11,11 @@ import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { CreateAccessTokenDto } from './dto/create-access-token.dto';
 import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
 import { verifyIdToken } from 'libs/auth-google';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -42,6 +41,7 @@ export class AuthService {
 
   constructor(
     private prismaService: PrismaService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
@@ -58,13 +58,11 @@ export class AuthService {
     const role = Role.MEMBER;
 
     try {
-      const user = await this.prismaService.user.create({
-        data: {
-          oauthId,
-          nickname,
-          profileUrl,
-          role,
-        },
+      const user = await this.userService.create({
+        oauthId,
+        nickname,
+        profileUrl,
+        role,
       });
 
       const [refreshToken, accessToken] = await Promise.all([
@@ -77,14 +75,6 @@ export class AuthService {
         accessToken,
       };
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          /**
-           * oauth id가 중복되었을 경우
-           */
-          throw new ConflictException(AuthService.ErrorAlreadyRegistered);
-        }
-      }
       throw error;
     }
   }

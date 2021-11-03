@@ -1,10 +1,19 @@
 import {
   ApiBearerAuth,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { SwaggerTag } from 'libs/constants';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
@@ -15,6 +24,8 @@ import { Request } from 'express';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-response.decorator';
 import { User } from './entities/user.entity';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
 
 @ApiTags(SwaggerTag.User)
 @ApiBearerAuth()
@@ -29,8 +40,59 @@ export class UserController {
     schema: { $ref: getSchemaPath(User) },
   })
   @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  @ApiNotFoundResponse({
+    description: UserService.ErrorNotFound.toDescription(),
+  })
   async getOwnProfile(@Req() req: Request) {
     const { id } = req.user as UserByAccessToken;
     return await this.userService.findOneById(id);
+  }
+
+  @Get(':id')
+  @ApiOkResponse({
+    schema: { $ref: getSchemaPath(User) },
+  })
+  @ApiNotFoundResponse({
+    description: UserService.ErrorNotFound.toDescription(),
+  })
+  async getProfile(@Param('id') id: string) {
+    return await this.userService.findOneById(+id);
+  }
+
+  @Patch()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.MEMBER)
+  @ApiOkResponse({
+    schema: { $ref: getSchemaPath(User) },
+  })
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  @ApiNotFoundResponse({
+    description: UserService.ErrorNotFound.toDescription(),
+  })
+  async updateOwnProfile(
+    @Req() req: Request,
+    @Body('profile') profile: UpdateProfileDto,
+  ) {
+    const { id } = req.user as UserByAccessToken;
+    return await this.userService.updateProfile(id, profile);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOkResponse({
+    schema: { $ref: getSchemaPath(User) },
+  })
+  @ApiUnauthorizedResponse()
+  @ApiNotFoundResponse({
+    description: UserService.ErrorNotFound.toDescription(),
+  })
+  async updateProfile(
+    @Param('id') id: string,
+    @Body('profile') profile: UpdateProfileDto,
+  ) {
+    return await this.userService.updateProfile(+id, profile);
   }
 }

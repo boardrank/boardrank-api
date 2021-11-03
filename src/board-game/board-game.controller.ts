@@ -9,9 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
@@ -46,12 +48,21 @@ export class BoardGameController {
   }
 
   @Get('/list')
+  @ApiOkResponse({
+    schema: { type: 'array', items: { $ref: getSchemaPath(BoardGame) } },
+  })
   async findAll() {
     return await this.boardGameService.findAll();
   }
 
   @Get('/list/:genreId')
-  async findAllByGenre(@Param('genreId') genreId: string) {
+  @ApiOkResponse({
+    schema: { type: 'array', items: { $ref: getSchemaPath(BoardGame) } },
+  })
+  @ApiBadRequestResponse({
+    description: BoardGameService.ErrorBadRequestGenreId.toDescription(),
+  })
+  async findAllByGenreId(@Param('genreId') genreId: string) {
     return await this.boardGameService.findAllByGenreId(+genreId);
   }
 

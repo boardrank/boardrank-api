@@ -4,6 +4,7 @@ export enum ErrorCode {
    */
   BadRequest = 4000,
   InvalidToken,
+  InvalidParam,
 
   /**
    * HttpStatus : 401

@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { BoardGame } from './entities/board-game.entity';
@@ -13,6 +18,11 @@ export class BoardGameService {
   static ErrorNotFoundBoardGame = new ApiErrorResponse(
     ErrorCode.NotFound,
     '보드게임을 찾을 수 없습니다.',
+  );
+
+  static ErrorBadRequestGenreId = new ApiErrorResponse(
+    ErrorCode.InvalidParam,
+    '올바르지 않은 장르입니다.',
   );
 
   logger = new Logger('BoardGameService');
@@ -43,6 +53,14 @@ export class BoardGameService {
 
   async findAllByGenreId(genreId: number) {
     try {
+      const genre = this.prismaService.genre.findUnique({
+        where: { id: genreId },
+      });
+
+      if (!genre) {
+        throw new BadRequestException(BoardGameService.ErrorBadRequestGenreId);
+      }
+
       return await this.prismaService.boardGame.findMany({
         include: {
           boardGameGenres: {

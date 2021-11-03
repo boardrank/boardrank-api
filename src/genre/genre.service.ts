@@ -132,16 +132,16 @@ export class GenreService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
-          /**
-           * 해당 id의 장르가 없을 때
-           */
-          throw new NotFoundException(GenreService.ErrorNotFound);
-        } else if (error.code === 'P2003') {
+        if (error.code === 'P2003') {
           /**
            * 해당 장르를 참조하는 보드게임이 있을 경우
            */
           throw new ConflictException(GenreService.ErrorHasReference);
+        } else if (error.code === 'P2025') {
+          /**
+           * 해당 id의 장르가 없을 때
+           */
+          throw new NotFoundException(GenreService.ErrorNotFound);
         }
       }
       throw error;

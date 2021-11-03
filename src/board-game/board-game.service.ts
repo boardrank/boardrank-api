@@ -1,12 +1,20 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
+import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { BoardGame } from './entities/board-game.entity';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';
+import { ErrorCode } from 'libs/http-exceptions/error-codes';
+import { Prisma } from '.prisma/client';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { UpdateBoardGameDto } from './dto/update-board-game.dto';
 
 @Injectable()
 export class BoardGameService {
+  static ErrorNotFoundBoardGame = new ApiErrorResponse(
+    ErrorCode.NotFound,
+    '보드게임을 찾을 수 없습니다.',
+  );
+
   logger = new Logger('BoardGameService');
 
   constructor(private prismaService: PrismaService) {}
@@ -74,10 +82,6 @@ export class BoardGameService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} boardGame`;
-  }
-
   async update(
     id: number,
     { genreIds, ...updateBoardGameDto }: UpdateBoardGameDto,
@@ -129,6 +133,14 @@ export class BoardGameService {
         },
       });
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          /**
+           * 해당 id 보드게임이 없을 때
+           */
+          throw new NotFoundException(BoardGameService.ErrorNotFoundBoardGame);
+        }
+      }
       throw error;
     }
   }
@@ -159,6 +171,14 @@ export class BoardGameService {
 
       return boardGame;
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          /**
+           * 해당 id 보드게임이 없을 때
+           */
+          throw new NotFoundException(BoardGameService.ErrorNotFoundBoardGame);
+        }
+      }
       throw error;
     }
   }

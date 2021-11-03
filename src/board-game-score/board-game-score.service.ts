@@ -14,9 +14,12 @@ export class BoardGameScoreService {
 
   constructor(private prismaService: PrismaService) {}
 
-  create(userId: number, createBoardGameScoreDto: CreateBoardGameScoreDto) {
+  async create(
+    userId: number,
+    createBoardGameScoreDto: CreateBoardGameScoreDto,
+  ) {
     try {
-      const boardGameScore = this.prismaService.boardGameScore.findFirst({
+      const boardGameScore = await this.prismaService.boardGameScore.findFirst({
         where: {
           userId,
           boardGameId: createBoardGameScoreDto.boardGameId,
@@ -30,7 +33,7 @@ export class BoardGameScoreService {
         });
       }
 
-      return this.prismaService.boardGameScore.create({
+      return await this.prismaService.boardGameScore.create({
         data: { userId, ...createBoardGameScoreDto },
       });
     } catch (error) {

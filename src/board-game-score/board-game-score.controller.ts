@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Req,
-} from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -40,11 +30,11 @@ export class BoardGameScoreController {
     schema: { $ref: getSchemaPath(BoardGameScore) },
   })
   @ApiUnauthorizedResponse()
-  create(
+  async create(
     @Req() req: Request,
     @Body() createBoardGameScoreDto: CreateBoardGameScoreDto,
   ) {
     const { id } = req.user as UserByAccessToken;
-    return this.boardGameScoreService.create(id, createBoardGameScoreDto);
+    return await this.boardGameScoreService.create(id, createBoardGameScoreDto);
   }
 }

@@ -2,10 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBoardGameReplyDto {
   @ApiProperty({
-    example: 8,
-    description: '1 ~ 10',
+    example: '이것은 댓글입니다',
   })
-  content: number;
+  content: string;
 
   @ApiProperty({
     example: 3,

@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateBoardGameReplyDto } from './create-board-game-reply.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
-export class UpdateBoardGameReplyDto extends PartialType(CreateBoardGameReplyDto) {}
+export class UpdateBoardGameReplyDto {
+  @ApiProperty({
+    example: '이것은 댓글입니다',
+  })
+  content: string;
+}

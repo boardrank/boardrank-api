@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { BoardGameReplyService } from './board-game-reply.service';
 import { BoardGameReplyController } from './board-game-reply.controller';
+import { BoardGameReplyService } from './board-game-reply.service';
+import { Module } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   controllers: [BoardGameReplyController],
-  providers: [BoardGameReplyService]
+  providers: [BoardGameReplyService, PrismaService],
 })
 export class BoardGameReplyModule {}

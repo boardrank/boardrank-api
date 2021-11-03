@@ -90,6 +90,9 @@ export class GenreController {
   @ApiNotFoundResponse({
     description: GenreService.ErrorNotFound.toDescription(),
   })
+  @ApiConflictResponse({
+    description: GenreService.ErrorHasReference.toDescription(),
+  })
   remove(@Param('id') id: string) {
     return this.genreService.remove(+id);
   }

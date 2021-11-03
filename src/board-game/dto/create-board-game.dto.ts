@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Genre } from 'src/genre/entities/genre.entity';
 
 export class CreateBoardGameDto {
   @ApiProperty({
@@ -48,7 +49,7 @@ export class CreateBoardGameDto {
   age: number;
 
   @ApiProperty({
-    example: ['STRATEGY', 'TILE'],
+    example: [3, 4, 5],
   })
-  genreCodes: string[];
+  genreIds: number[];
 }

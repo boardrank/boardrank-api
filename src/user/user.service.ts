@@ -1,4 +1,3 @@
-import { Prisma } from '.prisma/client';
 import {
   ConflictException,
   ForbiddenException,
@@ -7,10 +6,11 @@ import {
 } from '@nestjs/common';
 
 import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
-import { Role } from 'src/auth/entities/role';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { ErrorCode } from 'libs/http-exceptions/error-codes';
+import { Prisma } from '.prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Role } from 'src/auth/entities/role';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
@@ -46,7 +46,7 @@ export class UserService {
 
   async findOneById(id: number) {
     try {
-      const user = await this.prismaService.user.findFirst({
+      const user = await this.prismaService.user.findUnique({
         where: { id },
       });
 

@@ -35,9 +35,9 @@ model BoardGame {
   age Int // 10 => 10세 이상
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt
-  genres BoardGameGenre[]
-  grades BoardGameGrade[]
-  replies BoardGameReply[]
+  boardGameGenres BoardGameGenre[]
+  boardGameGrades BoardGameGrade[]
+  boardGameReplies BoardGameReply[]
 
   @@map("board_game")
 }

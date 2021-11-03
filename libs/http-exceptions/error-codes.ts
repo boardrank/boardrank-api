@@ -25,4 +25,5 @@ export enum ErrorCode {
    */
   Conflict = 4090,
   AlreadyRegistered,
+  HasReference,
 }

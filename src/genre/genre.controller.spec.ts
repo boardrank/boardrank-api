@@ -89,7 +89,7 @@ describe('GenreController', () => {
 
     it('should be deleted', async () => {
       const deletedGenre = await controller.remove(`${createdTestGenre.id}`);
-      const genre = await prismaService.genre.findFirst({
+      const genre = await prismaService.genre.findUnique({
         where: { id: createdTestGenre.id },
       });
       expect(deletedGenre.id).toEqual(createdTestGenre.id);

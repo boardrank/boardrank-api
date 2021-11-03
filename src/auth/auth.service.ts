@@ -14,8 +14,8 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
-import { verifyIdToken } from 'libs/auth-google';
 import { UserService } from 'src/user/user.service';
+import { verifyIdToken } from 'libs/auth-google';
 
 @Injectable()
 export class AuthService {
@@ -86,7 +86,7 @@ export class AuthService {
       throw new BadRequestException(AuthService.ErrorInvalidIdToken);
     }
 
-    const user = await this.prismaService.user.findFirst({
+    const user = await this.prismaService.user.findUnique({
       where: { oauthId: payload.sub },
     });
 

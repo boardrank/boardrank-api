@@ -35,6 +35,11 @@ export class GenreService {
     '해당 장르를 찾을 수 없습니다.',
   );
 
+  static ErrorHasReference = new ApiErrorResponse(
+    ErrorCode.HasReference,
+    '해당 장르를 참조하는 보드게임이 있습니다.',
+  );
+
   logger = new Logger('GenreService');
   constructor(private prismaService: PrismaService) {
     this.initialize();
@@ -121,13 +126,6 @@ export class GenreService {
   }
 
   async remove(id: number) {
-    const genre = await this.prismaService.genre.findFirst({ where: { id } });
-    /**
-     * 해당 id의 장르가 없을 때
-     */
-    if (!genre) {
-      throw new NotFoundException(GenreService.ErrorNotFound);
-    }
     try {
       return await this.prismaService.genre.delete({
         where: { id },
@@ -139,9 +137,13 @@ export class GenreService {
            * 해당 id의 장르가 없을 때
            */
           throw new NotFoundException(GenreService.ErrorNotFound);
+        } else if (error.code === 'P2003') {
+          /**
+           * 해당 장르를 참조하는 보드게임이 있을 경우
+           */
+          throw new ConflictException(GenreService.ErrorHasReference);
         }
       }
-
       throw error;
     }
   }

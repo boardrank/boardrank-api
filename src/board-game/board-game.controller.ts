@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Get,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SwaggerTag } from 'libs/constants';
 import { BoardGameService } from './board-game.service';
@@ -12,14 +20,19 @@ export class BoardGameController {
   constructor(private readonly boardGameService: BoardGameService) {}
 
   @Post()
-  create(@Body() createBoardGameDto: CreateBoardGameDto) {
-    return this.boardGameService.create(createBoardGameDto);
+  async create(@Body() createBoardGameDto: CreateBoardGameDto) {
+    return await this.boardGameService.create(createBoardGameDto);
   }
 
-  // @Get('/list/:genre')
-  // findAllByGenre(@Param('genre') genre: string) {
-  //   return this.boardGameService.findAllByGenre(genre);
-  // }
+  @Get('/list')
+  async findAll() {
+    return await this.boardGameService.findAll();
+  }
+
+  @Get('/list/:genreId')
+  async findAllByGenre(@Param('genreId') genreId: string) {
+    return await this.boardGameService.findAllByGenreId(+genreId);
+  }
 
   @Patch(':id')
   update(

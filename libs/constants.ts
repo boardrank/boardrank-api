@@ -3,6 +3,6 @@ export enum SwaggerTag {
   BoardGame = 'BoardGame',
   Genre = 'Genre',
   User = 'User',
-  BoardGameGrade = 'BoardGameGrade',
+  BoardGameScore = 'BoardGameScore',
   BoardGameReply = 'BoardGameReply',
 }

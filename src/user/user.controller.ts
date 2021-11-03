@@ -8,6 +8,7 @@ import {
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -94,5 +95,19 @@ export class UserController {
     @Body('profile') profile: UpdateProfileDto,
   ) {
     return await this.userService.updateProfile(+id, profile);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOkResponse({
+    schema: { $ref: getSchemaPath(User) },
+  })
+  @ApiUnauthorizedResponse()
+  @ApiNotFoundResponse({
+    description: UserService.ErrorNotFound.toDescription(),
+  })
+  async deleteUser(@Param('id') id: string) {
+    return await this.userService.delete(+id);
   }
 }

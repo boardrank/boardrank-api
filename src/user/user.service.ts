@@ -44,4 +44,17 @@ export class UserService {
       throw error;
     }
   }
+
+  async delete(id: number) {
+    try {
+      return await this.prismaService.user.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new NotFoundException(UserService.ErrorNotFound);
+      }
+      throw error;
+    }
+  }
 }

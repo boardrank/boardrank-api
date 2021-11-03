@@ -18,7 +18,7 @@ model User {
   role String // ADMIN, MEMBER
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt
-  boardGameGrades BoardGameGrade[]
+  boardGameScores BoardGameScore[]
   boardGameReplies BoardGameReply[]
 
   @@map("user")
@@ -38,7 +38,7 @@ model BoardGame {
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt
   boardGameGenres BoardGameGenre[]
-  boardGameGrades BoardGameGrade[]
+  boardGameScores BoardGameScore[]
   boardGameReplies BoardGameReply[]
 
   @@map("board_game")
@@ -68,9 +68,9 @@ model Genre {
   @@map("genre")
 }
 
-model BoardGameGrade {
+model BoardGameScore {
   id Int @default(autoincrement()) @id
-  grade Int
+  score Int
   userId Int @map("user_id")
   boardGameId Int @map("board_game_id")
   createdAt DateTime @map("created_at") @default(now())
@@ -78,7 +78,7 @@ model BoardGameGrade {
   boardGame BoardGame @relation(fields: [boardGameId], references: [id])
   user User @relation(fields: [userId], references: [id])
 
-  @@map("board_game_grade")
+  @@map("board_game_score")
 }
 
 model BoardGameReply {

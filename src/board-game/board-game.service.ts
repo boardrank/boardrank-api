@@ -156,7 +156,7 @@ export class BoardGameService {
         this.prismaService.boardGameGenre.deleteMany({
           where: { boardGameId: id },
         }),
-        this.prismaService.boardGameGrade.deleteMany({
+        this.prismaService.boardGameScore.deleteMany({
           where: { boardGameId: id },
         }),
         this.prismaService.boardGameReply.deleteMany({

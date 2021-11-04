@@ -7,7 +7,7 @@ COPY . .
 
 RUN yarn && yarn prisma:migrate && yarn build
 
-RUN rm -rf node-modules && yarn --production
+RUN rm -rf node-modules && yarn --production && yarn prisma:migrate
 
 # Production
 FROM arm64v8/node:14-buster as production
@@ -18,6 +18,7 @@ COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/prisma /app/prisma
 
+VOLUME /app/prisma
 WORKDIR /app
 
 EXPOSE 3000

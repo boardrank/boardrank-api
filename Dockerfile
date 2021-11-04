@@ -9,11 +9,17 @@ RUN yarn && yarn prisma:migrate && yarn build
 
 RUN rm -rf node-modules && yarn --production
 
-# Run
-FROM arm64v8/node:14-alpine
+# Production
+FROM arm64v8/node:14-buster as production
+
+COPY --from=builder /app/package.json /app/
+COPY --from=builder /app/yarn.lock /app/
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/prisma /app/prisma
 
 WORKDIR /app
 
-COPY --from=builder /app/* /app/
+EXPOSE 3000
 
 ENTRYPOINT yarn start:prod

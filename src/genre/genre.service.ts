@@ -12,17 +12,6 @@ import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 
-export const GENRES = [
-  { code: 'STRATEGY', name: '전략' },
-  { code: 'ABSTRACT', name: '추상' },
-  { code: 'WITS', name: '순발력' },
-  { code: 'BATTLE', name: '전투' },
-  { code: 'REASONING', name: '추리' },
-  { code: 'CARD', name: '카드게임' },
-  { code: 'TILE', name: '타일' },
-  { code: 'THEME', name: '테마' },
-];
-
 @Injectable()
 export class GenreService {
   static ErrorAlreadyRegistered = new ApiErrorResponse(
@@ -41,20 +30,7 @@ export class GenreService {
   );
 
   logger = new Logger('GenreService');
-  constructor(private prismaService: PrismaService) {
-    this.initialize();
-  }
-
-  async initialize() {
-    // 장르가 없을 경우 데이터 입력
-    const genres = await this.findAll();
-    if (genres.length === 0) {
-      for (let i = 0; i < GENRES.length; i++) {
-        const { code, name } = await this.create(GENRES[i]);
-        this.logger.log(`Initialized genre [${code}, ${name}] row.`);
-      }
-    }
-  }
+  constructor(private prismaService: PrismaService) {}
 
   async create({ code, name }: CreateGenreDto) {
     try {

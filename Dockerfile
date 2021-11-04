@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN yarn && yarn prisma:migrate && yarn build
+RUN yarn && yarn build
 
 RUN rm -rf node-modules && yarn --production
 
@@ -24,4 +24,4 @@ WORKDIR /app
 
 EXPOSE 3000
 
-ENTRYPOINT yarn prisma:migrate && yarn start:prod
+ENTRYPOINT yarn start:prod

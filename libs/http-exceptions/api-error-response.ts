@@ -10,10 +10,14 @@ export class ApiErrorResponse {
   }
 
   toDescription() {
-    return JSON.stringify({
-      errorCode: this.errorCode,
-      errorMsg: this.errorMsg,
-    });
+    return JSON.stringify(
+      {
+        errorCode: this.errorCode,
+        errorMsg: this.errorMsg,
+      },
+      null,
+      2,
+    );
   }
 
   @ApiProperty()

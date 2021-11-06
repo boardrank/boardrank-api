@@ -24,8 +24,10 @@ import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-respon
 import { Roles } from 'libs/decorators/role.decorator';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
 import { RolesGuard } from 'libs/guards/roles.guard';
+import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
 import { Role } from 'src/auth/entities/role';
-import { CreateGenreDto } from './dto/create-genre.dto';
+import { ApiPostGenreReqBodyDto } from './dto/api-post-genre-req-body.dto';
+import { ApiPostGenreResDataDto } from './dto/api-post-genre-res-data.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { Genre } from './entities/genre.entity';
 import { GenreService } from './genre.service';
@@ -42,15 +44,18 @@ export class GenreController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(Genre) },
+    schema: { $ref: getSchemaPath(ApiPostGenreReqBodyDto) },
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiConflictResponse({
     description: GenreService.ErrorAlreadyRegistered.toDescription(),
+    schema: { $ref: getSchemaPath(ApiAlreadyRegisteredErrorResponse) },
   })
-  create(@Body() createGenreDto: CreateGenreDto) {
-    return this.genreService.create(createGenreDto);
+  create(
+    @Body() genreDto: ApiPostGenreReqBodyDto,
+  ): Promise<ApiPostGenreResDataDto> {
+    return this.genreService.create(genreDto);
   }
 
   @Get('/list')

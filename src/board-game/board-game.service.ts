@@ -7,7 +7,9 @@ import {
 
 import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
-import { BoardGame } from './entities/board-game.entity';
+import { BoardGame } from './vo/board-game.vo';
+import { BoardGameDetail } from './vo/board-game-detail.vo';
+import { BoardGameListItem } from './vo/board-game-list-item.vo';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from '../../src/prisma/prisma.service';
@@ -27,29 +29,54 @@ export class BoardGameService {
 
   constructor(private prismaService: PrismaService) {}
 
-  async create({ genreIds, ...createBoardGameDto }: CreateBoardGameDto) {
+  async create({
+    genreIds,
+    ...createBoardGameDto
+  }: CreateBoardGameDto): Promise<BoardGame> {
     try {
-      return await this.prismaService.boardGame.create({
-        data: {
-          ...createBoardGameDto,
-          boardGameGenres: {
-            create: genreIds.map((id) => ({ genreId: id })),
-          },
-        },
-        include: {
-          boardGameGenres: {
-            include: {
-              genre: true,
+      const { boardGameGenres, ...boardGame } =
+        await this.prismaService.boardGame.create({
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            thumbnailUrl: true,
+            designer: true,
+            difficulty: true,
+            personnel: true,
+            recommendPersonnel: true,
+            playTime: true,
+            age: true,
+            boardGameGenres: {
+              include: {
+                genre: {
+                  select: {
+                    id: true,
+                    code: true,
+                    name: true,
+                    order: true,
+                  },
+                },
+              },
             },
           },
-        },
-      });
+          data: {
+            ...createBoardGameDto,
+            boardGameGenres: {
+              create: genreIds.map((id) => ({ genreId: id })),
+            },
+          },
+        });
+
+      const genres = boardGameGenres.map(({ genre }) => genre);
+
+      return { ...boardGame, genres };
     } catch (error) {
       throw error;
     }
   }
 
-  async findAllByGenreId(genreId: number) {
+  async findAllByGenreId(genreId: number): Promise<BoardGameListItem[]> {
     try {
       const genre = this.prismaService.genre.findUnique({
         where: { id: genreId },
@@ -59,11 +86,18 @@ export class BoardGameService {
         throw new BadRequestException(BoardGameService.ErrorBadRequestGenreId);
       }
 
-      return await this.prismaService.boardGame.findMany({
+      const boardGames = await this.prismaService.boardGame.findMany({
         include: {
           boardGameGenres: {
             include: {
-              genre: true,
+              genre: {
+                select: {
+                  id: true,
+                  code: true,
+                  name: true,
+                  order: true,
+                },
+              },
             },
           },
         },
@@ -77,22 +111,148 @@ export class BoardGameService {
           },
         },
       });
+
+      // [ { boardGameId: 1, _avg: { score: 8 } } ]
+      const averageScores = {};
+      (
+        await this.prismaService.boardGameScore.groupBy({
+          by: ['boardGameId'],
+          _avg: {
+            score: true,
+          },
+        })
+      ).forEach(({ boardGameId, _avg: { score } }) => {
+        averageScores[boardGameId] = score;
+      });
+
+      return boardGames.map(({ boardGameGenres, ...boardGame }) => {
+        return {
+          ...boardGame,
+          genres: boardGameGenres.map(({ genre }) => genre),
+          averageScore: averageScores[boardGame.id] || 0,
+        };
+      });
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll() {
+  async findAll(): Promise<BoardGameListItem[]> {
     try {
-      return await this.prismaService.boardGame.findMany({
+      const boardGames = await this.prismaService.boardGame.findMany({
         include: {
           boardGameGenres: {
             include: {
-              genre: true,
+              genre: {
+                select: {
+                  id: true,
+                  code: true,
+                  name: true,
+                  order: true,
+                },
+              },
             },
           },
         },
       });
+
+      // [ { boardGameId: 1, _avg: { score: 8 } } ]
+      const averageScores = {};
+      (
+        await this.prismaService.boardGameScore.groupBy({
+          by: ['boardGameId'],
+          _avg: {
+            score: true,
+          },
+        })
+      ).forEach(({ boardGameId, _avg: { score } }) => {
+        averageScores[boardGameId] = score;
+      });
+
+      return boardGames.map(({ boardGameGenres, ...boardGame }) => {
+        return {
+          ...boardGame,
+          genres: boardGameGenres.map(({ genre }) => genre),
+          averageScore: averageScores[boardGame.id] || 0,
+        };
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findOneById(id: number, userId?: number): Promise<BoardGameDetail> {
+    try {
+      const { boardGameGenres, boardGameReplies, ...boardGame } =
+        await this.prismaService.boardGame.findUnique({
+          where: { id },
+          include: {
+            boardGameGenres: {
+              include: {
+                genre: {
+                  select: {
+                    id: true,
+                    code: true,
+                    name: true,
+                    order: true,
+                  },
+                },
+              },
+            },
+            boardGameReplies: {
+              select: {
+                id: true,
+                content: true,
+                userId: true,
+                boardGameId: true,
+                user: {
+                  select: {
+                    id: true,
+                    nickname: true,
+                    profileUrl: true,
+                  },
+                },
+              },
+              orderBy: {
+                createdAt: 'desc',
+              },
+            },
+          },
+        });
+
+      const genres = boardGameGenres.map(({ genre }) => genre);
+      let myScore = 0;
+      if (userId) {
+        const { score } = await this.prismaService.boardGameScore.findFirst({
+          select: {
+            score: true,
+          },
+          where: {
+            userId,
+            boardGameId: id,
+          },
+        });
+        myScore = score;
+      }
+
+      const {
+        _avg: { score: averageScore = 0 },
+      } = await this.prismaService.boardGameScore.aggregate({
+        _avg: {
+          score: true,
+        },
+        where: {
+          boardGameId: id,
+        },
+      });
+
+      return {
+        ...boardGame,
+        genres,
+        averageScore,
+        myScore,
+        boardGameReplies,
+      };
     } catch (error) {
       throw error;
     }
@@ -131,23 +291,28 @@ export class BoardGameService {
           .map(({ id }) => id);
       }
 
-      return await this.prismaService.boardGame.update({
-        data: {
-          ...updateBoardGameDto,
-          boardGameGenres: {
-            create: genreIdsToBeCreated.map((genreId) => ({ genreId })),
-            delete: boardGameGenreidsToBeDeleted.map((id) => ({ id })),
-          },
-        },
-        where: { id },
-        include: {
-          boardGameGenres: {
-            include: {
-              genre: true,
+      const { boardGameGenres, ...boardGame } =
+        await this.prismaService.boardGame.update({
+          data: {
+            ...updateBoardGameDto,
+            boardGameGenres: {
+              create: genreIdsToBeCreated.map((genreId) => ({ genreId })),
+              delete: boardGameGenreidsToBeDeleted.map((id) => ({ id })),
             },
           },
-        },
-      });
+          where: { id },
+          include: {
+            boardGameGenres: {
+              include: {
+                genre: true,
+              },
+            },
+          },
+        });
+
+      const genres = boardGameGenres.map(({ genre }) => genre);
+
+      return { ...boardGame, genres };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
@@ -167,7 +332,7 @@ export class BoardGameService {
         { count: genreCount },
         { count: gradeCount },
         { count: replyCount },
-        boardGame,
+        { boardGameGenres, ...boardGame },
       ] = await this.prismaService.$transaction([
         this.prismaService.boardGameGenre.deleteMany({
           where: { boardGameId: id },
@@ -178,14 +343,19 @@ export class BoardGameService {
         this.prismaService.boardGameReply.deleteMany({
           where: { boardGameId: id },
         }),
-        this.prismaService.boardGame.delete({ where: { id } }),
+        this.prismaService.boardGame.delete({
+          where: { id },
+          include: { boardGameGenres: { include: { genre: true } } },
+        }),
       ]);
 
       this.logger.log(
         `Deleted rows derived BoardGame id: ${id} genre: ${genreCount}, grade: ${gradeCount}, reply: ${replyCount}.`,
       );
 
-      return boardGame;
+      const genres = boardGameGenres.map(({ genre }) => genre);
+
+      return { ...boardGame, genres };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {

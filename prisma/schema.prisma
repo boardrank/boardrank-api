@@ -15,7 +15,7 @@ model User {
   oauthId String @map("oauth_id") @unique
   nickname String
   profileUrl String @map("profile_url")
-  role String // ADMIN, MEMBER
+  role Role @default(MEMBER)
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt
   boardGameScores BoardGameScore[]
@@ -92,4 +92,9 @@ model BoardGameReply {
   user User @relation(fields: [userId], references: [id])
 
   @@map("board_game_reply")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
 }

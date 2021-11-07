@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Genre } from 'src/genre/entities/genre.entity';
 
 export class CreateBoardGameDto {
   @ApiProperty({

@@ -1,9 +1,7 @@
 import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 
-import { Genre as GenreType } from '.prisma/client';
-
 @ApiExtraModels()
-export class GenreEntity implements GenreType {
+export class Genre {
   @ApiProperty({
     example: 1,
   })
@@ -23,10 +21,4 @@ export class GenreEntity implements GenreType {
     example: 1,
   })
   order: number;
-
-  @ApiProperty()
-  createdAt: Date;
-
-  @ApiProperty()
-  updatedAt: Date;
 }

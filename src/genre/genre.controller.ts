@@ -25,11 +25,13 @@ import { Roles } from 'libs/decorators/role.decorator';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
 import { RolesGuard } from 'libs/guards/roles.guard';
 import { Role } from 'src/auth/entities/role';
-import { ApiPostGenreReqBodyDto } from './dto/api-post-genre-req-body.dto';
-import { ApiPostGenreResDataDto } from './dto/api-post-genre-res-data.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
-import { Genre } from './entities/genre.entity';
+import { ApiPostGenreResData } from './schemas/api-post-genre-res-data.schema';
 import { GenreService } from './genre.service';
+import { ApiPostGenreReqBody } from './schemas/api-post-genre-req-body.schema';
+import { ApiGetGenreListResData } from './schemas/api-get-genre-list-res-data.schema';
+import { ApiPatchGenreIdReqBody } from './schemas/api-patch-genre-id-req-body.schema';
+import { ApiPatchGenreIdResData } from './schemas/api-patch-genre-id-res-data.schema';
+import { ApiDeleteGenreIdResData } from './schemas/api-delete-genre-id-res-data.schema';
 
 @ApiTags(SwaggerTag.Genre)
 @ApiBearerAuth()
@@ -43,32 +45,34 @@ export class GenreController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(ApiPostGenreResDataDto) },
+    schema: { $ref: getSchemaPath(ApiPostGenreResData) },
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiConflictResponse(
     GenreService.ErrorAlreadyRegistered.toApiResponseOptions(),
   )
-  create(
-    @Body() genreDto: ApiPostGenreReqBodyDto,
-  ): Promise<ApiPostGenreResDataDto> {
-    return this.genreService.create(genreDto);
+  async create(
+    @Body() body: ApiPostGenreReqBody,
+  ): Promise<ApiPostGenreResData> {
+    const genre = await this.genreService.create(body.genre);
+    return { genre };
   }
 
   @Get('/list')
   @ApiOkResponse({
-    schema: { type: 'array', items: { $ref: getSchemaPath(Genre) } },
+    schema: { $ref: getSchemaPath(ApiGetGenreListResData) },
   })
-  findAll() {
-    return this.genreService.findAll();
+  async findAll(): Promise<ApiGetGenreListResData> {
+    const genres = await this.genreService.findAll();
+    return { genres };
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOkResponse({
-    schema: { $ref: getSchemaPath(Genre) },
+    schema: { $ref: getSchemaPath(ApiPatchGenreIdResData) },
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
@@ -76,21 +80,26 @@ export class GenreController {
   @ApiConflictResponse(
     GenreService.ErrorAlreadyRegistered.toApiResponseOptions(),
   )
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genreService.update(+id, updateGenreDto);
+  async update(
+    @Param('id') id: string,
+    @Body() body: ApiPatchGenreIdReqBody,
+  ): Promise<ApiPatchGenreIdResData> {
+    const genre = await this.genreService.update(+id, body.genre);
+    return { genre };
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @ApiOkResponse({
-    schema: { $ref: getSchemaPath(Genre) },
+    schema: { $ref: getSchemaPath(ApiDeleteGenreIdResData) },
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(GenreService.ErrorNotFound.toApiResponseOptions())
   @ApiConflictResponse(GenreService.ErrorHasReference.toApiResponseOptions())
-  remove(@Param('id') id: string) {
-    return this.genreService.remove(+id);
+  async remove(@Param('id') id: string): Promise<ApiDeleteGenreIdResData> {
+    const genre = await this.genreService.remove(+id);
+    return { genre };
   }
 }

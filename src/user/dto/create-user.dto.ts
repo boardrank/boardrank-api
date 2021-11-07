@@ -20,6 +20,7 @@ export class CreateUserDto {
 
   @ApiProperty({
     example: 'ADMIN | MEMBER',
+    enum: Role,
   })
   role: Role;
 }

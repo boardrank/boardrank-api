@@ -14,8 +14,10 @@ export class ApiErrorResponse {
     this.errorMsg = errorMsg;
   }
 
-  @ApiProperty()
-  errorCode: number;
+  @ApiProperty({
+    enum: Object.values(ErrorCode),
+  })
+  errorCode: ErrorCode;
 
   @ApiProperty()
   errorMsg: string;

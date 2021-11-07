@@ -27,6 +27,7 @@ export class User implements UserType {
 
   @ApiProperty({
     description: 'ADMIN | MEMBER',
+    enum: Role,
   })
   role: Role;
 

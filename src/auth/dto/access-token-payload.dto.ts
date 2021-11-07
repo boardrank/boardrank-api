@@ -24,6 +24,7 @@ export class AccessTokenPayloadDto<TRole = Role> {
 
   @ApiProperty({
     description: 'ADMIN or Member',
+    enum: Role,
   })
   role: TRole;
 }

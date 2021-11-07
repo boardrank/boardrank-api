@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
+import { BoardGameReply } from './vo/board-game-reply.vo';
 import { CreateBoardGameReplyDto } from './dto/create-board-game-reply.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -23,12 +24,21 @@ export class BoardGameReplyService {
   async create(
     userId: number,
     createBoardGameReplyDto: CreateBoardGameReplyDto,
-  ) {
+  ): Promise<BoardGameReply> {
     try {
       return await this.prismaService.boardGameReply.create({
         data: {
           ...createBoardGameReplyDto,
           userId,
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              nickname: true,
+              profileUrl: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -40,7 +50,7 @@ export class BoardGameReplyService {
     id: number,
     userId: number,
     updateBoardGameReplyDto: UpdateBoardGameReplyDto,
-  ) {
+  ): Promise<BoardGameReply> {
     try {
       const boardGameReply = await this.prismaService.boardGameReply.findUnique(
         { where: { id } },
@@ -53,6 +63,15 @@ export class BoardGameReplyService {
       return await this.prismaService.boardGameReply.update({
         data: updateBoardGameReplyDto,
         where: { id },
+        include: {
+          user: {
+            select: {
+              id: true,
+              nickname: true,
+              profileUrl: true,
+            },
+          },
+        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -67,7 +86,7 @@ export class BoardGameReplyService {
     }
   }
 
-  async remove(id: number, user: UserByAccessToken) {
+  async remove(id: number, user: UserByAccessToken): Promise<BoardGameReply> {
     try {
       if (user.role === Role.MEMBER) {
         const boardGameReply =
@@ -82,6 +101,15 @@ export class BoardGameReplyService {
 
       return await this.prismaService.boardGameReply.delete({
         where: { id },
+        include: {
+          user: {
+            select: {
+              id: true,
+              nickname: true,
+              profileUrl: true,
+            },
+          },
+        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {

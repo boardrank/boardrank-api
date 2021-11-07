@@ -25,9 +25,10 @@ import { RolesGuard } from 'libs/guards/roles.guard';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { Role } from 'src/auth/entities/role';
 import { BoardGameReplyService } from './board-game-reply.service';
-import { CreateBoardGameReplyDto } from './dto/create-board-game-reply.dto';
-import { UpdateBoardGameReplyDto } from './dto/update-board-game-reply.dto';
-import { BoardGameReply } from './entities/board-game-reply.entity';
+import { ApiDeleteBoardGameReplyIdResData } from './vo/api-delete-board-game-reply-id-res-data.schema';
+import { ApiPatchBoardGameReplyResData } from './vo/api-patch-board-game-reply-id-res-data.schema';
+import { ApiPostBoardGameReplyReqBody } from './vo/api-post-board-game-reply-req-body.schema';
+import { ApiPostBoardGameReplyResData } from './vo/api-post-board-game-reply-res-data.schema';
 
 @ApiTags(SwaggerTag.BoardGameReply)
 @ApiBearerAuth()
@@ -39,54 +40,63 @@ export class BoardGameReplyController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(BoardGameReply) },
+    schema: { $ref: getSchemaPath(ApiPostBoardGameReplyResData) },
   })
   @ApiUnauthorizedResponse()
   async create(
     @Req() req: Request,
-    @Body() createBoardGameReplyDto: CreateBoardGameReplyDto,
-  ) {
+    @Body() body: ApiPostBoardGameReplyReqBody,
+  ): Promise<ApiPostBoardGameReplyResData> {
     const { id } = req.user as UserByAccessToken;
-    return await this.boardGameReplyService.create(id, createBoardGameReplyDto);
+    const boardGameReply = await this.boardGameReplyService.create(
+      id,
+      body.boardGameReply,
+    );
+    return { boardGameReply };
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(BoardGameReply) },
+    schema: { $ref: getSchemaPath(ApiPatchBoardGameReplyResData) },
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(
     BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),
   )
-  update(
+  async update(
     @Param('id') id: string,
     @Req() req: Request,
-    @Body() updateBoardGameReplyDto: UpdateBoardGameReplyDto,
-  ) {
+    @Body() body: ApiPostBoardGameReplyReqBody,
+  ): Promise<ApiPatchBoardGameReplyResData> {
     const { id: userId } = req.user as UserByAccessToken;
-    return this.boardGameReplyService.update(
+    const boardGameReply = await this.boardGameReplyService.update(
       +id,
       userId,
-      updateBoardGameReplyDto,
+      body.boardGameReply,
     );
+    return { boardGameReply };
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(BoardGameReply) },
+    schema: { $ref: getSchemaPath(ApiDeleteBoardGameReplyIdResData) },
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(
     BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),
   )
-  remove(@Req() req: Request, @Param('id') id: string) {
+  async remove(
+    @Req() req: Request,
+    @Param('id') id: string,
+  ): Promise<ApiDeleteBoardGameReplyIdResData> {
     const user = req.user as UserByAccessToken;
-    return this.boardGameReplyService.remove(+id, user);
+    const boardGameReply = await this.boardGameReplyService.remove(+id, user);
+    return { boardGameReply };
   }
 }

@@ -27,7 +27,6 @@ import { RolesGuard } from 'libs/guards/roles.guard';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { Role } from 'src/auth/entities/role';
 import { BoardGameService } from './board-game.service';
-import { UpdateBoardGameDto } from './dto/update-board-game.dto';
 import { BoardGame } from './entities/board-game.entity';
 import { ApiGetBoardGameListGenreIdResData } from './schemas/api-get-board-game-list-genre-id-res-data.schema';
 import { ApiGetBoardGameListResData } from './schemas/api-get-board-game-list-res-data.schema';

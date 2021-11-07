@@ -56,11 +56,8 @@ export class AuthService {
     const role = Role.MEMBER;
 
     try {
-      const user = await this.userService.create({
-        oauthId,
-        nickname,
-        profileUrl,
-        role,
+      const user = await this.prismaService.user.create({
+        data: { oauthId, nickname, profileUrl, role },
       });
 
       const [refreshToken, accessToken] = await Promise.all([

@@ -24,9 +24,14 @@ import { Role } from 'src/auth/entities/role';
 import { Request } from 'express';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-response.decorator';
-import { User } from './entities/user.entity';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
+import { ApiGetUserResData } from './schemas/api-get-user-res-data.schema';
+import { ApiPatchUserResData } from './schemas/api-patch-user-res-data.schema';
+import { ApiPatchUserReqBody } from './schemas/api-patch-user-req-body.schema';
+import { ApiGetUserIdResData } from './schemas/api-get-user-id-res-data.schema';
+import { ApiPatchUserIdResData } from './schemas/api-patch-user-id-res-data.schema';
+import { ApiPatchUserIdReqBody } from './schemas/api-patch-user-id-req-body.schema';
+import { ApiDeleteUserIdResData } from './schemas/api-delete-user-id-res-data.schema';
 
 @ApiTags(SwaggerTag.User)
 @ApiBearerAuth()
@@ -37,62 +42,66 @@ export class UserController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserResData) } })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
-  async getOwnProfile(@Req() req: Request) {
+  async getOwnProfile(@Req() req: Request): Promise<ApiGetUserResData> {
     const { id } = req.user as UserByAccessToken;
-    return await this.userService.findOneById(id);
+    const user = await this.userService.findOneById(id);
+    return { user };
   }
 
   @Get(':id')
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserIdResData) } })
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
-  async getProfile(@Param('id') id: string) {
-    return await this.userService.findOneById(+id);
+  async getProfile(@Param('id') id: string): Promise<ApiGetUserIdResData> {
+    const user = await this.userService.findOneById(+id);
+    return { user };
   }
 
   @Patch()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPatchUserResData) } })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async updateOwnProfile(
     @Req() req: Request,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+    @Body() body: ApiPatchUserReqBody,
+  ): Promise<ApiPatchUserResData> {
     const { id, role } = req.user as UserByAccessToken;
-    return await this.userService.updateProfile(
+    const user = await this.userService.updateProfile(
       id,
-      updateUserDto,
+      body.user,
       role === Role.ADMIN,
     );
+    return { user };
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPatchUserIdResData) } })
   @ApiUnauthorizedResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async updateProfile(
     @Param('id') id: string,
-    @Req() req: Request,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return await this.userService.updateProfile(+id, updateUserDto, true);
+    @Body() body: ApiPatchUserIdReqBody,
+  ): Promise<ApiPatchUserIdResData> {
+    const user = await this.userService.updateProfile(+id, body.user, true);
+    return { user };
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiDeleteUserIdResData) } })
   @ApiUnauthorizedResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
-  async deleteUser(@Param('id') id: string) {
-    return await this.userService.delete(+id);
+  async deleteUser(@Param('id') id: string): Promise<ApiDeleteUserIdResData> {
+    const user = await this.userService.delete(+id);
+    return { user };
   }
 }

@@ -12,6 +12,7 @@ import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from 'src/auth/entities/role';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './vo/user.vo';
 
 @Injectable()
 export class UserService {
@@ -25,7 +26,7 @@ export class UserService {
 
   constructor(private prismaService: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       return await this.prismaService.user.create({
         data: createUserDto,
@@ -42,7 +43,7 @@ export class UserService {
     }
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<User> {
     try {
       const user = await this.prismaService.user.findUnique({
         where: { id },
@@ -62,7 +63,7 @@ export class UserService {
     id: number,
     updateUserDto: UpdateUserDto,
     hasAdminPermission = false,
-  ) {
+  ): Promise<User> {
     try {
       if (!hasAdminPermission && updateUserDto.role === Role.ADMIN) {
         throw new ForbiddenException();
@@ -80,7 +81,7 @@ export class UserService {
     }
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<User> {
     try {
       return await this.prismaService.user.delete({
         where: { id },

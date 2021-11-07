@@ -38,4 +38,23 @@ export class BoardGameScoreService {
       throw error;
     }
   }
+
+  async getAverageScoreById(boardGameId: number) {
+    try {
+      const {
+        _avg: { score },
+      } = await this.prismaService.boardGameScore.aggregate({
+        _avg: {
+          score: true,
+        },
+        where: {
+          boardGameId,
+        },
+      });
+
+      return score;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

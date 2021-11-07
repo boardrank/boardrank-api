@@ -14,8 +14,8 @@ import { RolesGuard } from 'libs/guards/roles.guard';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { Role } from 'src/auth/entities/role';
 import { BoardGameScoreService } from './board-game-score.service';
-import { CreateBoardGameScoreDto } from './dto/create-board-game-score.dto';
-import { BoardGameScore } from './entities/board-game-score.entity';
+import { ApiPostBoardGameScoreReqBody } from './schemas/api-post-board-game-score-req-body.schema';
+import { ApiPostBoardGameScoreResData } from './schemas/api-post-board-game-score-res-data.schema';
 
 @ApiTags(SwaggerTag.BoardGameScore)
 @ApiBearerAuth()
@@ -27,14 +27,21 @@ export class BoardGameScoreController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(BoardGameScore) },
+    schema: { $ref: getSchemaPath(ApiPostBoardGameScoreResData) },
   })
   @ApiUnauthorizedResponse()
   async create(
     @Req() req: Request,
-    @Body() createBoardGameScoreDto: CreateBoardGameScoreDto,
-  ) {
-    const { id } = req.user as UserByAccessToken;
-    return await this.boardGameScoreService.create(id, createBoardGameScoreDto);
+    @Body() body: ApiPostBoardGameScoreReqBody,
+  ): Promise<ApiPostBoardGameScoreResData> {
+    const { id: userId } = req.user as UserByAccessToken;
+    const boardGameScore = await this.boardGameScoreService.create(
+      userId,
+      body.boardGameScore,
+    );
+    const averageScore = await this.boardGameScoreService.getAverageScoreById(
+      boardGameScore.boardGameId,
+    );
+    return { boardGameScore, averageScore };
   }
 }

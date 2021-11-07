@@ -14,6 +14,7 @@ import { ApiInvalidTokenErrorResponse } from 'libs/http-exceptions/api-invalid-t
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { ApiPatchGenreIdReqBody } from './genre/schemas/api-patch-genre-id-req-body.schema';
 import { ApiPatchGenreIdResData } from './genre/schemas/api-patch-genre-id-res-data.schema';
+import { ApiPostBoardGameScoreResData } from './board-game-score/schemas/api-post-board-game-score-res-data.schema';
 import { ApiPostGenreReqBody } from './genre/schemas/api-post-genre-req-body.schema';
 import { ApiPostGenreResData } from './genre/schemas/api-post-genre-res-data.schema';
 import { ApiUnauthorizedErrorResponse } from 'libs/http-exceptions/api-unauthorized-error-response';
@@ -51,6 +52,8 @@ async function bootstrap() {
       ApiPatchGenreIdReqBody,
       ApiPatchGenreIdResData,
       ApiDeleteGenreIdResData,
+      // BoardGameScore
+      ApiPostBoardGameScoreResData,
       // VO
       BoardGame,
       User,

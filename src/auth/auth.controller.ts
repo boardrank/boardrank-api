@@ -22,12 +22,10 @@ export class AuthController {
 
   @Post('sign-up')
   @ApiCreatedResponse({ schema: { $ref: getSchemaPath(ApiAuthResponse) } })
-  @ApiBadRequestResponse({
-    description: AuthService.ErrorInvalidIdToken.toDescription(),
-  })
-  @ApiConflictResponse({
-    description: AuthService.ErrorAlreadyRegistered.toDescription(),
-  })
+  @ApiBadRequestResponse(AuthService.ErrorInvalidIdToken.toApiResponseOptions())
+  @ApiConflictResponse(
+    AuthService.ErrorAlreadyRegistered.toApiResponseOptions(),
+  )
   async signUp(@Body() body: SignUpDto) {
     return await this.authService.signUp(body.idToken);
   }
@@ -35,12 +33,8 @@ export class AuthController {
   @Post('sign-in')
   @HttpCode(200)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiAuthResponse) } })
-  @ApiBadRequestResponse({
-    description: AuthService.ErrorInvalidIdToken.toDescription(),
-  })
-  @ApiNotFoundResponse({
-    description: AuthService.ErrorNotFoundUser.toDescription(),
-  })
+  @ApiBadRequestResponse(AuthService.ErrorInvalidIdToken.toApiResponseOptions())
+  @ApiNotFoundResponse(AuthService.ErrorNotFoundUser.toApiResponseOptions())
   async signIn(@Body() body: SignInDto) {
     return await this.authService.signIn(body.idToken);
   }
@@ -48,9 +42,7 @@ export class AuthController {
   @Post('sign-in/refresh')
   @HttpCode(200)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiAuthResponse) } })
-  @ApiBadRequestResponse({
-    description: AuthService.ErrorInvalidIdToken.toDescription(),
-  })
+  @ApiBadRequestResponse(AuthService.ErrorInvalidIdToken.toApiResponseOptions())
   async refresh(@Body() body: RefreshDto) {
     return await this.authService.refresh(body.refreshToken);
   }

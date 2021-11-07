@@ -1,14 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
-import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
+import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
 import { CreateBoardGameScoreDto } from './dto/create-board-game-score.dto';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class BoardGameScoreService {
-  static ErrorAlreadyRegistered = new ApiErrorResponse(
-    ErrorCode.AlreadyRegistered,
+  static ErrorAlreadyRegistered = new ApiAlreadyRegisteredErrorResponse(
     '이미 점수를 등록했습니다.',
   );
 

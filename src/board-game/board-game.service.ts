@@ -5,23 +5,21 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
+import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
+import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { BoardGame } from './entities/board-game.entity';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from '../../src/prisma/prisma.service';
 import { UpdateBoardGameDto } from './dto/update-board-game.dto';
 
 @Injectable()
 export class BoardGameService {
-  static ErrorNotFoundBoardGame = new ApiErrorResponse(
-    ErrorCode.NotFound,
+  static ErrorNotFoundBoardGame = new ApiNotFoundErrorResponse(
     '보드게임을 찾을 수 없습니다.',
   );
 
-  static ErrorBadRequestGenreId = new ApiErrorResponse(
-    ErrorCode.InvalidParam,
+  static ErrorBadRequestGenreId = new ApiInvalidParamErrorResponse(
     '올바르지 않은 장르입니다.',
   );
 

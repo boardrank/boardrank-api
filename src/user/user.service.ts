@@ -5,9 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
+import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
+import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from 'src/auth/entities/role';
@@ -15,13 +15,11 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  static ErrorAlreadyRegistered = new ApiErrorResponse(
-    ErrorCode.AlreadyRegistered,
+  static ErrorAlreadyRegistered = new ApiAlreadyRegisteredErrorResponse(
     '이미 등록된 회원입니다.',
   );
 
-  static ErrorNotFound = new ApiErrorResponse(
-    ErrorCode.NotFound,
+  static ErrorNotFound = new ApiNotFoundErrorResponse(
     '해당 유저를 찾을 수 없습니다.',
   );
 

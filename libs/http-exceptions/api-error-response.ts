@@ -1,4 +1,9 @@
-import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiProperty,
+  ApiResponseOptions,
+  getSchemaPath,
+} from '@nestjs/swagger';
 
 import { ErrorCode } from './error-codes';
 
@@ -8,6 +13,12 @@ export class ApiErrorResponse {
     this.errorCode = errorCode;
     this.errorMsg = errorMsg;
   }
+
+  @ApiProperty()
+  errorCode: number;
+
+  @ApiProperty()
+  errorMsg: string;
 
   toDescription() {
     return JSON.stringify(
@@ -20,9 +31,10 @@ export class ApiErrorResponse {
     );
   }
 
-  @ApiProperty()
-  errorCode: number;
-
-  @ApiProperty()
-  errorMsg: string;
+  toApiResponseOptions(): ApiResponseOptions {
+    return {
+      description: this.toDescription(),
+      schema: { $ref: getSchemaPath(this.constructor.name) },
+    };
+  }
 }

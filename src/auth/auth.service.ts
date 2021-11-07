@@ -6,10 +6,11 @@ import {
 } from '@nestjs/common';
 
 import { AccessTokenPayloadDto } from './dto/access-token-payload.dto';
+import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
 import { ApiAuthResponse } from './entities/api-auth-response';
-import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
+import { ApiInvalidTokenErrorResponse } from 'libs/http-exceptions/api-invalid-token-error-response';
+import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { CreateAccessTokenDto } from './dto/create-access-token.dto';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
@@ -19,18 +20,15 @@ import { verifyIdToken } from 'libs/auth-google';
 
 @Injectable()
 export class AuthService {
-  static ErrorInvalidIdToken = new ApiErrorResponse(
-    ErrorCode.InvalidToken,
+  static ErrorInvalidIdToken = new ApiInvalidTokenErrorResponse(
     '유효하지 않은 토큰입니다.',
   );
 
-  static ErrorAlreadyRegistered = new ApiErrorResponse(
-    ErrorCode.AlreadyRegistered,
+  static ErrorAlreadyRegistered = new ApiAlreadyRegisteredErrorResponse(
     '이미 등록된 회원입니다.',
   );
 
-  static ErrorNotFoundUser = new ApiErrorResponse(
-    ErrorCode.NotFound,
+  static ErrorNotFoundUser = new ApiNotFoundErrorResponse(
     '사용자를 찾을 수 없습니다.',
   );
 

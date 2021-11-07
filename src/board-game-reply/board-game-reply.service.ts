@@ -4,9 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
+import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { CreateBoardGameReplyDto } from './dto/create-board-game-reply.dto';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from 'src/auth/entities/role';
@@ -15,8 +14,7 @@ import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 
 @Injectable()
 export class BoardGameReplyService {
-  static ErrorNotFoundBoardGame = new ApiErrorResponse(
-    ErrorCode.NotFound,
+  static ErrorNotFoundBoardGame = new ApiNotFoundErrorResponse(
     '댓글을 찾을 수 없습니다.',
   );
 

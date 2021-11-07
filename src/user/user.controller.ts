@@ -40,9 +40,7 @@ export class UserController {
   @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  @ApiNotFoundResponse({
-    description: UserService.ErrorNotFound.toDescription(),
-  })
+  @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async getOwnProfile(@Req() req: Request) {
     const { id } = req.user as UserByAccessToken;
     return await this.userService.findOneById(id);
@@ -50,9 +48,7 @@ export class UserController {
 
   @Get(':id')
   @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
-  @ApiNotFoundResponse({
-    description: UserService.ErrorNotFound.toDescription(),
-  })
+  @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async getProfile(@Param('id') id: string) {
     return await this.userService.findOneById(+id);
   }
@@ -63,9 +59,7 @@ export class UserController {
   @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  @ApiNotFoundResponse({
-    description: UserService.ErrorNotFound.toDescription(),
-  })
+  @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async updateOwnProfile(
     @Req() req: Request,
     @Body() updateUserDto: UpdateUserDto,
@@ -83,9 +77,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
-  @ApiNotFoundResponse({
-    description: UserService.ErrorNotFound.toDescription(),
-  })
+  @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async updateProfile(
     @Param('id') id: string,
     @Req() req: Request,
@@ -99,9 +91,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(User) } })
   @ApiUnauthorizedResponse()
-  @ApiNotFoundResponse({
-    description: UserService.ErrorNotFound.toDescription(),
-  })
+  @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async deleteUser(@Param('id') id: string) {
     return await this.userService.delete(+id);
   }

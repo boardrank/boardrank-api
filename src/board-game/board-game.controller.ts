@@ -59,9 +59,9 @@ export class BoardGameController {
   @ApiOkResponse({
     schema: { type: 'array', items: { $ref: getSchemaPath(BoardGame) } },
   })
-  @ApiBadRequestResponse({
-    description: BoardGameService.ErrorBadRequestGenreId.toDescription(),
-  })
+  @ApiBadRequestResponse(
+    BoardGameService.ErrorBadRequestGenreId.toApiResponseOptions(),
+  )
   async findAllByGenreId(@Param('genreId') genreId: string) {
     return await this.boardGameService.findAllByGenreId(+genreId);
   }
@@ -74,9 +74,9 @@ export class BoardGameController {
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  @ApiNotFoundResponse({
-    description: BoardGameService.ErrorNotFoundBoardGame.toDescription(),
-  })
+  @ApiNotFoundResponse(
+    BoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),
+  )
   update(
     @Param('id') id: string,
     @Body() updateBoardGameDto: UpdateBoardGameDto,
@@ -92,9 +92,9 @@ export class BoardGameController {
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  @ApiNotFoundResponse({
-    description: BoardGameService.ErrorNotFoundBoardGame.toDescription(),
-  })
+  @ApiNotFoundResponse(
+    BoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),
+  )
   remove(@Param('id') id: string) {
     return this.boardGameService.remove(+id);
   }

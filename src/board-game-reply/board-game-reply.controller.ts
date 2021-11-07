@@ -59,9 +59,9 @@ export class BoardGameReplyController {
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  @ApiNotFoundResponse({
-    description: BoardGameReplyService.ErrorNotFoundBoardGame.toDescription(),
-  })
+  @ApiNotFoundResponse(
+    BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),
+  )
   update(
     @Param('id') id: string,
     @Req() req: Request,
@@ -83,9 +83,9 @@ export class BoardGameReplyController {
   })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  @ApiNotFoundResponse({
-    description: BoardGameReplyService.ErrorNotFoundBoardGame.toDescription(),
-  })
+  @ApiNotFoundResponse(
+    BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),
+  )
   remove(@Req() req: Request, @Param('id') id: string) {
     const user = req.user as UserByAccessToken;
     return this.boardGameReplyService.remove(+id, user);

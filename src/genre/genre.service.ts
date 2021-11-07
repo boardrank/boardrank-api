@@ -1,35 +1,31 @@
 import {
   ConflictException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
+import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
+import { ApiHasReferenceErrorResponse } from 'libs/http-exceptions/api-already-registered-error-response';
+import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { CreateGenreDto } from './dto/create-genre.dto';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 
 @Injectable()
 export class GenreService {
-  static ErrorAlreadyRegistered = new ApiErrorResponse(
-    ErrorCode.AlreadyRegistered,
+  static ErrorAlreadyRegistered = new ApiAlreadyRegisteredErrorResponse(
     '이미 등록된 장르 코드입니다.',
   );
 
-  static ErrorNotFound = new ApiErrorResponse(
-    ErrorCode.NotFound,
+  static ErrorNotFound = new ApiNotFoundErrorResponse(
     '해당 장르를 찾을 수 없습니다.',
   );
 
-  static ErrorHasReference = new ApiErrorResponse(
-    ErrorCode.HasReference,
+  static ErrorHasReference = new ApiHasReferenceErrorResponse(
     '해당 장르를 참조하는 보드게임이 있습니다.',
   );
 
-  logger = new Logger('GenreService');
   constructor(private prismaService: PrismaService) {}
 
   async create({ code, name }: CreateGenreDto) {

@@ -1,9 +1,10 @@
-import { Genre, Prisma } from '.prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { CreateGenreDto } from './dto/create-genre.dto';
+import { Genre } from './vo/genre.vo';
 import { GenreController } from './genre.controller';
 import { GenreModule } from './genre.module';
+import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 describe('GenreController', () => {
@@ -24,7 +25,7 @@ describe('GenreController', () => {
   });
 
   it('should be returned genre list', async () => {
-    const genres = await controller.findAll();
+    const { genres } = await controller.findAll();
     expect(genres.length > 0).toBeTruthy();
   });
 
@@ -61,7 +62,8 @@ describe('GenreController', () => {
       testGenre.code = 'TEST_GENRE';
       testGenre.name = '테스트 장르';
 
-      createdTestGenre = await controller.create(testGenre);
+      const { genre } = await controller.create({ genre: testGenre });
+      createdTestGenre = genre;
 
       expect(createdTestGenre.code).toBe(testGenre.code);
       expect(createdTestGenre.name).toBe(testGenre.name);
@@ -72,23 +74,24 @@ describe('GenreController', () => {
       createdTestGenre.code = 'UPDATE_TEST_GENRE';
       createdTestGenre.name = '수정된 테스트 장르';
 
-      const updatedTestGenre = await controller.update(
+      const { genre: updatedTestGenre } = await controller.update(
         `${createdTestGenre.id}`,
         {
-          code: createdTestGenre.code,
-          name: createdTestGenre.name,
+          genre: {
+            code: createdTestGenre.code,
+            name: createdTestGenre.name,
+          },
         },
       );
 
       expect(updatedTestGenre.code).toBe(createdTestGenre.code);
       expect(updatedTestGenre.name).toBe(createdTestGenre.name);
-      expect(updatedTestGenre.updatedAt).not.toEqual(
-        createdTestGenre.updatedAt,
-      );
     });
 
     it('should be deleted', async () => {
-      const deletedGenre = await controller.remove(`${createdTestGenre.id}`);
+      const { genre: deletedGenre } = await controller.remove(
+        `${createdTestGenre.id}`,
+      );
       const genre = await prismaService.genre.findUnique({
         where: { id: createdTestGenre.id },
       });

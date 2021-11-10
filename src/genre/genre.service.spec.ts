@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Genre } from './entities/genre.entity';
+import { Genre } from './vo/genre.vo';
 import { GenreService } from './genre.service';
 import { HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -16,7 +16,6 @@ describe('GenreService', () => {
     }).compile();
 
     service = module.get<GenreService>(GenreService);
-    service.initialize();
     genres = await service.findAll();
   });
 

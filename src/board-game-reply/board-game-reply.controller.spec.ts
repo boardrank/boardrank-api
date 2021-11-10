@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { BoardGameReplyController } from './board-game-reply.controller';
-import { BoardGameReplyService } from './board-game-reply.service';
+import { BoardGameReplyModule } from './board-game-reply.module';
 
 describe('BoardGameReplyController', () => {
   let controller: BoardGameReplyController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [BoardGameReplyController],
-      providers: [BoardGameReplyService],
+      imports: [BoardGameReplyModule],
     }).compile();
 
     controller = module.get<BoardGameReplyController>(BoardGameReplyController);

@@ -6,14 +6,18 @@ const ISS = 'accounts.google.com';
 const client = new OAuth2Client(OAUTH_GOOGLE_CLIENT_ID);
 
 export const verifyIdToken = async (idToken: string) => {
-  const ticket = await client.verifyIdToken({
-    idToken,
-    audience: OAUTH_GOOGLE_CLIENT_ID,
-  });
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: OAUTH_GOOGLE_CLIENT_ID,
+    });
 
-  const payload = ticket.getPayload();
+    const payload = ticket.getPayload();
 
-  if (validate(payload)) return payload;
+    if (validate(payload)) return payload;
+  } catch (error) {
+    return null;
+  }
 };
 
 export const validate = ({ iss, aud }: TokenPayload) => {

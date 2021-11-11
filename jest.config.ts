@@ -7,12 +7,13 @@ const config: Config.InitialOptions = {
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
-  collectCoverageFrom: ['**/*.(t|j)s'],
-  coverageDirectory: '../coverage',
+  collectCoverageFrom: ['<rootDir>/src/**/*.(t|j)s'],
+  coverageDirectory: './coverage',
   testEnvironment: 'node',
   moduleNameMapper: {
     'src/(.*)': '<rootDir>/src/$1',
     'libs/(.*)': '<rootDir>/libs/$1',
   },
+  modulePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/src/main.ts'],
 };
 export default config;

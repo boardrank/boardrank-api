@@ -16,4 +16,8 @@ describe('AppService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('should be return null when get /health', () => {
+    expect(service.health()).toBeNull();
+  });
 });

@@ -20,7 +20,7 @@ import { verifyIdToken } from 'libs/auth-google';
 
 @Injectable()
 export class AuthService {
-  static ErrorInvalidIdToken = new ApiInvalidTokenErrorResponse(
+  static ErrorInvalidToken = new ApiInvalidTokenErrorResponse(
     '유효하지 않은 토큰입니다.',
   );
 
@@ -47,7 +47,7 @@ export class AuthService {
     const payload = await verifyIdToken(idToken);
 
     if (!payload) {
-      throw new BadRequestException(AuthService.ErrorInvalidIdToken);
+      throw new BadRequestException(AuthService.ErrorInvalidToken);
     }
 
     const oauthId = payload.sub;
@@ -78,7 +78,7 @@ export class AuthService {
     const payload = await verifyIdToken(idToken);
 
     if (!payload) {
-      throw new BadRequestException(AuthService.ErrorInvalidIdToken);
+      throw new BadRequestException(AuthService.ErrorInvalidToken);
     }
 
     const user = await this.prismaService.user.findUnique({
@@ -101,7 +101,11 @@ export class AuthService {
   }
 
   async refresh(token: string): Promise<ApiAuthResponse> {
-    return await this.issueTokensByRefreshToken(token);
+    try {
+      return await this.issueTokensByRefreshToken(token);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async issueRefreshToken(id: number): Promise<string> {
@@ -155,8 +159,8 @@ export class AuthService {
         accessToken,
       };
     } catch (error) {
-      if (error.message === 'invalid signature') {
-        throw new BadRequestException(AuthService.ErrorInvalidIdToken);
+      if (error.message === 'jwt must be provided') {
+        throw new BadRequestException(AuthService.ErrorInvalidToken);
       }
       throw error;
     }

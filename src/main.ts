@@ -6,7 +6,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerTag } from 'libs/constants';
 import extraModels from 'libs/swaggers/extraModels';
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });

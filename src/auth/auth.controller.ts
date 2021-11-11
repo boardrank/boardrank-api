@@ -25,7 +25,7 @@ export class AuthController {
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiPostAuthSignUpResData) },
   })
-  @ApiBadRequestResponse(AuthService.ErrorInvalidIdToken.toApiResponseOptions())
+  @ApiBadRequestResponse(AuthService.ErrorInvalidToken.toApiResponseOptions())
   @ApiConflictResponse(
     AuthService.ErrorAlreadyRegistered.toApiResponseOptions(),
   )
@@ -38,7 +38,7 @@ export class AuthController {
   @Post('sign-in')
   @HttpCode(200)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPostAuthSignInResData) } })
-  @ApiBadRequestResponse(AuthService.ErrorInvalidIdToken.toApiResponseOptions())
+  @ApiBadRequestResponse(AuthService.ErrorInvalidToken.toApiResponseOptions())
   @ApiNotFoundResponse(AuthService.ErrorNotFoundUser.toApiResponseOptions())
   async signIn(
     @Body() body: ApiPostAuthSignUpReqBody,
@@ -49,7 +49,7 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(200)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPostAuthRefreshResData) } })
-  @ApiBadRequestResponse(AuthService.ErrorInvalidIdToken.toApiResponseOptions())
+  @ApiBadRequestResponse(AuthService.ErrorInvalidToken.toApiResponseOptions())
   async refresh(
     @Body() body: ApiPostAuthRefreshReqBody,
   ): Promise<ApiPostAuthRefreshResData> {

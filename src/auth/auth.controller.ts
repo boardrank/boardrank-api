@@ -12,6 +12,7 @@ import { SwaggerTag } from 'libs/constants';
 import { AuthService } from './auth.service';
 import { ApiPostAuthRefreshReqBody } from './schemas/api-post-auth-refresh-req-body.schema';
 import { ApiPostAuthRefreshResData } from './schemas/api-post-auth-refresh-res-data.schema';
+import { ApiPostAuthSignInReqBody } from './schemas/api-post-auth-sign-in-req-body.schema';
 import { ApiPostAuthSignInResData } from './schemas/api-post-auth-sign-in-res-data.schema';
 import { ApiPostAuthSignUpReqBody } from './schemas/api-post-auth-sign-up-req-body.schema';
 import { ApiPostAuthSignUpResData } from './schemas/api-post-auth-sign-up-res-data.schema';
@@ -41,7 +42,7 @@ export class AuthController {
   @ApiBadRequestResponse(AuthService.ErrorInvalidToken.toApiResponseOptions())
   @ApiNotFoundResponse(AuthService.ErrorNotFoundUser.toApiResponseOptions())
   async signIn(
-    @Body() body: ApiPostAuthSignUpReqBody,
+    @Body() body: ApiPostAuthSignInReqBody,
   ): Promise<ApiPostAuthSignInResData> {
     return await this.authService.signIn(body.idToken);
   }

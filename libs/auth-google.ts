@@ -21,5 +21,5 @@ export const verifyIdToken = async (idToken: string) => {
 };
 
 export const validate = ({ iss, aud }: TokenPayload) => {
-  return iss === ISS && aud === OAUTH_GOOGLE_CLIENT_ID;
+  return iss.replace('https://', '') === ISS && aud === OAUTH_GOOGLE_CLIENT_ID;
 };

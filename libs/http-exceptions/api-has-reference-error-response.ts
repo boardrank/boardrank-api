@@ -11,6 +11,8 @@ export class ApiAlreadyRegisteredErrorResponse extends ApiErrorResponse {
 
   @ApiProperty({
     default: ErrorCode.AlreadyRegistered,
+    type: Number,
+    enum: null,
   })
-  errorCode: number;
+  errorCode: ErrorCode.AlreadyRegistered;
 }

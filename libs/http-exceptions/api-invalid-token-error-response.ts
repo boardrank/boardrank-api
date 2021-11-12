@@ -11,6 +11,8 @@ export class ApiInvalidTokenErrorResponse extends ApiErrorResponse {
 
   @ApiProperty({
     default: ErrorCode.InvalidToken,
+    type: Number,
+    enum: null,
   })
-  errorCode: number;
+  errorCode: ErrorCode.InvalidToken;
 }

@@ -20,7 +20,7 @@ export class ApiErrorResponse {
       (value) => !isNaN(parseInt(value as string)),
     ),
   })
-  errorCode: number;
+  errorCode: ErrorCode;
 
   @ApiProperty()
   errorMsg: string;

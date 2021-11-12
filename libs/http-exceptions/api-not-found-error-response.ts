@@ -11,6 +11,8 @@ export class ApiNotFoundErrorResponse extends ApiErrorResponse {
 
   @ApiProperty({
     default: ErrorCode.NotFound,
+    type: Number,
+    enum: null,
   })
-  errorCode: number;
+  errorCode: ErrorCode.NotFound;
 }

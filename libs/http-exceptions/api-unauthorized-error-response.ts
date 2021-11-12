@@ -11,6 +11,8 @@ export class ApiUnauthorizedErrorResponse extends ApiErrorResponse {
 
   @ApiProperty({
     default: ErrorCode.Unauthorized,
+    type: Number,
+    enum: null,
   })
-  errorCode: number;
+  readonly errorCode: ErrorCode.Unauthorized;
 }

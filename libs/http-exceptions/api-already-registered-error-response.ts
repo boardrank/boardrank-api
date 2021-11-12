@@ -11,6 +11,8 @@ export class ApiHasReferenceErrorResponse extends ApiErrorResponse {
 
   @ApiProperty({
     default: ErrorCode.HasReference,
+    type: Number,
+    enum: null,
   })
-  errorCode: number;
+  errorCode: ErrorCode.HasReference;
 }

@@ -11,6 +11,8 @@ export class ApiConflictErrorResponse extends ApiErrorResponse {
 
   @ApiProperty({
     default: ErrorCode.Conflict,
+    type: Number,
+    enum: null,
   })
-  errorCode: number;
+  errorCode: ErrorCode.Conflict;
 }

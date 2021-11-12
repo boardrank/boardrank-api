@@ -15,7 +15,10 @@ export class ApiErrorResponse {
   }
 
   @ApiProperty({
-    enum: Object.values(ErrorCode),
+    type: Number,
+    enum: Object.values(ErrorCode).filter(
+      (value) => !isNaN(parseInt(value as string)),
+    ),
   })
   errorCode: ErrorCode;
 

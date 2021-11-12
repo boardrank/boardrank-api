@@ -12,7 +12,6 @@ export class ApiBadRequestErrorResponse extends ApiErrorResponse {
   @ApiProperty({
     default: ErrorCode.BadRequest,
     type: Number,
-    enum: null,
   })
-  errorCode: ErrorCode.BadRequest;
+  readonly errorCode: number = ErrorCode.BadRequest;
 }

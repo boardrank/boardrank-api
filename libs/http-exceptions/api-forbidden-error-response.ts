@@ -12,7 +12,6 @@ export class ApiForbiddenErrorResponse extends ApiErrorResponse {
   @ApiProperty({
     default: ErrorCode.Forbidden,
     type: Number,
-    enum: null,
   })
-  errorCode: ErrorCode.Forbidden;
+  readonly errorCode: number = ErrorCode.Forbidden;
 }

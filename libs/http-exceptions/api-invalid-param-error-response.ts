@@ -12,7 +12,6 @@ export class ApiInvalidParamErrorResponse extends ApiErrorResponse {
   @ApiProperty({
     default: ErrorCode.InvalidParam,
     type: Number,
-    enum: null,
   })
-  errorCode: ErrorCode.InvalidParam;
+  readonly errorCode: number = ErrorCode.InvalidParam;
 }

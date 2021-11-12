@@ -4,26 +4,25 @@ import {
   ApiResponseOptions,
   getSchemaPath,
 } from '@nestjs/swagger';
-
 import { ErrorCode } from './error-codes';
 
 @ApiExtraModels()
 export class ApiErrorResponse {
-  constructor(errorCode: ErrorCode, errorMsg: string) {
+  constructor(errorCode: number, errorMsg: string) {
     this.errorCode = errorCode;
     this.errorMsg = errorMsg;
   }
 
   @ApiProperty({
     type: Number,
-    enum: Object.values(ErrorCode).filter(
-      (value) => !isNaN(parseInt(value as string)),
-    ),
+    description: Object.entries(ErrorCode)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join(', '),
   })
-  errorCode: ErrorCode;
+  readonly errorCode: number;
 
   @ApiProperty()
-  errorMsg: string;
+  readonly errorMsg: string;
 
   toDescription() {
     return JSON.stringify(

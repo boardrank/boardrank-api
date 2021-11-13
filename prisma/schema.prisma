@@ -27,7 +27,7 @@ model User {
 model BoardGame {
   id  Int @default(autoincrement()) @id
   name String
-  description String
+  description String @db.VarChar(2000)
   thumbnailUrl String @map("thumbnail_url")
   designer String
   difficulty Float

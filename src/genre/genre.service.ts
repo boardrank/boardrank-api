@@ -40,6 +40,12 @@ export class GenreService {
       });
 
       return await this.prismaService.genre.create({
+        select: {
+          id: true,
+          code: true,
+          name: true,
+          order: true,
+        },
         data: {
           code: code.toUpperCase(),
           name,
@@ -62,6 +68,12 @@ export class GenreService {
 
   findAll() {
     return this.prismaService.genre.findMany({
+      select: {
+        id: true,
+        code: true,
+        name: true,
+        order: true,
+      },
       orderBy: {
         order: 'asc',
       },
@@ -71,6 +83,12 @@ export class GenreService {
   async update(id: number, { code, name, order }: UpdateGenreDto) {
     try {
       return await this.prismaService.genre.update({
+        select: {
+          id: true,
+          code: true,
+          name: true,
+          order: true,
+        },
         data: {
           code: code?.toUpperCase(),
           name,
@@ -100,6 +118,12 @@ export class GenreService {
   async remove(id: number) {
     try {
       return await this.prismaService.genre.delete({
+        select: {
+          id: true,
+          code: true,
+          name: true,
+          order: true,
+        },
         where: { id },
       });
     } catch (error) {

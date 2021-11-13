@@ -30,7 +30,7 @@ model BoardGame {
   description String
   thumbnailUrl String @map("thumbnail_url")
   designer String
-  difficulty Int
+  difficulty Float
   personnel String
   recommendPersonnel String @map("recommend_personnel")
   playTime Int // 분 단위

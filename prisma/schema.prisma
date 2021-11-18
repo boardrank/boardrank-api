@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,86 +8,92 @@ datasource db {
 }
 
 model User {
-  id Int @default(autoincrement()) @id
-  oauthId String @map("oauth_id") @unique
-  nickname String
-  profileUrl String @map("profile_url")
-  role Role @default(MEMBER)
-  createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt
-  boardGameScores BoardGameScore[]
+  id               Int              @id @default(autoincrement())
+  oauthId          String           @unique @map("oauth_id")
+  nickname         String
+  profileUrl       String           @map("profile_url")
+  role             Role             @default(MEMBER)
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
   boardGameReplies BoardGameReply[]
+  boardGameScores  BoardGameScore[]
 
   @@map("user")
 }
 
 model BoardGame {
-  id  Int @default(autoincrement()) @id
-  name String
-  description String @db.VarChar(2000)
-  thumbnailUrl String @map("thumbnail_url")
-  designer String
-  difficulty Float
-  personnel String
-  recommendPersonnel String @map("recommend_personnel")
-  playTime Int // 분 단위
-  age Int // 10 => 10세 이상
-  createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt
-  boardGameGenres BoardGameGenre[]
-  boardGameScores BoardGameScore[]
-  boardGameReplies BoardGameReply[]
+  id                 Int              @id @default(autoincrement())
+  name               String
+  description        String           @db.VarChar(2000)
+  thumbnailUrl       String           @map("thumbnail_url")
+  designer           String
+  difficulty         Float
+  personnel          String
+  recommendPersonnel String           @map("recommend_personnel")
+  playTime           Int
+  age                Int
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+  boardGameGenres    BoardGameGenre[]
+  boardGameReplies   BoardGameReply[]
+  boardGameScores    BoardGameScore[]
 
   @@map("board_game")
 }
 
 model BoardGameGenre {
-  id Int @default(autoincrement()) @id
-  boardGameId Int @map("board_game_id")
-  genreId Int @map("genre_id")
-  createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt
-  boardGame BoardGame @relation(fields: [boardGameId], references: [id])
-  genre Genre @relation(fields: [genreId], references: [id])
+  id          Int       @id @default(autoincrement())
+  boardGameId Int       @map("board_game_id")
+  genreId     Int       @map("genre_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  boardGame   BoardGame @relation(fields: [boardGameId], references: [id])
+  genre       Genre     @relation(fields: [genreId], references: [id])
 
+  @@index([boardGameId], map: "board_game_genre_board_game_id_fkey")
+  @@index([genreId], map: "board_game_genre_genre_id_fkey")
   @@map("board_game_genre")
 }
 
 model Genre {
-  id Int @default(autoincrement()) @id
-  code String @unique // STRATEGY, ABSTRACT, WITS, BATTLE, REASONING, CARD, TILE, THEME 
-  name String // 전략, 추상, 순발력, 전투, 추리, 카드게임, 타일, 테마
-  order Int
-  createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt 
+  id               Int              @id @default(autoincrement())
+  code             String           @unique
+  name             String
+  order            Int
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
   boardGameGeneres BoardGameGenre[]
 
   @@map("genre")
 }
 
 model BoardGameScore {
-  id Int @default(autoincrement()) @id
-  score Int
-  userId Int @map("user_id")
-  boardGameId Int @map("board_game_id")
-  createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt
-  boardGame BoardGame @relation(fields: [boardGameId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  id          Int       @id @default(autoincrement())
+  score       Int
+  userId      Int       @map("user_id")
+  boardGameId Int       @map("board_game_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  boardGame   BoardGame @relation(fields: [boardGameId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
 
+  @@index([boardGameId], map: "board_game_score_board_game_id_fkey")
+  @@index([userId], map: "board_game_score_user_id_fkey")
   @@map("board_game_score")
 }
 
 model BoardGameReply {
-  id Int @default(autoincrement()) @id
-  content String
-  userId Int @map("user_id")
-  boardGameId Int @map("board_game_id")
-  createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt
-  boardGame BoardGame @relation(fields: [boardGameId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  id          Int       @id @default(autoincrement())
+  content     String
+  userId      Int       @map("user_id")
+  boardGameId Int       @map("board_game_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  boardGame   BoardGame @relation(fields: [boardGameId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
 
+  @@index([boardGameId], map: "board_game_reply_board_game_id_fkey")
+  @@index([userId], map: "board_game_reply_user_id_fkey")
   @@map("board_game_reply")
 }
 

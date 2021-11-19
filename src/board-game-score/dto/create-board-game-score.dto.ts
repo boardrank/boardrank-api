@@ -8,6 +8,11 @@ export class CreateBoardGameScoreDto {
   score: number;
 
   @ApiProperty({
+    example: '너무 너무 재밌어요!!!',
+  })
+  comment: string;
+
+  @ApiProperty({
     example: 3,
     description: 'BoardGame ID',
   })

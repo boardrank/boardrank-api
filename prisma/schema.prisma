@@ -70,6 +70,7 @@ model Genre {
 model BoardGameScore {
   id          Int       @id @default(autoincrement())
   score       Int
+  comment     String    @db.VarChar(2000)
   userId      Int       @map("user_id")
   boardGameId Int       @map("board_game_id")
   createdAt   DateTime  @default(now()) @map("created_at")

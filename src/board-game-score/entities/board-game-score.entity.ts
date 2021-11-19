@@ -16,6 +16,11 @@ export class BoardGameScore implements BoardGameScoreType {
   score: number;
 
   @ApiProperty({
+    example: '너무 너무 재밌어요!!',
+  })
+  comment: string;
+
+  @ApiProperty({
     example: 10,
     description: 'id가 10인 사용자',
   })

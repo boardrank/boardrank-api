@@ -15,4 +15,10 @@ export class User {
     description: `default: google profile's picture`,
   })
   profileUrl: string;
+
+  @ApiProperty({
+    description: 'User role',
+    enum: ['ADMIN', 'MEMBER'],
+  })
+  role: 'ADMIN' | 'MEMBER';
 }

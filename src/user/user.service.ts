@@ -46,6 +46,12 @@ export class UserService {
   async findOneById(id: number): Promise<User> {
     try {
       const user = await this.prismaService.user.findUnique({
+        select: {
+          id: true,
+          nickname: true,
+          profileUrl: true,
+          role: true,
+        },
         where: { id },
       });
 
@@ -70,6 +76,12 @@ export class UserService {
       }
 
       return await this.prismaService.user.update({
+        select: {
+          id: true,
+          nickname: true,
+          profileUrl: true,
+          role: true,
+        },
         data: updateUserDto,
         where: { id },
       });
@@ -84,6 +96,12 @@ export class UserService {
   async delete(id: number): Promise<User> {
     try {
       return await this.prismaService.user.delete({
+        select: {
+          id: true,
+          nickname: true,
+          profileUrl: true,
+          role: true,
+        },
         where: { id },
       });
     } catch (error) {

@@ -183,7 +183,7 @@ export class BoardGameService {
 
   async findOneById(id: number, userId?: number): Promise<BoardGameDetail> {
     try {
-      const { boardGameGenres, boardGameReplies, ...boardGame } =
+      const { boardGameGenres, boardGameScores, ...boardGame } =
         await this.prismaService.boardGame.findUnique({
           where: { id },
           include: {
@@ -199,10 +199,11 @@ export class BoardGameService {
                 },
               },
             },
-            boardGameReplies: {
+            boardGameScores: {
               select: {
                 id: true,
-                content: true,
+                score: true,
+                comment: true,
                 userId: true,
                 boardGameId: true,
                 user: {
@@ -213,9 +214,6 @@ export class BoardGameService {
                     role: true,
                   },
                 },
-              },
-              orderBy: {
-                createdAt: 'desc',
               },
             },
           },
@@ -236,23 +234,48 @@ export class BoardGameService {
         myScore = score;
       }
 
-      const {
-        _avg: { score: averageScore = 0 },
-      } = await this.prismaService.boardGameScore.aggregate({
+      /**
+       * Ranking
+       */
+      let averageScore = 0;
+      const scoreAverages = await this.prismaService.boardGameScore.groupBy({
+        by: ['boardGameId'],
         _avg: {
           score: true,
         },
-        where: {
-          boardGameId: id,
+        orderBy: {
+          _avg: {
+            score: 'desc',
+          },
         },
       });
+
+      let seq = 0;
+      let prevScore = -1;
+      let rank = 0;
+      for (const {
+        boardGameId,
+        _avg: { score },
+      } of scoreAverages) {
+        seq++;
+        if (prevScore !== score) {
+          prevScore = score;
+          rank = seq;
+        }
+        if (boardGameId === boardGame.id) {
+          averageScore = score;
+          break;
+        }
+      }
+      if (averageScore === 0) rank = seq + 1;
 
       return {
         ...boardGame,
         genres,
         averageScore,
+        rank,
         myScore,
-        boardGameReplies,
+        boardGameScores,
       };
     } catch (error) {
       throw error;

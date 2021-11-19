@@ -210,6 +210,7 @@ export class BoardGameService {
                     id: true,
                     nickname: true,
                     profileUrl: true,
+                    role: true,
                   },
                 },
               },

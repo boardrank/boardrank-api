@@ -13,6 +13,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Role } from 'src/auth/entities/role';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './vo/user.vo';
+import { UserListItem } from './vo/user-list-item.vo';
 
 @Injectable()
 export class UserService {
@@ -60,6 +61,24 @@ export class UserService {
       }
 
       return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAll(): Promise<UserListItem[]> {
+    try {
+      const users = await this.prismaService.user.findMany({
+        select: {
+          id: true,
+          nickname: true,
+          profileUrl: true,
+          role: true,
+          createdAt: true,
+        },
+      });
+
+      return users;
     } catch (error) {
       throw error;
     }

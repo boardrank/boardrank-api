@@ -32,6 +32,7 @@ import { ApiGetUserIdResData } from './schemas/api-get-user-id-res-data.schema';
 import { ApiPatchUserIdResData } from './schemas/api-patch-user-id-res-data.schema';
 import { ApiPatchUserIdReqBody } from './schemas/api-patch-user-id-req-body.schema';
 import { ApiDeleteUserIdResData } from './schemas/api-delete-user-id-res-data.schema';
+import { ApiGetUserListResData } from './schemas/api-get-user-list-res-data.schema';
 
 @ApiTags(SwaggerTag.User)
 @ApiBearerAuth()
@@ -50,6 +51,17 @@ export class UserController {
     const { id } = req.user as UserByAccessToken;
     const user = await this.userService.findOneById(id);
     return { user };
+  }
+
+  @Get('list')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserListResData) } })
+  @ApiUnauthorizedResponse()
+  @ApiForbiddenResponse()
+  async getUserList() {
+    const users = await this.userService.findAll();
+    return { users };
   }
 
   @Get(':id')

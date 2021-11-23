@@ -13,6 +13,7 @@ import { ApiGetBoardGameListGenreIdResData } from 'src/board-game/schemas/api-ge
 import { ApiGetBoardGameListResData } from 'src/board-game/schemas/api-get-board-game-list-res-data.schema';
 import { ApiGetGenreListResData } from 'src/genre/schemas/api-get-genre-list-res-data.schema';
 import { ApiGetUserIdResData } from 'src/user/schemas/api-get-user-id-res-data.schema';
+import { ApiGetUserListResData } from 'src/user/schemas/api-get-user-list-res-data.schema';
 import { ApiGetUserResData } from 'src/user/schemas/api-get-user-res-data.schema';
 import { ApiHasReferenceErrorResponse } from 'libs/http-exceptions/api-already-registered-error-response';
 import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
@@ -58,6 +59,7 @@ export default [
   // User
   ApiGetUserResData,
   ApiPatchUserResData,
+  ApiGetUserListResData,
   ApiGetUserIdResData,
   ApiPatchUserIdResData,
   ApiDeleteUserIdResData,

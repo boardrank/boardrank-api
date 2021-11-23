@@ -28,7 +28,7 @@
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.1.2",
-    "@nestjs/swagger": "^5.1.4",
+    "@nestjs/swagger": "^5.1.5",
     "@prisma/client": "^3.5.0",
     "axios": "^0.24.0",
     "google-auth-library": "^7.10.1",

@@ -66,6 +66,40 @@ export class UserService {
     }
   }
 
+  async getAllCount(): Promise<number> {
+    try {
+      const { _count } = await this.prismaService.user.aggregate({
+        _count: true,
+      });
+      return _count;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAllByPageAndRowsPerPage(
+    page: number,
+    rowsPerPage: number,
+  ): Promise<UserListItem[]> {
+    try {
+      const users = await this.prismaService.user.findMany({
+        select: {
+          id: true,
+          nickname: true,
+          profileUrl: true,
+          role: true,
+          createdAt: true,
+        },
+        skip: (page - 1) * rowsPerPage,
+        take: rowsPerPage,
+      });
+
+      return users;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findAll(): Promise<UserListItem[]> {
     try {
       const users = await this.prismaService.user.findMany({

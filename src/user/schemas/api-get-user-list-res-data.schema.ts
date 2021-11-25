@@ -6,4 +6,10 @@ export class ApiGetUserListResData {
     type: () => [UserListItem],
   })
   users: UserListItem[];
+
+  @ApiProperty({
+    type: Number,
+    example: 1,
+  })
+  totalCount: number;
 }

@@ -12,6 +12,7 @@ import {
   Get,
   Param,
   Patch,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -59,9 +60,16 @@ export class UserController {
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserListResData) } })
   @ApiUnauthorizedResponse()
   @ApiForbiddenResponse()
-  async getUserList() {
-    const users = await this.userService.findAll();
-    return { users };
+  async getUserList(
+    @Query('rowsPerPage') rowsPerPage: number,
+    @Query('page') page: number,
+  ) {
+    const users = await this.userService.findAllByPageAndRowsPerPage(
+      +page,
+      +rowsPerPage,
+    );
+    const totalCount = await this.userService.getAllCount();
+    return { users, totalCount };
   }
 
   @Get(':id')

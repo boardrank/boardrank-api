@@ -10,6 +10,7 @@ export const ErrorCode = {
    * HttpStatus : 401
    */
   Unauthorized: 4010,
+  ExpiredToken: 4011,
 
   /**
    * HttpStatus : 403

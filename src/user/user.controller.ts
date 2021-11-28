@@ -34,6 +34,7 @@ import { ApiPatchUserIdResData } from './schemas/api-patch-user-id-res-data.sche
 import { ApiPatchUserIdReqBody } from './schemas/api-patch-user-id-req-body.schema';
 import { ApiDeleteUserIdResData } from './schemas/api-delete-user-id-res-data.schema';
 import { ApiGetUserListResData } from './schemas/api-get-user-list-res-data.schema';
+import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 
 @ApiTags(SwaggerTag.User)
 @ApiBearerAuth()
@@ -46,6 +47,7 @@ export class UserController {
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserResData) } })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async getOwnProfile(@Req() req: Request): Promise<ApiGetUserResData> {
@@ -59,6 +61,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserListResData) } })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   async getUserList(
     @Query('rowsPerPage') rowsPerPage: number,
@@ -85,6 +88,7 @@ export class UserController {
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPatchUserResData) } })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async updateOwnProfile(
@@ -105,6 +109,8 @@ export class UserController {
   @Roles(Role.ADMIN)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPatchUserIdResData) } })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
+  @ApiForbiddenResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async updateProfile(
     @Param('id') id: string,
@@ -119,6 +125,8 @@ export class UserController {
   @Roles(Role.ADMIN)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiDeleteUserIdResData) } })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
+  @ApiForbiddenResponse()
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async deleteUser(@Param('id') id: string): Promise<ApiDeleteUserIdResData> {
     const user = await this.userService.delete(+id);

@@ -8,6 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { SwaggerTag } from 'libs/constants';
+import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 import { Roles } from 'libs/decorators/role.decorator';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
 import { RolesGuard } from 'libs/guards/roles.guard';
@@ -30,6 +31,7 @@ export class BoardGameScoreController {
     schema: { $ref: getSchemaPath(ApiPostBoardGameScoreResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   async create(
     @Req() req: Request,
     @Body() body: ApiPostBoardGameScoreReqBody,

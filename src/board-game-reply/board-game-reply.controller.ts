@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { SwaggerTag } from 'libs/constants';
+import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
 import { Roles } from 'libs/decorators/role.decorator';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
@@ -43,6 +44,7 @@ export class BoardGameReplyController {
     schema: { $ref: getSchemaPath(ApiPostBoardGameReplyResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   async create(
     @Req() req: Request,
     @Body() body: ApiPostBoardGameReplyReqBody,
@@ -62,6 +64,7 @@ export class BoardGameReplyController {
     schema: { $ref: getSchemaPath(ApiPatchBoardGameReplyResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(
     BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),
@@ -87,6 +90,7 @@ export class BoardGameReplyController {
     schema: { $ref: getSchemaPath(ApiDeleteBoardGameReplyIdResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(
     BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),

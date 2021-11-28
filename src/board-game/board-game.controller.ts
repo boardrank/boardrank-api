@@ -37,6 +37,7 @@ import { ApiGetBoardGameIdResData } from './schemas/api-get-board-game-id-res-da
 import { ApiPatchBoardGameIdReqBody } from './schemas/api-patch-board-game-id-req-body.schema';
 import { ApiPatchBoardGameIdResData } from './schemas/api-patch-board-game-id-res-data.schema';
 import { ApiDeleteBoardGameIdResData } from './schemas/api-delete-board-game-id-res-data.schema';
+import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 
 @ApiTags(SwaggerTag.BoardGame)
 @ApiBearerAuth()
@@ -51,6 +52,7 @@ export class BoardGameController {
     schema: { $ref: getSchemaPath(ApiPostBoardGameResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   async create(
     @Body() body: ApiPostBoardGameReqBody,
@@ -106,6 +108,7 @@ export class BoardGameController {
     schema: { $ref: getSchemaPath(BoardGame) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(
     BoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),
@@ -125,6 +128,7 @@ export class BoardGameController {
     schema: { $ref: getSchemaPath(ApiDeleteBoardGameIdResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(
     BoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),

@@ -32,6 +32,7 @@ import { ApiGetGenreListResData } from './schemas/api-get-genre-list-res-data.sc
 import { ApiPatchGenreIdReqBody } from './schemas/api-patch-genre-id-req-body.schema';
 import { ApiPatchGenreIdResData } from './schemas/api-patch-genre-id-res-data.schema';
 import { ApiDeleteGenreIdResData } from './schemas/api-delete-genre-id-res-data.schema';
+import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 
 @ApiTags(SwaggerTag.Genre)
 @ApiBearerAuth()
@@ -48,6 +49,7 @@ export class GenreController {
     schema: { $ref: getSchemaPath(ApiPostGenreResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiConflictResponse(
     GenreService.ErrorAlreadyRegistered.toApiResponseOptions(),
@@ -75,6 +77,7 @@ export class GenreController {
     schema: { $ref: getSchemaPath(ApiPatchGenreIdResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(GenreService.ErrorNotFound.toApiResponseOptions())
   @ApiConflictResponse(
@@ -95,6 +98,7 @@ export class GenreController {
     schema: { $ref: getSchemaPath(ApiDeleteGenreIdResData) },
   })
   @ApiUnauthorizedResponse()
+  @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   @ApiNotFoundResponse(GenreService.ErrorNotFound.toApiResponseOptions())
   @ApiConflictResponse(GenreService.ErrorHasReference.toApiResponseOptions())

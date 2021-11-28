@@ -27,4 +27,9 @@ export class AccessTokenPayloadDto<TRole = Role> {
     enum: Role,
   })
   role: TRole;
+
+  @ApiProperty({
+    description: 'Token 만료',
+  })
+  exp: number;
 }

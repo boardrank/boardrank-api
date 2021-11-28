@@ -129,7 +129,7 @@ export class AuthService {
     profileUrl,
     role,
   }: CreateAccessTokenDto<T>): Promise<string> {
-    const payload: AccessTokenPayloadDto<T> = {
+    const payload: Partial<AccessTokenPayloadDto<T>> = {
       iss: AuthService.ISS,
       aud: id,
       nickname,

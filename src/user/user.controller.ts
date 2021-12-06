@@ -11,6 +11,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Query,
   Req,
@@ -64,12 +65,14 @@ export class UserController {
   @ApiExpiredTokenResponse()
   @ApiForbiddenResponse()
   async getUserList(
-    @Query('rowsPerPage') rowsPerPage: number,
-    @Query('page') page: number,
+    @Query('rowsPerPage', ParseIntPipe) rowsPerPage: number,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('keyword') keyword: string,
   ) {
     const users = await this.userService.findAllByPageAndRowsPerPage(
       +page,
       +rowsPerPage,
+      keyword,
     );
     const totalCount = await this.userService.getAllCount();
     return { users, totalCount };

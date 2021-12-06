@@ -80,6 +80,7 @@ export class UserService {
   async findAllByPageAndRowsPerPage(
     page: number,
     rowsPerPage: number,
+    keyword = '',
   ): Promise<UserListItem[]> {
     try {
       const users = await this.prismaService.user.findMany({
@@ -90,8 +91,16 @@ export class UserService {
           role: true,
           createdAt: true,
         },
+        where: {
+          nickname: {
+            contains: keyword,
+          },
+        },
         skip: (page - 1) * rowsPerPage,
         take: rowsPerPage,
+        orderBy: {
+          id: 'desc',
+        },
       });
 
       return users;

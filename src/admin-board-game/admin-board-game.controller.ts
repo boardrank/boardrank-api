@@ -32,6 +32,8 @@ import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.dec
 import { ApiPostAdminBoardGameResData } from './schemas/api-post-admin-board-game-res-data.schema';
 import { ApiPatchAdminBoardGameIdResData } from './schemas/api-patch-admin-board-game-id-res-data.schema';
 import { ApiPatchAdminBoardGameIdReqBody } from './schemas/api-patch-admin-board-game-id-req-body.schema';
+import { ApiDeleteAdminBoardGameIdResData } from './schemas/api-delete-admin-board-game-id-res-data.schema';
+import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-game-list-res-data.schema';
 
 @ApiTags(SwaggerTag.AdminBoardGame)
 @ApiBearerAuth()
@@ -56,12 +58,21 @@ export class AdminBoardGameController {
   }
 
   @Get('list')
+  @ApiOkResponse({
+    schema: { $ref: getSchemaPath(ApiGetAdminBoardGameListResData) },
+  })
   async getBoardGameList(
     @Query('rowsPerPage', ParseIntPipe) rowsPerPage: number,
     @Query('page', ParseIntPipe) page: number,
     @Query('keyword') keyword: string,
   ) {
-    return [];
+    const boardGames = await this.adminBoardGameService.findAll(
+      rowsPerPage,
+      page,
+      keyword,
+    );
+    const totalCount = await this.adminBoardGameService.getAllCount(keyword);
+    return { boardGames, totalCount };
   }
 
   @Patch(':id')
@@ -79,6 +90,18 @@ export class AdminBoardGameController {
       id,
       body.boardGame,
     );
+    return { boardGame };
+  }
+
+  @Delete(':id')
+  @ApiCreatedResponse({
+    schema: { $ref: getSchemaPath(ApiDeleteAdminBoardGameIdResData) },
+  })
+  @ApiNotFoundResponse(
+    AdminBoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),
+  )
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const boardGame = await this.adminBoardGameService.remove(+id);
     return { boardGame };
   }
 }

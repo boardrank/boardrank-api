@@ -7,13 +7,10 @@ import {
 
 import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
-import { BoardGame } from './vo/board-game.vo';
 import { BoardGameDetail } from './vo/board-game-detail.vo';
 import { BoardGameListItem } from './vo/board-game-list-item.vo';
-import { CreateBoardGameDto } from '../admin-board-game/dto/create-board-game.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from '../../src/prisma/prisma.service';
-import { UpdateBoardGameDto } from '../admin-board-game/dto/update-board-game.dto';
 
 @Injectable()
 export class BoardGameService {

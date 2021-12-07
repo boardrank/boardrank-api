@@ -2,12 +2,13 @@ import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-
 import { ApiAuthResponse } from 'src/auth/entities/api-auth-response';
 import { ApiBadRequestErrorResponse } from 'libs/http-exceptions/api-bad-request-error-response';
 import { ApiConflictErrorResponse } from 'libs/http-exceptions/api-conflict-error-response';
-import { ApiDeleteBoardGameIdResData } from 'src/board-game/schemas/api-delete-board-game-id-res-data.schema';
+import { ApiDeleteAdminBoardGameIdResData } from 'src/admin-board-game/schemas/api-delete-admin-board-game-id-res-data.schema';
 import { ApiDeleteBoardGameReplyIdResData } from 'src/board-game-reply/vo/api-delete-board-game-reply-id-res-data.schema';
 import { ApiDeleteGenreIdResData } from 'src/genre/schemas/api-delete-genre-id-res-data.schema';
 import { ApiDeleteUserIdResData } from 'src/user/schemas/api-delete-user-id-res-data.schema';
 import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { ApiForbiddenErrorResponse } from 'libs/http-exceptions/api-forbidden-error-response';
+import { ApiGetAdminBoardGameListResData } from 'src/admin-board-game/schemas/api-get-admin-board-game-list-res-data.schema';
 import { ApiGetBoardGameIdResData } from 'src/board-game/schemas/api-get-board-game-id-res-data.schema';
 import { ApiGetBoardGameListGenreIdResData } from 'src/board-game/schemas/api-get-board-game-list-genre-id-res-data.schema';
 import { ApiGetBoardGameListResData } from 'src/board-game/schemas/api-get-board-game-list-res-data.schema';
@@ -42,7 +43,6 @@ export default [
   ApiGetBoardGameListResData,
   ApiGetBoardGameListGenreIdResData,
   ApiGetBoardGameIdResData,
-  ApiDeleteBoardGameIdResData,
   // BoardGameReply
   ApiPostBoardGameReplyResData,
   ApiPatchBoardGameReplyResData,
@@ -63,7 +63,9 @@ export default [
   ApiDeleteUserIdResData,
   // AdminBoardGame
   ApiPostAdminBoardGameResData,
+  ApiGetAdminBoardGameListResData,
   ApiPatchAdminBoardGameIdResData,
+  ApiDeleteAdminBoardGameIdResData,
   // Error
   ApiErrorResponse,
   ApiAuthResponse,

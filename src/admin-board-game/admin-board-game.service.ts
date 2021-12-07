@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
+import { AdminBoardGameListItem } from './vo/admin-board-game-list-item.vo';
 import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { BoardGame } from './vo/board-game.vo';
@@ -18,6 +19,8 @@ export class AdminBoardGameService {
   static ErrorBadRequestGenreId = new ApiInvalidParamErrorResponse(
     '올바르지 않은 장르입니다.',
   );
+
+  logger = new Logger('AdminBoardGameService');
 
   constructor(private readonly prismaService: PrismaService) {}
 
@@ -63,6 +66,59 @@ export class AdminBoardGameService {
       const genres = boardGameGenres.map(({ genre }) => genre);
 
       return { ...boardGame, genres };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAll(
+    rowsPerPage: number,
+    page: number,
+    keyword = '',
+  ): Promise<AdminBoardGameListItem[]> {
+    try {
+      const boardGames = await this.prismaService.boardGame.findMany({
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          thumbnailUrl: true,
+          createdAt: true,
+        },
+        where: {
+          OR: [
+            { name: { contains: keyword } },
+            { description: { contains: keyword } },
+            { designer: { contains: keyword } },
+          ],
+        },
+        skip: (page - 1) * rowsPerPage,
+        take: rowsPerPage,
+        orderBy: {
+          id: 'desc',
+        },
+      });
+
+      return boardGames;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllCount(keyword = ''): Promise<number> {
+    try {
+      const { _count: count } = await this.prismaService.boardGame.aggregate({
+        _count: true,
+        where: {
+          OR: [
+            { name: { contains: keyword } },
+            { description: { contains: keyword } },
+            { designer: { contains: keyword } },
+          ],
+        },
+      });
+
+      return count;
     } catch (error) {
       throw error;
     }
@@ -119,6 +175,49 @@ export class AdminBoardGameService {
             },
           },
         });
+
+      const genres = boardGameGenres.map(({ genre }) => genre);
+
+      return { ...boardGame, genres };
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          /**
+           * 해당 id 보드게임이 없을 때
+           */
+          throw new NotFoundException(BoardGameService.ErrorNotFoundBoardGame);
+        }
+      }
+      throw error;
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      const [
+        { count: genreCount },
+        { count: gradeCount },
+        { count: replyCount },
+        { boardGameGenres, ...boardGame },
+      ] = await this.prismaService.$transaction([
+        this.prismaService.boardGameGenre.deleteMany({
+          where: { boardGameId: id },
+        }),
+        this.prismaService.boardGameScore.deleteMany({
+          where: { boardGameId: id },
+        }),
+        this.prismaService.boardGameReply.deleteMany({
+          where: { boardGameId: id },
+        }),
+        this.prismaService.boardGame.delete({
+          where: { id },
+          include: { boardGameGenres: { include: { genre: true } } },
+        }),
+      ]);
+
+      this.logger.log(
+        `Deleted rows derived BoardGame id: ${id} genre: ${genreCount}, grade: ${gradeCount}, reply: ${replyCount}.`,
+      );
 
       const genres = boardGameGenres.map(({ genre }) => genre);
 

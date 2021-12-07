@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BoardGame } from './board-game.vo';
-import { BoardGameReply } from 'src/board-game-reply/vo/board-game-reply.vo';
 import { BoardGameScore } from 'src/board-game-score/vo/board-game-score.vo';
 
 export class BoardGameDetail extends BoardGame {

@@ -1,6 +1,5 @@
 import {
   Controller,
-  Post,
   Body,
   Patch,
   Param,
@@ -30,12 +29,8 @@ import { BoardGameService } from './board-game.service';
 import { BoardGame } from './entities/board-game.entity';
 import { ApiGetBoardGameListGenreIdResData } from './schemas/api-get-board-game-list-genre-id-res-data.schema';
 import { ApiGetBoardGameListResData } from './schemas/api-get-board-game-list-res-data.schema';
-import { ApiPostBoardGameReqBody } from './schemas/api-post-board-game-req-body.schema';
-import { ApiPostBoardGameResData } from './schemas/api-post-board-game-res-data.schema';
 import { Request } from 'express';
 import { ApiGetBoardGameIdResData } from './schemas/api-get-board-game-id-res-data.schema';
-import { ApiPatchBoardGameIdReqBody } from './schemas/api-patch-board-game-id-req-body.schema';
-import { ApiPatchBoardGameIdResData } from './schemas/api-patch-board-game-id-res-data.schema';
 import { ApiDeleteBoardGameIdResData } from './schemas/api-delete-board-game-id-res-data.schema';
 import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 
@@ -44,22 +39,6 @@ import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-respo
 @Controller('board-game')
 export class BoardGameController {
   constructor(private readonly boardGameService: BoardGameService) {}
-
-  @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(ApiPostBoardGameResData) },
-  })
-  @ApiUnauthorizedResponse()
-  @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
-  async create(
-    @Body() body: ApiPostBoardGameReqBody,
-  ): Promise<ApiPostBoardGameResData> {
-    const boardGame = await this.boardGameService.create(body.boardGame);
-    return { boardGame };
-  }
 
   @Get('list')
   @ApiOkResponse({
@@ -98,26 +77,6 @@ export class BoardGameController {
   ): Promise<ApiGetBoardGameIdResData> {
     const userId = (req.user as UserByAccessToken)?.id;
     const boardGame = await this.boardGameService.findOneById(+id, userId);
-    return { boardGame };
-  }
-
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  @ApiCreatedResponse({
-    schema: { $ref: getSchemaPath(BoardGame) },
-  })
-  @ApiUnauthorizedResponse()
-  @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
-  @ApiNotFoundResponse(
-    BoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),
-  )
-  async update(
-    @Param('id') id: string,
-    @Body() body: ApiPatchBoardGameIdReqBody,
-  ): Promise<ApiPatchBoardGameIdResData> {
-    const boardGame = await this.boardGameService.update(+id, body.boardGame);
     return { boardGame };
   }
 

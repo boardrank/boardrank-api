@@ -19,16 +19,16 @@ import { ApiHasReferenceErrorResponse } from 'libs/http-exceptions/api-already-r
 import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
 import { ApiInvalidTokenErrorResponse } from 'libs/http-exceptions/api-invalid-token-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
-import { ApiPatchBoardGameIdResData } from 'src/board-game/schemas/api-patch-board-game-id-res-data.schema';
+import { ApiPatchAdminBoardGameIdResData } from 'src/admin-board-game/schemas/api-patch-admin-board-game-id-res-data.schema';
 import { ApiPatchBoardGameReplyResData } from 'src/board-game-reply/vo/api-patch-board-game-reply-id-res-data.schema';
 import { ApiPatchGenreIdResData } from 'src/genre/schemas/api-patch-genre-id-res-data.schema';
 import { ApiPatchUserIdResData } from 'src/user/schemas/api-patch-user-id-res-data.schema';
 import { ApiPatchUserResData } from 'src/user/schemas/api-patch-user-res-data.schema';
+import { ApiPostAdminBoardGameResData } from 'src/admin-board-game/schemas/api-post-admin-board-game-res-data.schema';
 import { ApiPostAuthRefreshResData } from 'src/auth/schemas/api-post-auth-refresh-res-data.schema';
 import { ApiPostAuthSignInResData } from 'src/auth/schemas/api-post-auth-sign-in-res-data.schema';
 import { ApiPostAuthSignUpResData } from 'src/auth/schemas/api-post-auth-sign-up-res-data.schema';
 import { ApiPostBoardGameReplyResData } from 'src/board-game-reply/vo/api-post-board-game-reply-res-data.schema';
-import { ApiPostBoardGameResData } from 'src/board-game/schemas/api-post-board-game-res-data.schema';
 import { ApiPostBoardGameScoreResData } from 'src/board-game-score/schemas/api-post-board-game-score-res-data.schema';
 import { ApiPostGenreResData } from 'src/genre/schemas/api-post-genre-res-data.schema';
 import { ApiUnauthorizedErrorResponse } from 'libs/http-exceptions/api-unauthorized-error-response';
@@ -39,11 +39,9 @@ export default [
   ApiPostAuthSignInResData,
   ApiPostAuthRefreshResData,
   // BoardGame
-  ApiPostBoardGameResData,
   ApiGetBoardGameListResData,
   ApiGetBoardGameListGenreIdResData,
   ApiGetBoardGameIdResData,
-  ApiPatchBoardGameIdResData,
   ApiDeleteBoardGameIdResData,
   // BoardGameReply
   ApiPostBoardGameReplyResData,
@@ -63,6 +61,9 @@ export default [
   ApiGetUserIdResData,
   ApiPatchUserIdResData,
   ApiDeleteUserIdResData,
+  // AdminBoardGame
+  ApiPostAdminBoardGameResData,
+  ApiPatchAdminBoardGameIdResData,
   // Error
   ApiErrorResponse,
   ApiAuthResponse,

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BoardGame } from '../vo/board-game.vo';
+import { BoardGame } from '../../board-game/vo/board-game.vo';
 
-export class ApiPostBoardGameResData {
+export class ApiPostAdminBoardGameResData {
   @ApiProperty({
     type: () => BoardGame,
   })

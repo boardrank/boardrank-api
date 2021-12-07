@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UpdateBoardGameDto } from '../dto/update-board-game.dto';
 
-export class ApiPatchBoardGameIdReqBody {
+export class ApiPatchAdminBoardGameIdReqBody {
   @ApiProperty({
     type: () => UpdateBoardGameDto,
   })

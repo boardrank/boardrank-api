@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
+import { AdminBoardGameModule } from './admin-board-game/admin-board-game.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BoardGameModule } from './board-game/board-game.module';
-import { GenreModule } from './genre/genre.module';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { BoardGameScoreModule } from './board-game-score/board-game-score.module';
+import { BoardGameModule } from './board-game/board-game.module';
 import { BoardGameReplyModule } from './board-game-reply/board-game-reply.module';
+import { BoardGameScoreModule } from './board-game-score/board-game-score.module';
+import { GenreModule } from './genre/genre.module';
+import { Module } from '@nestjs/common';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BoardGameReplyModule } from './board-game-reply/board-game-reply.module
     UserModule,
     BoardGameScoreModule,
     BoardGameReplyModule,
+    AdminBoardGameModule,
   ],
   controllers: [AppController],
   providers: [AppService],

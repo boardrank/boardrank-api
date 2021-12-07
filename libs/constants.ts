@@ -5,4 +5,7 @@ export enum SwaggerTag {
   BoardGameScore = 'BoardGameScore',
   Genre = 'Genre',
   User = 'User',
+  AdminUser = 'AdminUser',
+  AdminBoardGame = 'AdminBoardGame',
+  AdminGenre = 'AdminGenre',
 }

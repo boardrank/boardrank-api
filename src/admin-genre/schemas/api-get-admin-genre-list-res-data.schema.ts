@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Genre } from '../vo/genre.vo';
 
-export class ApiDeleteGenreIdResData {
+export class ApiGetAdminGenreListResData {
   @ApiProperty({
-    type: () => Genre,
+    type: () => [Genre],
   })
-  genre: Genre;
+  genres: Genre[];
 }

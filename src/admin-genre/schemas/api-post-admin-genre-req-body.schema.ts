@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateGenreDto } from '../dto/create-genre.dto';
 
-export class ApiPostGenreReqBody {
+export class ApiPostAdminGenreReqBody {
   @ApiProperty({
     type: () => CreateGenreDto,
   })

@@ -8,6 +8,7 @@ import { BoardGameScoreModule } from './board-game-score/board-game-score.module
 import { GenreModule } from './genre/genre.module';
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
+import { AdminGenreModule } from './admin-genre/admin-genre.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
     BoardGameScoreModule,
     BoardGameReplyModule,
     AdminBoardGameModule,
+    AdminGenreModule,
   ],
   controllers: [AppController],
   providers: [AppService],

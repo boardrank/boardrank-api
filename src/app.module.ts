@@ -9,6 +9,7 @@ import { GenreModule } from './genre/genre.module';
 import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { AdminGenreModule } from './admin-genre/admin-genre.module';
+import { AdminUserModule } from './admin-user/admin-user.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AdminGenreModule } from './admin-genre/admin-genre.module';
     BoardGameReplyModule,
     AdminBoardGameModule,
     AdminGenreModule,
+    AdminUserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

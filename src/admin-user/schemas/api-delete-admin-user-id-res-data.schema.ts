@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../vo/user.vo';
+import { User } from '../../user/vo/user.vo';
 
-export class ApiDeleteUserIdResData {
+export class ApiDeleteAdminUserIdResData {
   @ApiProperty({
     type: () => User,
   })

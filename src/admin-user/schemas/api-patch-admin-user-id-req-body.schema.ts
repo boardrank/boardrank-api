@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { UpdateUserDto } from '../../user/dto/update-user.dto';
 
-export class ApiPatchUserIdReqBody {
+export class ApiPatchAdminUserIdReqBody {
   @ApiProperty({
     type: () => UpdateUserDto,
   })

@@ -11,9 +11,7 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
-  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -31,10 +29,6 @@ import { ApiGetUserResData } from './schemas/api-get-user-res-data.schema';
 import { ApiPatchUserResData } from './schemas/api-patch-user-res-data.schema';
 import { ApiPatchUserReqBody } from './schemas/api-patch-user-req-body.schema';
 import { ApiGetUserIdResData } from './schemas/api-get-user-id-res-data.schema';
-import { ApiPatchUserIdResData } from './schemas/api-patch-user-id-res-data.schema';
-import { ApiPatchUserIdReqBody } from './schemas/api-patch-user-id-req-body.schema';
-import { ApiDeleteUserIdResData } from './schemas/api-delete-user-id-res-data.schema';
-import { ApiGetUserListResData } from './schemas/api-get-user-list-res-data.schema';
 import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 
 @ApiTags(SwaggerTag.User)
@@ -57,27 +51,6 @@ export class UserController {
     return { user };
   }
 
-  @Get('list')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserListResData) } })
-  @ApiUnauthorizedResponse()
-  @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
-  async getUserList(
-    @Query('rowsPerPage', ParseIntPipe) rowsPerPage: number,
-    @Query('page', ParseIntPipe) page: number,
-    @Query('keyword') keyword: string,
-  ) {
-    const users = await this.userService.findAllByPageAndRowsPerPage(
-      +page,
-      +rowsPerPage,
-      keyword,
-    );
-    const totalCount = await this.userService.getAllCount();
-    return { users, totalCount };
-  }
-
   @Get(':id')
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserIdResData) } })
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
@@ -98,41 +71,8 @@ export class UserController {
     @Req() req: Request,
     @Body() body: ApiPatchUserReqBody,
   ): Promise<ApiPatchUserResData> {
-    const { id, role } = req.user as UserByAccessToken;
-    const user = await this.userService.updateProfile(
-      id,
-      body.user,
-      role === Role.ADMIN,
-    );
-    return { user };
-  }
-
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPatchUserIdResData) } })
-  @ApiUnauthorizedResponse()
-  @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
-  @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
-  async updateProfile(
-    @Param('id') id: string,
-    @Body() body: ApiPatchUserIdReqBody,
-  ): Promise<ApiPatchUserIdResData> {
-    const user = await this.userService.updateProfile(+id, body.user, true);
-    return { user };
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
-  @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiDeleteUserIdResData) } })
-  @ApiUnauthorizedResponse()
-  @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
-  @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
-  async deleteUser(@Param('id') id: string): Promise<ApiDeleteUserIdResData> {
-    const user = await this.userService.delete(+id);
+    const { id } = req.user as UserByAccessToken;
+    const user = await this.userService.updateProfile(id, body.user);
     return { user };
   }
 }

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../vo/user.vo';
 
-export class ApiPatchUserIdResData {
+export class ApiPatchAdminUserIdResData {
   @ApiProperty({
     type: () => User,
   })

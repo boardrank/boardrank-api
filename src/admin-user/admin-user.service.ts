@@ -1,20 +1,15 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Prisma } from '.prisma/client';
+import { Prisma } from 'prisma/prisma-client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './vo/user.vo';
 import { UserListItem } from './vo/user-list-item.vo';
 
 @Injectable()
-export class UserService {
+export class AdminUserService {
   static ErrorAlreadyRegistered = new ApiAlreadyRegisteredErrorResponse(
     '이미 등록된 회원입니다.',
   );
@@ -24,56 +19,6 @@ export class UserService {
   );
 
   constructor(private prismaService: PrismaService) {}
-
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      return await this.prismaService.user.create({
-        data: createUserDto,
-      });
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          /**
-           * oauth id가 중복되었을 경우
-           */
-          throw new ConflictException(UserService.ErrorAlreadyRegistered);
-        }
-      }
-    }
-  }
-
-  async findOneById(id: number): Promise<User> {
-    try {
-      const user = await this.prismaService.user.findUnique({
-        select: {
-          id: true,
-          nickname: true,
-          profileUrl: true,
-          role: true,
-        },
-        where: { id },
-      });
-
-      if (!user) {
-        throw new NotFoundException(UserService.ErrorNotFound);
-      }
-
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getAllCount(): Promise<number> {
-    try {
-      const { _count } = await this.prismaService.user.aggregate({
-        _count: true,
-      });
-      return _count;
-    } catch (error) {
-      throw error;
-    }
-  }
 
   async findAllByPageAndRowsPerPage(
     page: number,
@@ -107,19 +52,17 @@ export class UserService {
     }
   }
 
-  async findAll(): Promise<UserListItem[]> {
+  async getAllCount(keyword = ''): Promise<number> {
     try {
-      const users = await this.prismaService.user.findMany({
-        select: {
-          id: true,
-          nickname: true,
-          profileUrl: true,
-          role: true,
-          createdAt: true,
+      const { _count } = await this.prismaService.user.aggregate({
+        _count: true,
+        where: {
+          nickname: {
+            contains: keyword,
+          },
         },
       });
-
-      return users;
+      return _count;
     } catch (error) {
       throw error;
     }
@@ -139,7 +82,26 @@ export class UserService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new NotFoundException(UserService.ErrorNotFound);
+        throw new NotFoundException(AdminUserService.ErrorNotFound);
+      }
+      throw error;
+    }
+  }
+
+  async delete(id: number): Promise<User> {
+    try {
+      return await this.prismaService.user.delete({
+        select: {
+          id: true,
+          nickname: true,
+          profileUrl: true,
+          role: true,
+        },
+        where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        throw new NotFoundException(AdminUserService.ErrorNotFound);
       }
       throw error;
     }

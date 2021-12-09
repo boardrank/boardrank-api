@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN yarn && yarn build
+RUN yarn --network-timeout 600000 && yarn build 
 RUN rm -rf node_modules && yarn --production
 
 # Production

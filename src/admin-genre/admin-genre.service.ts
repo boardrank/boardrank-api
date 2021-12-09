@@ -3,12 +3,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Genre, Prisma } from '.prisma/client';
 
 import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
 import { ApiHasReferenceErrorResponse } from 'libs/http-exceptions/api-already-registered-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { CreateGenreDto } from './dto/create-genre.dto';
-import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 

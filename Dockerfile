@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 
 RUN yarn --network-timeout 600000 && yarn build 
-RUN rm -rf node_modules && yarn --production
+RUN rm -rf node_modules && yarn --production --network-timeout 600000
 
 # Production
 FROM arm64v8/node:14-buster as production

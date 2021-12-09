@@ -9,6 +9,7 @@ import { ApiDeleteBoardGameReplyIdResData } from 'src/board-game-reply/vo/api-de
 import { ApiErrorResponse } from 'libs/http-exceptions/api-error-response';
 import { ApiForbiddenErrorResponse } from 'libs/http-exceptions/api-forbidden-error-response';
 import { ApiGetAdminBoardGameListResData } from 'src/admin-board-game/schemas/api-get-admin-board-game-list-res-data.schema';
+import { ApiGetAdminGenreListResData } from 'src/admin-genre/schemas/api-get-admin-genre-list-res-data.schema';
 import { ApiGetAdminUserListResData } from 'src/admin-user/schemas/api-get-admin-user-list-res-data.schema';
 import { ApiGetBoardGameIdResData } from 'src/board-game/schemas/api-get-board-game-id-res-data.schema';
 import { ApiGetBoardGameListGenreIdResData } from 'src/board-game/schemas/api-get-board-game-list-genre-id-res-data.schema';
@@ -66,6 +67,7 @@ export default [
   ApiDeleteAdminBoardGameIdResData,
   // AdminGenre
   ApiPostAdminGenreResData,
+  ApiGetAdminGenreListResData,
   ApiPatchAdminGenreIdResData,
   ApiDeleteAdminGenreIdResData,
   // Error

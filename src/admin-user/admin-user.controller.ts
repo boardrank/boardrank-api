@@ -38,7 +38,7 @@ import { ApiDeleteAdminUserIdResData } from './schemas/api-delete-admin-user-id-
 @ApiUnauthorizedResponse()
 @ApiExpiredTokenResponse()
 @ApiForbiddenResponse()
-@Controller('admin-user')
+@Controller('admin/user')
 export class AdminUserController {
   constructor(private readonly adminUserService: AdminUserService) {}
 

@@ -13,9 +13,13 @@ export async function bootstrap() {
   const globalPrefix = process.env.GLOBAL_PREFIX;
   if (globalPrefix) app.setGlobalPrefix(globalPrefix);
 
+  let title = 'Board Rank';
+  if (process.env.NODE_ENV !== 'production')
+    title = `Board Rank(${process.env.NODE_ENV})`;
+
   const documentBuilder = new DocumentBuilder()
-    .setTitle('Board Rank')
-    .setDescription('Board Rank API')
+    .setTitle(title)
+    .setDescription(`Board Rank API for ${process.env.NODE_ENV}`)
     .setVersion('1.0')
     .setExternalDoc('JSON Specification', '/swagger-ui-json')
     .addBearerAuth();

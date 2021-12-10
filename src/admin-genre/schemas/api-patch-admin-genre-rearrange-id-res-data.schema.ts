@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Genre } from '../vo/genre.vo';
 
-export class ApiPatchAdminGenreRearrageIdResData {
+export class ApiPatchAdminGenreRearrangeIdResData {
   @ApiProperty({
     type: () => [Genre],
   })

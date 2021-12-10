@@ -1,0 +1,10 @@
+# Develop
+FROM arm64v8/node:14-buster as builder
+
+RUN mkdir /app && git clone https://github.com/boardrank/boardrank-api.git -b develop app
+
+WORKDIR /app
+
+RUN yarn --network-timeout 600000
+
+ENTRYPOINT yarn start:dev

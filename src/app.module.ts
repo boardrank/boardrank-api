@@ -17,10 +17,14 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath:
+        process.env.NODE_ENV === 'development'
+          ? '.env.development'
+          : '.env.local',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
       validationSchema: Joi.object({
         NODE_ENV: Joi.string()
-          .valid('development', 'production', 'test')
+          .valid('local', 'development', 'production', 'test')
           .required(),
         DATABASE_URL: Joi.string().required(),
         OAUTH_GOOGLE_CLIENT_ID: Joi.string().required(),

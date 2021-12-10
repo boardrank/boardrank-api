@@ -123,7 +123,7 @@ export class AdminGenreService {
 
   async remove(id: number) {
     try {
-      return await this.prismaService.genre.delete({
+      const genre = await this.prismaService.genre.findUnique({
         select: {
           id: true,
           code: true,
@@ -132,6 +132,32 @@ export class AdminGenreService {
         },
         where: { id },
       });
+
+      await this.prismaService.$transaction([
+        this.prismaService.genre.delete({
+          select: {
+            id: true,
+            code: true,
+            name: true,
+            order: true,
+          },
+          where: { id },
+        }),
+        this.prismaService.genre.updateMany({
+          data: {
+            order: {
+              decrement: 1,
+            },
+          },
+          where: {
+            order: {
+              gt: genre.order,
+            },
+          },
+        }),
+      ]);
+
+      return genre;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2003') {

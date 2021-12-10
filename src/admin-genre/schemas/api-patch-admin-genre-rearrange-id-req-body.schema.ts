@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ApiPatchAdminGenreRearrageIdReqBody {
+export class ApiPatchAdminGenreRearrangeIdReqBody {
   @ApiProperty()
   source: number;
 

@@ -34,8 +34,8 @@ import { ApiPatchAdminGenreIdResData } from './schemas/api-patch-admin-genre-id-
 import { ApiPatchAdminGenreIdReqBody } from './schemas/api-patch-admin-genre-id-req-body.schema';
 import { ApiDeleteAdminGenreIdResData } from 'src/admin-board-game/schemas/api-delete-admin-genre-id-res-data.schema';
 import { ApiGetAdminGenreListResData } from './schemas/api-get-admin-genre-list-res-data.schema';
-import { ApiPatchAdminGenreRearrageIdResData } from './schemas/api-patch-admin-genre-rearrange-id-res-data.schema';
-import { ApiPatchAdminGenreRearrageIdReqBody } from './schemas/api-patch-admin-genre-rearrange-id-req-body.schema';
+import { ApiPatchAdminGenreRearrangeIdResData } from './schemas/api-patch-admin-genre-rearrange-id-res-data.schema';
+import { ApiPatchAdminGenreRearrangeIdReqBody } from './schemas/api-patch-admin-genre-rearrange-id-req-body.schema';
 
 @ApiTags(SwaggerTag.AdminGenre)
 @ApiBearerAuth()
@@ -73,11 +73,11 @@ export class AdminGenreController {
 
   @Patch('/rearrange/:id')
   @ApiOkResponse({
-    schema: { $ref: getSchemaPath(ApiPatchAdminGenreRearrageIdResData) },
+    schema: { $ref: getSchemaPath(ApiPatchAdminGenreRearrangeIdResData) },
   })
   async rearrage(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: ApiPatchAdminGenreRearrageIdReqBody,
+    @Body() body: ApiPatchAdminGenreRearrangeIdReqBody,
   ) {
     const { source, destination } = body;
     const genres = await this.adminGenreService.rearrange(

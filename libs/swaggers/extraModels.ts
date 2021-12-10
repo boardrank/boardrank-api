@@ -23,6 +23,7 @@ import { ApiInvalidTokenErrorResponse } from 'libs/http-exceptions/api-invalid-t
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { ApiPatchAdminBoardGameIdResData } from 'src/admin-board-game/schemas/api-patch-admin-board-game-id-res-data.schema';
 import { ApiPatchAdminGenreIdResData } from 'src/admin-genre/schemas/api-patch-admin-genre-id-res-data.schema';
+import { ApiPatchAdminGenreRearrageIdResData } from 'src/admin-genre/schemas/api-patch-admin-genre-rearrange-id-res-data.schema';
 import { ApiPatchAdminUserIdResData } from 'src/admin-user/schemas/api-patch-admin-user-id-res-data.schema';
 import { ApiPatchBoardGameReplyResData } from 'src/board-game-reply/vo/api-patch-board-game-reply-id-res-data.schema';
 import { ApiPatchUserResData } from 'src/user/schemas/api-patch-user-res-data.schema';
@@ -70,6 +71,7 @@ export default [
   ApiGetAdminGenreListResData,
   ApiPatchAdminGenreIdResData,
   ApiDeleteAdminGenreIdResData,
+  ApiPatchAdminGenreRearrageIdResData,
   // Error
   ApiErrorResponse,
   ApiAuthResponse,

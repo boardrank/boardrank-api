@@ -38,9 +38,9 @@ import { ApiPatchAdminGenreRearrageIdResData } from './schemas/api-patch-admin-g
 import { ApiPatchAdminGenreRearrageIdReqBody } from './schemas/api-patch-admin-genre-rearrange-id-req-body.schema';
 
 @ApiTags(SwaggerTag.AdminGenre)
-// @ApiBearerAuth()
-// @UseGuards(JwtAuthGuard, RolesGuard)
-// @Roles(Role.ADMIN)
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.ADMIN)
 @ApiUnauthorizedResponse()
 @ApiExpiredTokenResponse()
 @ApiForbiddenResponse()

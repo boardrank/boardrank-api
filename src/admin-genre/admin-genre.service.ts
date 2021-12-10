@@ -1,14 +1,17 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Genre, Prisma } from '.prisma/client';
 
 import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
 import { ApiHasReferenceErrorResponse } from 'libs/http-exceptions/api-already-registered-error-response';
+import { ApiInvalidDataErrorResponse } from 'libs/http-exceptions/api-invalid-data-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { CreateGenreDto } from './dto/create-genre.dto';
+import { Genre } from './vo/genre.vo';
+import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 
@@ -24,6 +27,10 @@ export class AdminGenreService {
 
   static ErrorHasReference = new ApiHasReferenceErrorResponse(
     '해당 장르를 참조하는 보드게임이 있습니다.',
+  );
+
+  static ErrorInvalidOrderData = new ApiInvalidDataErrorResponse(
+    'order 값이 올바르지 않습니다',
   );
 
   constructor(private prismaService: PrismaService) {}
@@ -80,7 +87,7 @@ export class AdminGenreService {
     });
   }
 
-  async update(id: number, { code, name, order }: UpdateGenreDto) {
+  async update(id: number, { code, name }: UpdateGenreDto) {
     try {
       return await this.prismaService.genre.update({
         select: {
@@ -92,7 +99,6 @@ export class AdminGenreService {
         data: {
           code: code?.toUpperCase(),
           name,
-          order,
         },
         where: { id },
       });
@@ -140,6 +146,59 @@ export class AdminGenreService {
           throw new NotFoundException(AdminGenreService.ErrorNotFound);
         }
       }
+      throw error;
+    }
+  }
+
+  async rearrange(
+    id: number,
+    source: number,
+    destination: number,
+  ): Promise<Genre[]> {
+    try {
+      if (source === destination) return await this.findAll();
+      const genres = await this.prismaService.genre.findMany({
+        select: {
+          id: true,
+          order: true,
+        },
+        where: {
+          order: {
+            gte: Math.min(source, destination),
+            lte: Math.max(source, destination),
+          },
+        },
+        orderBy: {
+          order: 'asc',
+        },
+      });
+
+      if (!genres.some((genre) => genre.id === id && genre.order === source)) {
+        throw new BadRequestException(AdminGenreService.ErrorInvalidOrderData);
+      }
+
+      if (source < destination) {
+        genres.push(genres.shift());
+      } else {
+        genres.unshift(genres.pop());
+      }
+
+      let order = Math.min(source, destination);
+      await this.prismaService.$transaction(
+        genres.map((genre) => {
+          return this.prismaService.genre.update({
+            data: {
+              order: order++,
+            },
+            where: {
+              id: genre.id,
+            },
+          });
+        }),
+      );
+
+      return await this.findAll();
+    } catch (error) {
       throw error;
     }
   }

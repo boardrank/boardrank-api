@@ -5,6 +5,7 @@ export const ErrorCode = {
   BadRequest: 4000,
   InvalidToken: 4001,
   InvalidParam: 4002,
+  InvalidData: 4003,
 
   /**
    * HttpStatus : 401

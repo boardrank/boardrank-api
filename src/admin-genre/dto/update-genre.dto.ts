@@ -1,11 +1,4 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-
 import { CreateGenreDto } from './create-genre.dto';
+import { PartialType } from '@nestjs/swagger';
 
-export class UpdateGenreDto extends PartialType(CreateGenreDto) {
-  @ApiProperty({
-    type: Number,
-    example: 1,
-  })
-  order?: number;
-}
+export class UpdateGenreDto extends PartialType(CreateGenreDto) {}

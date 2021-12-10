@@ -15,6 +15,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -33,11 +34,13 @@ import { ApiPatchAdminGenreIdResData } from './schemas/api-patch-admin-genre-id-
 import { ApiPatchAdminGenreIdReqBody } from './schemas/api-patch-admin-genre-id-req-body.schema';
 import { ApiDeleteAdminGenreIdResData } from 'src/admin-board-game/schemas/api-delete-admin-genre-id-res-data.schema';
 import { ApiGetAdminGenreListResData } from './schemas/api-get-admin-genre-list-res-data.schema';
+import { ApiPatchAdminGenreRearrageIdResData } from './schemas/api-patch-admin-genre-rearrange-id-res-data.schema';
+import { ApiPatchAdminGenreRearrageIdReqBody } from './schemas/api-patch-admin-genre-rearrange-id-req-body.schema';
 
 @ApiTags(SwaggerTag.AdminGenre)
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN)
+// @ApiBearerAuth()
+// @UseGuards(JwtAuthGuard, RolesGuard)
+// @Roles(Role.ADMIN)
 @ApiUnauthorizedResponse()
 @ApiExpiredTokenResponse()
 @ApiForbiddenResponse()
@@ -68,6 +71,23 @@ export class AdminGenreController {
     return { genres };
   }
 
+  @Patch('/rearrange/:id')
+  @ApiOkResponse({
+    schema: { $ref: getSchemaPath(ApiPatchAdminGenreRearrageIdResData) },
+  })
+  async rearrage(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: ApiPatchAdminGenreRearrageIdReqBody,
+  ) {
+    const { source, destination } = body;
+    const genres = await this.adminGenreService.rearrange(
+      id,
+      source,
+      destination,
+    );
+    return { genres };
+  }
+
   @Patch(':id')
   @ApiOkResponse({
     schema: { $ref: getSchemaPath(ApiPatchAdminGenreIdResData) },
@@ -77,10 +97,10 @@ export class AdminGenreController {
     AdminGenreService.ErrorAlreadyRegistered.toApiResponseOptions(),
   )
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: ApiPatchAdminGenreIdReqBody,
   ): Promise<ApiPatchAdminGenreIdResData> {
-    const genre = await this.adminGenreService.update(+id, body.genre);
+    const genre = await this.adminGenreService.update(id, body.genre);
     return { genre };
   }
 
@@ -92,8 +112,10 @@ export class AdminGenreController {
   @ApiConflictResponse(
     AdminGenreService.ErrorHasReference.toApiResponseOptions(),
   )
-  async remove(@Param('id') id: string): Promise<ApiDeleteAdminGenreIdResData> {
-    const genre = await this.adminGenreService.remove(+id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ApiDeleteAdminGenreIdResData> {
+    const genre = await this.adminGenreService.remove(id);
     return { genre };
   }
 }

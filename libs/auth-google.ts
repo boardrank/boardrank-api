@@ -1,15 +1,31 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 
-const OAUTH_GOOGLE_CLIENT_ID = process.env.OAUTH_GOOGLE_CLIENT_ID;
 const ISS = 'accounts.google.com';
+let OAUTH_GOOGLE_CLIENT_ID;
+let client;
 
-const client = new OAuth2Client(OAUTH_GOOGLE_CLIENT_ID);
+const getOauthGoogleClientId = () => {
+  if (!OAUTH_GOOGLE_CLIENT_ID) {
+    OAUTH_GOOGLE_CLIENT_ID = process.env.OAUTH_GOOGLE_CLIENT_ID;
+  }
+
+  return OAUTH_GOOGLE_CLIENT_ID;
+};
+
+const getClient = () => {
+  if (!client) {
+    client = new OAuth2Client(getOauthGoogleClientId());
+  }
+
+  return client;
+};
 
 export const verifyIdToken = async (idToken: string) => {
   try {
+    const client = getClient();
     const ticket = await client.verifyIdToken({
       idToken,
-      audience: OAUTH_GOOGLE_CLIENT_ID,
+      audience: getOauthGoogleClientId(),
     });
 
     const payload = ticket.getPayload();
@@ -21,5 +37,7 @@ export const verifyIdToken = async (idToken: string) => {
 };
 
 export const validate = ({ iss, aud }: TokenPayload) => {
-  return iss.replace('https://', '') === ISS && aud === OAUTH_GOOGLE_CLIENT_ID;
+  return (
+    iss.replace('https://', '') === ISS && aud === getOauthGoogleClientId()
+  );
 };

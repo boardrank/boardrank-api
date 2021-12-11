@@ -20,9 +20,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma:migrate": "prisma migrate dev --name dev",
     "prisma:pull": "prisma db pull && prisma generate",
-    "generate:api": "rm -rf out && openapi-generator-cli generate -i http://localhost:3000/swagger-ui-json -g typescript -o out/typescript"
+    "prisma:migrate": "prisma migrate dev --name dev",
+    "generate:api": "rm -rf out && openapi-generator-cli generate -i http://localhost:3000/dev/swagger-ui-json -g typescript -o out/typescript"
   },
   "dependencies": {
     "@nestjs/common": "^8.1.2",

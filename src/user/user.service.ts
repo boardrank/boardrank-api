@@ -1,46 +1,18 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
-import { CreateUserDto } from './dto/create-user.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './vo/user.vo';
-import { UserListItem } from './vo/user-list-item.vo';
 
 @Injectable()
 export class UserService {
-  static ErrorAlreadyRegistered = new ApiAlreadyRegisteredErrorResponse(
-    '이미 등록된 회원입니다.',
-  );
-
   static ErrorNotFound = new ApiNotFoundErrorResponse(
     '해당 유저를 찾을 수 없습니다.',
   );
 
   constructor(private prismaService: PrismaService) {}
-
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      return await this.prismaService.user.create({
-        data: createUserDto,
-      });
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          /**
-           * oauth id가 중복되었을 경우
-           */
-          throw new ConflictException(UserService.ErrorAlreadyRegistered);
-        }
-      }
-    }
-  }
 
   async findOneById(id: number): Promise<User> {
     try {
@@ -59,67 +31,6 @@ export class UserService {
       }
 
       return user;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getAllCount(): Promise<number> {
-    try {
-      const { _count } = await this.prismaService.user.aggregate({
-        _count: true,
-      });
-      return _count;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findAllByPageAndRowsPerPage(
-    page: number,
-    rowsPerPage: number,
-    keyword = '',
-  ): Promise<UserListItem[]> {
-    try {
-      const users = await this.prismaService.user.findMany({
-        select: {
-          id: true,
-          nickname: true,
-          profileUrl: true,
-          role: true,
-          createdAt: true,
-        },
-        where: {
-          nickname: {
-            contains: keyword,
-          },
-        },
-        skip: (page - 1) * rowsPerPage,
-        take: rowsPerPage,
-        orderBy: {
-          id: 'desc',
-        },
-      });
-
-      return users;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findAll(): Promise<UserListItem[]> {
-    try {
-      const users = await this.prismaService.user.findMany({
-        select: {
-          id: true,
-          nickname: true,
-          profileUrl: true,
-          role: true,
-          createdAt: true,
-        },
-      });
-
-      return users;
     } catch (error) {
       throw error;
     }

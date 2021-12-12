@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://boardrank.kr" target="blank"><img src="https://raw.githubusercontent.com/boardrank/boardrank-api/main/docs/Board%20Rank.svg" width="320" alt="Nest Logo" /></a>
+  <a href="https://boardrank.kr" target="blank"><img src="https://raw.githubusercontent.com/boardrank/boardrank-api/main/docs/boardrank.svg" width="320" alt="Nest Logo" /></a>
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456

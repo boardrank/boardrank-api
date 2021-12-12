@@ -17,7 +17,7 @@ export class User {
   profileUrl: string;
 
   @ApiProperty({
-    description: 'User role',
+    description: '사용자 역할',
     enum: ['ADMIN', 'MEMBER'],
   })
   role: 'ADMIN' | 'MEMBER';

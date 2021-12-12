@@ -12,6 +12,7 @@ model User {
   oauthId          String           @unique @map("oauth_id")
   nickname         String
   profileUrl       String           @map("profile_url")
+  status           UserStatus       @default(ACTIVATE)
   role             Role             @default(MEMBER)
   createdAt        DateTime         @default(now()) @map("created_at")
   updatedAt        DateTime         @updatedAt @map("updated_at")
@@ -101,4 +102,11 @@ model BoardGameReply {
 enum Role {
   ADMIN
   MEMBER
+}
+
+enum UserStatus {
+  ACTIVATE
+  BLOCK
+  DORMANT
+  WITHDRAWAL
 }

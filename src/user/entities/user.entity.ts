@@ -31,6 +31,12 @@ export class User implements UserType {
   })
   role: Role;
 
+  @ApiProperty({
+    description: '사용자 상태',
+    enum: ['ACTIVATE', 'BLOCK', 'DORMANT', 'WITHDRAWAL'],
+  })
+  status: 'ACTIVATE' | 'BLOCK' | 'DORMANT' | 'WITHDRAWAL';
+
   @ApiProperty()
   createdAt: Date;
 

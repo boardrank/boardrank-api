@@ -21,4 +21,10 @@ export class User {
     enum: ['ADMIN', 'MEMBER'],
   })
   role: 'ADMIN' | 'MEMBER';
+
+  @ApiProperty({
+    description: '사용자 상태',
+    enum: ['ACTIVATE', 'BLOCK', 'DORMANT', 'WITHDRAWAL'],
+  })
+  status: 'ACTIVATE' | 'BLOCK' | 'DORMANT' | 'WITHDRAWAL';
 }

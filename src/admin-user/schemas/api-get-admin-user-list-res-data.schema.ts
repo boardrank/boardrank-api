@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserListItem } from '../../user/vo/user-list-item.vo';
+import { UserListItem } from '../vo/user-list-item.vo';
 
 export class ApiGetAdminUserListResData {
   @ApiProperty({

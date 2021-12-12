@@ -32,6 +32,7 @@ export class AdminUserService {
           nickname: true,
           profileUrl: true,
           role: true,
+          status: true,
           createdAt: true,
         },
         where: {
@@ -76,6 +77,7 @@ export class AdminUserService {
           nickname: true,
           profileUrl: true,
           role: true,
+          status: true,
         },
         data: updateUserDto,
         where: { id },
@@ -96,6 +98,7 @@ export class AdminUserService {
           nickname: true,
           profileUrl: true,
           role: true,
+          status: true,
         },
         where: { id },
       });

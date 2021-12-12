@@ -23,12 +23,6 @@ export class AccessTokenPayloadDto<TRole = Role> {
   profileUrl: string;
 
   @ApiProperty({
-    description: 'ADMIN or Member',
-    enum: Role,
-  })
-  role: TRole;
-
-  @ApiProperty({
     description: 'Token 만료',
   })
   exp: number;

@@ -8,7 +8,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { SwaggerTag } from 'libs/constants';
-import { RolesGuard } from 'libs/guards/roles.guard';
+import { RoleGuard } from 'libs/guards/role.guard';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { BoardGameService } from './board-game.service';
 import { ApiGetBoardGameListGenreIdResData } from './schemas/api-get-board-game-list-genre-id-res-data.schema';
@@ -46,7 +46,7 @@ export class BoardGameController {
   }
 
   @Get(':id')
-  @UseGuards(RolesGuard)
+  @UseGuards(RoleGuard)
   @ApiOkResponse({
     schema: { $ref: getSchemaPath(ApiGetBoardGameIdResData) },
   })

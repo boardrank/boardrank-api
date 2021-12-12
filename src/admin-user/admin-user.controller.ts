@@ -22,7 +22,7 @@ import {
 import { AdminUserService } from './admin-user.service';
 import { SwaggerTag } from 'libs/constants';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
-import { RolesGuard } from 'libs/guards/roles.guard';
+import { RoleGuard } from 'libs/guards/role.guard';
 import { Roles } from 'libs/decorators/role.decorator';
 import { Role } from 'src/auth/entities/role';
 import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
@@ -33,7 +33,7 @@ import { ApiDeleteAdminUserIdResData } from './schemas/api-delete-admin-user-id-
 
 @ApiTags(SwaggerTag.AdminUser)
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Roles(Role.ADMIN)
 @ApiUnauthorizedResponse()
 @ApiExpiredTokenResponse()

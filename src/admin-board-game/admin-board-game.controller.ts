@@ -23,7 +23,7 @@ import {
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
 import { Role } from 'src/auth/entities/role';
 import { Roles } from 'libs/decorators/role.decorator';
-import { RolesGuard } from 'libs/guards/roles.guard';
+import { RoleGuard } from 'libs/guards/role.guard';
 import { SwaggerTag } from 'libs/constants';
 import { ApiPostAdminBoardGameReqBody } from './schemas/api-post-admin-board-game-req-body.schema';
 import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-response.decorator';
@@ -37,7 +37,7 @@ import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-g
 
 @ApiTags(SwaggerTag.AdminBoardGame)
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Roles(Role.ADMIN)
 @ApiUnauthorizedResponse()
 @ApiExpiredTokenResponse()

@@ -127,14 +127,12 @@ export class AuthService {
     id,
     nickname,
     profileUrl,
-    role,
   }: CreateAccessTokenDto<T>): Promise<string> {
     const payload: Partial<AccessTokenPayloadDto<T>> = {
       iss: AuthService.ISS,
       aud: id,
       nickname,
       profileUrl,
-      role,
     };
     return this.jwtService.sign(payload, { secret: process.env.JWT_SECRET });
   }

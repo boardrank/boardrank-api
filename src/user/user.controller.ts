@@ -18,7 +18,7 @@ import {
 import { SwaggerTag } from 'libs/constants';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
-import { RolesGuard } from 'libs/guards/roles.guard';
+import { RoleGuard } from 'libs/guards/role.guard';
 import { Roles } from 'libs/decorators/role.decorator';
 import { Role } from 'src/auth/entities/role';
 import { Request } from 'express';
@@ -38,7 +38,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserResData) } })
   @ApiUnauthorizedResponse()
@@ -60,7 +60,7 @@ export class UserController {
   }
 
   @Patch()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPatchUserResData) } })
   @ApiUnauthorizedResponse()

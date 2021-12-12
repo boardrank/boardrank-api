@@ -22,7 +22,7 @@ import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-respo
 import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
 import { Roles } from 'libs/decorators/role.decorator';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
-import { RolesGuard } from 'libs/guards/roles.guard';
+import { RoleGuard } from 'libs/guards/role.guard';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { Role } from 'src/auth/entities/role';
 import { BoardGameReplyService } from './board-game-reply.service';
@@ -38,7 +38,7 @@ export class BoardGameReplyController {
   constructor(private readonly boardGameReplyService: BoardGameReplyService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiPostBoardGameReplyResData) },
@@ -58,7 +58,7 @@ export class BoardGameReplyController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiPatchBoardGameReplyResData) },
@@ -84,7 +84,7 @@ export class BoardGameReplyController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiDeleteBoardGameReplyIdResData) },
@@ -99,8 +99,7 @@ export class BoardGameReplyController {
     @Req() req: Request,
     @Param('id') id: string,
   ): Promise<ApiDeleteBoardGameReplyIdResData> {
-    const user = req.user as UserByAccessToken;
-    const boardGameReply = await this.boardGameReplyService.remove(+id, user);
+    const boardGameReply = await this.boardGameReplyService.remove(+id);
     return { boardGameReply };
   }
 }

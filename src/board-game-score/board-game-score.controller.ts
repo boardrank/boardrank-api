@@ -11,7 +11,7 @@ import { SwaggerTag } from 'libs/constants';
 import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
 import { Roles } from 'libs/decorators/role.decorator';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
-import { RolesGuard } from 'libs/guards/roles.guard';
+import { RoleGuard } from 'libs/guards/role.guard';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { Role } from 'src/auth/entities/role';
 import { BoardGameScoreService } from './board-game-score.service';
@@ -25,7 +25,7 @@ export class BoardGameScoreController {
   constructor(private readonly boardGameScoreService: BoardGameScoreService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiPostBoardGameScoreResData) },

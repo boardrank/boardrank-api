@@ -26,7 +26,7 @@ import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-respo
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
 import { Role } from 'src/auth/entities/role';
 import { Roles } from 'libs/decorators/role.decorator';
-import { RolesGuard } from 'libs/guards/roles.guard';
+import { RoleGuard } from 'libs/guards/role.guard';
 import { SwaggerTag } from 'libs/constants';
 import { ApiPostAdminGenreResData } from './schemas/api-post-admin-genre-res-data.schema';
 import { ApiPostAdminGenreReqBody } from './schemas/api-post-admin-genre-req-body.schema';
@@ -39,7 +39,7 @@ import { ApiPatchAdminGenreRearrangeIdReqBody } from './schemas/api-patch-admin-
 
 @ApiTags(SwaggerTag.AdminGenre)
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 @Roles(Role.ADMIN)
 @ApiUnauthorizedResponse()
 @ApiExpiredTokenResponse()

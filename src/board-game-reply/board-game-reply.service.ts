@@ -9,9 +9,7 @@ import { BoardGameReply } from './vo/board-game-reply.vo';
 import { CreateBoardGameReplyDto } from './dto/create-board-game-reply.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Role } from 'src/auth/entities/role';
 import { UpdateBoardGameReplyDto } from './dto/update-board-game-reply.dto';
-import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 
 @Injectable()
 export class BoardGameReplyService {
@@ -88,19 +86,8 @@ export class BoardGameReplyService {
     }
   }
 
-  async remove(id: number, user: UserByAccessToken): Promise<BoardGameReply> {
+  async remove(id: number): Promise<BoardGameReply> {
     try {
-      if (user.role === Role.MEMBER) {
-        const boardGameReply =
-          await this.prismaService.boardGameReply.findFirst({
-            where: { id },
-          });
-
-        if (boardGameReply && boardGameReply.userId !== user.id) {
-          throw new ForbiddenException();
-        }
-      }
-
       return await this.prismaService.boardGameReply.delete({
         where: { id },
         include: {

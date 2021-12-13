@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id               Int              @id @default(autoincrement())
-  oauthId          String           @unique @map("oauth_id")
+  oauthId          String?          @unique @map("oauth_id")
   nickname         String
   profileUrl       String           @map("profile_url")
   role             Role             @default(MEMBER)

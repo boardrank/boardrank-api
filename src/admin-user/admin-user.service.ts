@@ -78,6 +78,7 @@ export class AdminUserService {
           profileUrl: true,
           role: true,
           status: true,
+          createdAt: true,
         },
         data: updateUserDto,
         where: { id },
@@ -92,13 +93,18 @@ export class AdminUserService {
 
   async delete(id: number): Promise<User> {
     try {
-      return await this.prismaService.user.delete({
+      return await this.prismaService.user.update({
         select: {
           id: true,
           nickname: true,
           profileUrl: true,
           role: true,
           status: true,
+          createdAt: true,
+        },
+        data: {
+          oauthId: null,
+          status: 'WITHDRAWAL',
         },
         where: { id },
       });

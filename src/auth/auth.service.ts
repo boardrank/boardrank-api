@@ -12,13 +12,13 @@ import { ApiAuthResponse } from './entities/api-auth-response';
 import { ApiInvalidTokenErrorResponse } from 'libs/http-exceptions/api-invalid-token-error-response';
 import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
 import { CreateAccessTokenDto } from './dto/create-access-token.dto';
+import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
 import { UserService } from 'src/user/user.service';
 import { verifyIdToken } from 'libs/auth-google';
-import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
 
 @Injectable()
 export class AuthService {

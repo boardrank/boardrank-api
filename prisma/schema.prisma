@@ -12,10 +12,10 @@ model User {
   oauthId          String           @unique @map("oauth_id")
   nickname         String
   profileUrl       String           @map("profile_url")
-  status           UserStatus       @default(ACTIVATE)
   role             Role             @default(MEMBER)
   createdAt        DateTime         @default(now()) @map("created_at")
   updatedAt        DateTime         @updatedAt @map("updated_at")
+  status           UserStatus       @default(ACTIVATE)
   boardGameReplies BoardGameReply[]
   boardGameScores  BoardGameScore[]
 
@@ -71,11 +71,11 @@ model Genre {
 model BoardGameScore {
   id          Int       @id @default(autoincrement())
   score       Int
-  comment     String    @db.VarChar(2000)
   userId      Int       @map("user_id")
   boardGameId Int       @map("board_game_id")
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
+  comment     String    @db.VarChar(2000)
   boardGame   BoardGame @relation(fields: [boardGameId], references: [id])
   user        User      @relation(fields: [userId], references: [id])
 

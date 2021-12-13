@@ -12,6 +12,9 @@ import { Request, Response } from 'express';
 import { ApiExpiredTokenErrorResponse } from 'libs/http-exceptions/api-expired-token-error-response';
 import { ApiForbiddenErrorResponse } from 'libs/http-exceptions/api-forbidden-error-response';
 import { ApiUnauthorizedErrorResponse } from 'libs/http-exceptions/api-unauthorized-error-response';
+import { ApiNoPermissionErrorResponse } from 'libs/http-exceptions/api-no-permission-error-response';
+import { ApiBlockStatusErrorResponse } from 'libs/http-exceptions/api-block-status-error-response';
+import { ApiDormantStatusErrorResponse } from 'libs/http-exceptions/api-dormant-status-error-response';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -25,7 +28,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
     '토큰이 만료되었습니다.',
   );
 
-  static ErrorForbidden = new ApiForbiddenErrorResponse('권한이 없습니다.');
+  static ErrorForbidden = new ApiForbiddenErrorResponse(
+    '접근이 거부되었습니다.',
+  );
+
+  static ErrorNoPermission = new ApiNoPermissionErrorResponse(
+    '권한이 없습니다.',
+  );
+
+  static ErrorBlockStatus = new ApiBlockStatusErrorResponse(
+    '차단된 사용자입니다.',
+  );
+
+  static ErrorDormantStatus = new ApiDormantStatusErrorResponse(
+    '휴먼계정입니다.',
+  );
 
   checkExpiration({ headers: { authorization } }: Request) {
     try {
@@ -52,9 +69,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
           ? HttpExceptionFilter.ErrorExpiredToken
           : HttpExceptionFilter.ErrorUnauthorized;
         res.status(status).json(error);
-        break;
-      case HttpStatus.FORBIDDEN:
-        res.status(status).json(HttpExceptionFilter.ErrorForbidden);
         break;
       default:
         res.status(status).json(exception.getResponse());

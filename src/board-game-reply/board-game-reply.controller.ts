@@ -23,6 +23,7 @@ import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.dec
 import { Roles } from 'libs/decorators/role.decorator';
 import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
 import { RoleGuard } from 'libs/guards/role.guard';
+import { ErrorCode } from 'libs/http-exceptions/error-codes';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
 import { Role } from 'src/auth/entities/role';
 import { BoardGameReplyService } from './board-game-reply.service';
@@ -65,7 +66,7 @@ export class BoardGameReplyController {
   })
   @ApiUnauthorizedResponse()
   @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
+  @ApiForbiddenResponse(ErrorCode.NoPermission)
   @ApiNotFoundResponse(
     BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),
   )
@@ -91,7 +92,7 @@ export class BoardGameReplyController {
   })
   @ApiUnauthorizedResponse()
   @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
+  @ApiForbiddenResponse(ErrorCode.NoPermission)
   @ApiNotFoundResponse(
     BoardGameReplyService.ErrorNotFoundBoardGame.toApiResponseOptions(),
   )
@@ -99,7 +100,8 @@ export class BoardGameReplyController {
     @Req() req: Request,
     @Param('id') id: string,
   ): Promise<ApiDeleteBoardGameReplyIdResData> {
-    const boardGameReply = await this.boardGameReplyService.remove(+id);
+    const { id: userId } = req.user as UserByAccessToken;
+    const boardGameReply = await this.boardGameReplyService.remove(+id, userId);
     return { boardGameReply };
   }
 }

@@ -10,11 +10,16 @@ import { CreateBoardGameReplyDto } from './dto/create-board-game-reply.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateBoardGameReplyDto } from './dto/update-board-game-reply.dto';
+import { ApiNoPermissionErrorResponse } from 'libs/http-exceptions/api-no-permission-error-response';
 
 @Injectable()
 export class BoardGameReplyService {
   static ErrorNotFoundBoardGame = new ApiNotFoundErrorResponse(
     '댓글을 찾을 수 없습니다.',
+  );
+
+  static ErrorNoPermission = new ApiNoPermissionErrorResponse(
+    '접근 권한이 없습니다.',
   );
 
   constructor(private prismaService: PrismaService) {}
@@ -56,7 +61,7 @@ export class BoardGameReplyService {
       );
 
       if (boardGameReply && boardGameReply.userId !== userId) {
-        throw new ForbiddenException();
+        throw new ForbiddenException(BoardGameReplyService.ErrorNoPermission);
       }
 
       return await this.prismaService.boardGameReply.update({
@@ -86,8 +91,16 @@ export class BoardGameReplyService {
     }
   }
 
-  async remove(id: number): Promise<BoardGameReply> {
+  async remove(id: number, userId: number): Promise<BoardGameReply> {
     try {
+      const boardGameReply = await this.prismaService.boardGameReply.findUnique(
+        { where: { id } },
+      );
+
+      if (boardGameReply && boardGameReply.userId !== userId) {
+        throw new ForbiddenException(BoardGameReplyService.ErrorNoPermission);
+      }
+
       return await this.prismaService.boardGameReply.delete({
         where: { id },
         include: {

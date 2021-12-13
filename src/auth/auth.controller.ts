@@ -3,12 +3,14 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { SwaggerTag } from 'libs/constants';
+import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
 import { AuthService } from './auth.service';
 import { ApiPostAuthRefreshReqBody } from './schemas/api-post-auth-refresh-req-body.schema';
 import { ApiPostAuthRefreshResData } from './schemas/api-post-auth-refresh-res-data.schema';
@@ -41,6 +43,12 @@ export class AuthController {
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPostAuthSignInResData) } })
   @ApiBadRequestResponse(AuthService.ErrorInvalidToken.toApiResponseOptions())
   @ApiNotFoundResponse(AuthService.ErrorNotFoundUser.toApiResponseOptions())
+  @ApiForbiddenResponse(
+    HttpExceptionFilter.ErrorBlockStatus.toApiResponseOptions(),
+  )
+  @ApiForbiddenResponse(
+    HttpExceptionFilter.ErrorDormantStatus.toApiResponseOptions(),
+  )
   async signIn(
     @Body() body: ApiPostAuthSignInReqBody,
   ): Promise<ApiPostAuthSignInResData> {
@@ -51,6 +59,12 @@ export class AuthController {
   @HttpCode(200)
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPostAuthRefreshResData) } })
   @ApiBadRequestResponse(AuthService.ErrorInvalidToken.toApiResponseOptions())
+  @ApiForbiddenResponse(
+    HttpExceptionFilter.ErrorBlockStatus.toApiResponseOptions(),
+  )
+  @ApiForbiddenResponse(
+    HttpExceptionFilter.ErrorDormantStatus.toApiResponseOptions(),
+  )
   async refresh(
     @Body() body: ApiPostAuthRefreshReqBody,
   ): Promise<ApiPostAuthRefreshResData> {

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   Logger,
   NotFoundException,
@@ -17,6 +18,7 @@ import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
 import { UserService } from 'src/user/user.service';
 import { verifyIdToken } from 'libs/auth-google';
+import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
 
 @Injectable()
 export class AuthService {
@@ -87,6 +89,10 @@ export class AuthService {
 
     if (!user) {
       throw new NotFoundException(AuthService.ErrorNotFoundUser);
+    } else if (user.status === 'BLOCK') {
+      throw new ForbiddenException(HttpExceptionFilter.ErrorBlockStatus);
+    } else if (user.status === 'DORMANT') {
+      throw new ForbiddenException(HttpExceptionFilter.ErrorDormantStatus);
     }
 
     const [refreshToken, accessToken] = await Promise.all([
@@ -146,6 +152,14 @@ export class AuthService {
       const user = await this.prismaService.user.findUnique({
         where: { id },
       });
+
+      if (!user) {
+        throw new NotFoundException(AuthService.ErrorNotFoundUser);
+      } else if (user.status === 'BLOCK') {
+        throw new ForbiddenException(HttpExceptionFilter.ErrorBlockStatus);
+      } else if (user.status === 'DORMANT') {
+        throw new ForbiddenException(HttpExceptionFilter.ErrorDormantStatus);
+      }
 
       const [refreshToken, accessToken] = await Promise.all([
         this.issueRefreshToken(id),

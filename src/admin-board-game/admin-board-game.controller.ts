@@ -34,6 +34,7 @@ import { ApiPatchAdminBoardGameIdResData } from './schemas/api-patch-admin-board
 import { ApiPatchAdminBoardGameIdReqBody } from './schemas/api-patch-admin-board-game-id-req-body.schema';
 import { ApiDeleteAdminBoardGameIdResData } from './schemas/api-delete-admin-board-game-id-res-data.schema';
 import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-game-list-res-data.schema';
+import { ErrorCode } from 'libs/http-exceptions/error-codes';
 
 @ApiTags(SwaggerTag.AdminBoardGame)
 @ApiBearerAuth()
@@ -41,7 +42,7 @@ import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-g
 @Roles(Role.ADMIN)
 @ApiUnauthorizedResponse()
 @ApiExpiredTokenResponse()
-@ApiForbiddenResponse()
+@ApiForbiddenResponse(ErrorCode.NoPermission)
 @Controller('admin/board-game')
 export class AdminBoardGameController {
   constructor(private readonly adminBoardGameService: AdminBoardGameService) {}

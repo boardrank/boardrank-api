@@ -30,6 +30,7 @@ import { ApiPatchUserResData } from './schemas/api-patch-user-res-data.schema';
 import { ApiPatchUserReqBody } from './schemas/api-patch-user-req-body.schema';
 import { ApiGetUserIdResData } from './schemas/api-get-user-id-res-data.schema';
 import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
+import { ErrorCode } from 'libs/http-exceptions/error-codes';
 
 @ApiTags(SwaggerTag.User)
 @ApiBearerAuth()
@@ -43,7 +44,7 @@ export class UserController {
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiGetUserResData) } })
   @ApiUnauthorizedResponse()
   @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
+  @ApiForbiddenResponse(ErrorCode.NoPermission)
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async getOwnProfile(@Req() req: Request): Promise<ApiGetUserResData> {
     const { id } = req.user as UserByAccessToken;
@@ -65,7 +66,7 @@ export class UserController {
   @ApiOkResponse({ schema: { $ref: getSchemaPath(ApiPatchUserResData) } })
   @ApiUnauthorizedResponse()
   @ApiExpiredTokenResponse()
-  @ApiForbiddenResponse()
+  @ApiForbiddenResponse(ErrorCode.NoPermission)
   @ApiNotFoundResponse(UserService.ErrorNotFound.toApiResponseOptions())
   async updateOwnProfile(
     @Req() req: Request,

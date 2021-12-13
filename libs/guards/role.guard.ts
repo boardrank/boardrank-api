@@ -1,11 +1,12 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   Logger,
+  UnauthorizedException,
 } from '@nestjs/common';
 
-import { Observable } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ROLES_KEY } from 'libs/decorators/role.decorator';
 import { Reflector } from '@nestjs/core';
@@ -31,7 +32,7 @@ export class RoleGuard implements CanActivate {
     const user = context.switchToHttp().getRequest()
       .user as UserByAccessToken | null;
 
-    if (!user) return false;
+    if (!user) throw new UnauthorizedException();
 
     const { role } = await this.prismaService.user.findUnique({
       select: {
@@ -42,6 +43,8 @@ export class RoleGuard implements CanActivate {
       },
     });
 
-    return requiredRoles.includes(role as Role);
+    if (!requiredRoles.includes(role as Role)) throw new ForbiddenException();
+
+    return true;
   }
 }

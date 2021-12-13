@@ -17,6 +17,9 @@ export const ErrorCode = {
    * HttpStatus : 403
    */
   Forbidden: 4030,
+  NoPermission: 4031,
+  BlockStatus: 4032,
+  DormantStatus: 4033,
 
   /**
    * HttpStatus: 404

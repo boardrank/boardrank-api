@@ -35,6 +35,9 @@ import { ApiPostAuthSignUpResData } from 'src/auth/schemas/api-post-auth-sign-up
 import { ApiPostBoardGameReplyResData } from 'src/board-game-reply/vo/api-post-board-game-reply-res-data.schema';
 import { ApiPostBoardGameScoreResData } from 'src/board-game-score/schemas/api-post-board-game-score-res-data.schema';
 import { ApiUnauthorizedErrorResponse } from 'libs/http-exceptions/api-unauthorized-error-response';
+import { ApiNoPermissionErrorResponse } from 'libs/http-exceptions/api-no-permission-error-response';
+import { ApiBlockStatusErrorResponse } from 'libs/http-exceptions/api-block-status-error-response';
+import { ApiDormantStatusErrorResponse } from 'libs/http-exceptions/api-dormant-status-error-response';
 
 export default [
   // Auth
@@ -80,6 +83,9 @@ export default [
   ApiInvalidParamErrorResponse,
   ApiUnauthorizedErrorResponse,
   ApiForbiddenErrorResponse,
+  ApiNoPermissionErrorResponse,
+  ApiBlockStatusErrorResponse,
+  ApiDormantStatusErrorResponse,
   ApiNotFoundErrorResponse,
   ApiConflictErrorResponse,
   ApiAlreadyRegisteredErrorResponse,

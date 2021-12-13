@@ -1,7 +1,6 @@
 import {
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
   Injectable,
   Logger,
   UnauthorizedException,
@@ -12,6 +11,7 @@ import { ROLES_KEY } from 'libs/decorators/role.decorator';
 import { Reflector } from '@nestjs/core';
 import { Role } from 'src/auth/entities/role';
 import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
+import { ApiNoPermissionErrorResponse } from 'libs/http-exceptions/api-no-permission-error-response';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -43,7 +43,8 @@ export class RoleGuard implements CanActivate {
       },
     });
 
-    if (!requiredRoles.includes(role as Role)) throw new ForbiddenException();
+    if (!requiredRoles.includes(role as Role))
+      throw new ApiNoPermissionErrorResponse('권한이 없습니다.');
 
     return true;
   }

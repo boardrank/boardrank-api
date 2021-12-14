@@ -13,9 +13,9 @@ model User {
   nickname         String
   profileUrl       String           @map("profile_url")
   role             Role             @default(MEMBER)
+  status           UserStatus       @default(ACTIVATE)
   createdAt        DateTime         @default(now()) @map("created_at")
   updatedAt        DateTime         @updatedAt @map("updated_at")
-  status           UserStatus       @default(ACTIVATE)
   boardGameReplies BoardGameReply[]
   boardGameScores  BoardGameScore[]
 

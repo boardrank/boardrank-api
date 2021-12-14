@@ -105,6 +105,37 @@ export class AdminBoardGameService {
     }
   }
 
+  async findOneById(id: number): Promise<BoardGame> {
+    try {
+      const { boardGameGenres, createdAt, updatedAt, ...boardGame } =
+        await this.prismaService.boardGame.findUnique({
+          where: {
+            id,
+          },
+          include: {
+            boardGameGenres: {
+              include: {
+                genre: {
+                  select: {
+                    id: true,
+                    code: true,
+                    name: true,
+                    order: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+      const genres = boardGameGenres.map(({ genre }) => genre);
+
+      return { ...boardGame, genres };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getAllCount(keyword = ''): Promise<number> {
     try {
       const { _count: count } = await this.prismaService.boardGame.aggregate({

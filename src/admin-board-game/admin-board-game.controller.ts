@@ -35,6 +35,7 @@ import { ApiPatchAdminBoardGameIdReqBody } from './schemas/api-patch-admin-board
 import { ApiDeleteAdminBoardGameIdResData } from './schemas/api-delete-admin-board-game-id-res-data.schema';
 import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-game-list-res-data.schema';
 import { ErrorCode } from 'libs/http-exceptions/error-codes';
+import { ApiGetAdminBoardGameIdResData } from './schemas/api-get-admin-board-game-id-res-data.schema';
 
 @ApiTags(SwaggerTag.AdminBoardGame)
 @ApiBearerAuth()
@@ -66,14 +67,31 @@ export class AdminBoardGameController {
     @Query('rowsPerPage', ParseIntPipe) rowsPerPage: number,
     @Query('page', ParseIntPipe) page: number,
     @Query('keyword') keyword: string,
-  ) {
-    const boardGames = await this.adminBoardGameService.findAll(
+  ): Promise<ApiGetAdminBoardGameListResData> {
+    const promiseBoardGames = this.adminBoardGameService.findAll(
       rowsPerPage,
       page,
       keyword,
     );
-    const totalCount = await this.adminBoardGameService.getAllCount(keyword);
+    const promiseTotalCount = this.adminBoardGameService.getAllCount(keyword);
+    const [boardGames, totalCount] = await Promise.all([
+      promiseBoardGames,
+      promiseTotalCount,
+    ]);
     return { boardGames, totalCount };
+  }
+
+  @Get(':id')
+  @ApiOkResponse({
+    schema: { $ref: getSchemaPath(ApiGetAdminBoardGameIdResData) },
+  })
+  @ApiNotFoundResponse(
+    AdminBoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),
+  )
+  async findById(@Param('id', ParseIntPipe) id: number) {
+    const boardGame = await this.adminBoardGameService.findOneById(id);
+
+    return { boardGame };
   }
 
   @Patch(':id')

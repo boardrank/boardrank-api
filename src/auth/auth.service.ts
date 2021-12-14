@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   Logger,
@@ -19,6 +20,7 @@ import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
 import { UserService } from 'src/user/user.service';
 import { verifyIdToken } from 'libs/auth-google';
+import { Prisma } from '.prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -72,6 +74,15 @@ export class AuthService {
         accessToken,
       };
     } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          /**
+           * 코드가 중복되었을 때 Conflict Exception
+           */
+          throw new ConflictException(AuthService.ErrorAlreadyRegistered);
+        }
+      }
+
       throw error;
     }
   }

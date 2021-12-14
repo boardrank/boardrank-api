@@ -6,4 +6,7 @@ export class ApiGetAdminBoardGameListResData {
     type: () => [AdminBoardGameListItem],
   })
   boardGames: AdminBoardGameListItem[];
+
+  @ApiProperty()
+  totalCount: number;
 }

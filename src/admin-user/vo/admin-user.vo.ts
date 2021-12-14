@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class User {
+export class AdminUser {
   @ApiProperty({
     example: 1,
   })

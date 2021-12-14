@@ -5,7 +5,7 @@ import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-err
 import { Prisma } from 'prisma/prisma-client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './vo/user.vo';
+import { AdminUser } from './vo/admin-user.vo';
 import { UserListItem } from './vo/user-list-item.vo';
 
 @Injectable()
@@ -69,7 +69,10 @@ export class AdminUserService {
     }
   }
 
-  async updateProfile(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateProfile(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<AdminUser> {
     try {
       return await this.prismaService.user.update({
         select: {
@@ -91,7 +94,7 @@ export class AdminUserService {
     }
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(id: number): Promise<AdminUser> {
     try {
       return await this.prismaService.user.update({
         select: {

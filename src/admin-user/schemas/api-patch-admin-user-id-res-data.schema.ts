@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../vo/user.vo';
+import { AdminUser } from '../vo/admin-user.vo';
 
 export class ApiPatchAdminUserIdResData {
   @ApiProperty({
-    type: () => User,
+    type: () => AdminUser,
   })
-  user: User;
+  user: AdminUser;
 }

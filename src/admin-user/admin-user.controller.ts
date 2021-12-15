@@ -20,12 +20,12 @@ import {
 } from '@nestjs/common';
 
 import { AdminUserService } from './admin-user.service';
-import { SwaggerTag } from 'libs/constants';
-import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
-import { RoleGuard } from 'libs/guards/role.guard';
-import { Roles } from 'libs/decorators/role.decorator';
+import { SwaggerTag } from 'src/libs/constants';
+import { JwtAuthGuard } from 'src/libs/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/libs/guards/role.guard';
+import { Roles } from 'src/libs/decorators/role.decorator';
 import { Role } from 'src/auth/entities/role';
-import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
+import { ApiExpiredTokenResponse } from 'src/libs/decorators/api-expired-token-response.decorator';
 import { ApiGetAdminUserListResData } from './schemas/api-get-admin-user-list-res-data.schema';
 import { ApiPatchAdminUserIdResData } from './schemas/api-patch-admin-user-id-res-data.schema';
 import { ApiPatchAdminUserIdReqBody } from './schemas/api-patch-admin-user-id-req-body.schema';

@@ -7,12 +7,12 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Request } from 'express';
-import { SwaggerTag } from 'libs/constants';
-import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
-import { Roles } from 'libs/decorators/role.decorator';
-import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
-import { RoleGuard } from 'libs/guards/role.guard';
-import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
+import { SwaggerTag } from 'src/libs/constants';
+import { ApiExpiredTokenResponse } from 'src/libs/decorators/api-expired-token-response.decorator';
+import { Roles } from 'src/libs/decorators/role.decorator';
+import { JwtAuthGuard } from 'src/libs/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/libs/guards/role.guard';
+import { UserByAccessToken } from 'src/libs/strategies/jwt.strategy';
 import { Role } from 'src/auth/entities/role';
 import { BoardGameScoreService } from './board-game-score.service';
 import { ApiPostBoardGameScoreReqBody } from './schemas/api-post-board-game-score-req-body.schema';

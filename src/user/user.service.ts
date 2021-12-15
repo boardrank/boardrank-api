@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
+import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';

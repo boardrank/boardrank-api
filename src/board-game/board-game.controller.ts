@@ -7,9 +7,9 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SwaggerTag } from 'libs/constants';
-import { RoleGuard } from 'libs/guards/role.guard';
-import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
+import { SwaggerTag } from 'src/libs/constants';
+import { RoleGuard } from 'src/libs/guards/role.guard';
+import { UserByAccessToken } from 'src/libs/strategies/jwt.strategy';
 import { BoardGameService } from './board-game.service';
 import { ApiGetBoardGameListGenreIdResData } from './schemas/api-get-board-game-list-genre-id-res-data.schema';
 import { ApiGetBoardGameListResData } from './schemas/api-get-board-game-list-res-data.schema';

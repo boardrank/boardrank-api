@@ -7,11 +7,11 @@ import {
 } from '@nestjs/common';
 
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ROLES_KEY } from 'libs/decorators/role.decorator';
+import { ROLES_KEY } from 'src/libs/decorators/role.decorator';
 import { Reflector } from '@nestjs/core';
 import { Role } from 'src/auth/entities/role';
-import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
-import { ApiNoPermissionErrorResponse } from 'libs/http-exceptions/api-no-permission-error-response';
+import { UserByAccessToken } from 'src/libs/strategies/jwt.strategy';
+import { ApiNoPermissionErrorResponse } from 'src/libs/http-exceptions/api-no-permission-error-response';
 
 @Injectable()
 export class RoleGuard implements CanActivate {

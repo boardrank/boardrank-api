@@ -20,21 +20,21 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/libs/guards/jwt-auth.guard';
 import { Role } from 'src/auth/entities/role';
-import { Roles } from 'libs/decorators/role.decorator';
-import { RoleGuard } from 'libs/guards/role.guard';
-import { SwaggerTag } from 'libs/constants';
+import { Roles } from 'src/libs/decorators/role.decorator';
+import { RoleGuard } from 'src/libs/guards/role.guard';
+import { SwaggerTag } from 'src/libs/constants';
 import { ApiPostAdminBoardGameReqBody } from './schemas/api-post-admin-board-game-req-body.schema';
-import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-response.decorator';
-import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
-import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
+import { ApiUnauthorizedResponse } from 'src/libs/decorators/api-unauthorized-response.decorator';
+import { ApiExpiredTokenResponse } from 'src/libs/decorators/api-expired-token-response.decorator';
+import { ApiForbiddenResponse } from 'src/libs/decorators/api-forbidden-response.decorator';
 import { ApiPostAdminBoardGameResData } from './schemas/api-post-admin-board-game-res-data.schema';
 import { ApiPatchAdminBoardGameIdResData } from './schemas/api-patch-admin-board-game-id-res-data.schema';
 import { ApiPatchAdminBoardGameIdReqBody } from './schemas/api-patch-admin-board-game-id-req-body.schema';
 import { ApiDeleteAdminBoardGameIdResData } from './schemas/api-delete-admin-board-game-id-res-data.schema';
 import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-game-list-res-data.schema';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
+import { ErrorCode } from 'src/libs/http-exceptions/error-codes';
 import { ApiGetAdminBoardGameIdResData } from './schemas/api-get-admin-board-game-id-res-data.schema';
 
 @ApiTags(SwaggerTag.AdminBoardGame)

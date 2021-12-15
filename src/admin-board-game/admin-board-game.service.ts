@@ -1,8 +1,8 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { AdminBoardGameListItem } from './vo/admin-board-game-list-item.vo';
-import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
-import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
+import { ApiInvalidParamErrorResponse } from 'src/libs/http-exceptions/api-invalid-param-error-response';
+import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
 import { BoardGame } from './vo/board-game.vo';
 import { BoardGameService } from 'src/board-game/board-game.service';
 import { CreateBoardGameDto } from './dto/create-board-game.dto';

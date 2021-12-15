@@ -5,10 +5,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
-import { ApiHasReferenceErrorResponse } from 'libs/http-exceptions/api-already-registered-error-response';
-import { ApiInvalidDataErrorResponse } from 'libs/http-exceptions/api-invalid-data-error-response';
-import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
+import { ApiAlreadyRegisteredErrorResponse } from 'src/libs/http-exceptions/api-has-reference-error-response';
+import { ApiHasReferenceErrorResponse } from 'src/libs/http-exceptions/api-already-registered-error-response';
+import { ApiInvalidDataErrorResponse } from 'src/libs/http-exceptions/api-invalid-data-error-response';
+import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { Genre } from './vo/genre.vo';
 import { Prisma } from '.prisma/client';

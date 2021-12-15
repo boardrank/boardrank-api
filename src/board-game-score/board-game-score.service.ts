@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 
-import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
+import { ApiAlreadyRegisteredErrorResponse } from 'src/libs/http-exceptions/api-has-reference-error-response';
 import { CreateBoardGameScoreDto } from './dto/create-board-game-score.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 

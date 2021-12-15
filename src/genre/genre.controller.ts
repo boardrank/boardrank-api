@@ -3,7 +3,7 @@ import { Controller, Get } from '@nestjs/common';
 
 import { ApiGetGenreListResData } from './schemas/api-get-genre-list-res-data.schema';
 import { GenreService } from './genre.service';
-import { SwaggerTag } from 'libs/constants';
+import { SwaggerTag } from 'src/libs/constants';
 
 @ApiTags(SwaggerTag.Genre)
 @Controller('genre')

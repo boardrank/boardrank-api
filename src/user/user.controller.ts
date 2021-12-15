@@ -15,22 +15,22 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { SwaggerTag } from 'libs/constants';
+import { SwaggerTag } from 'src/libs/constants';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
-import { RoleGuard } from 'libs/guards/role.guard';
-import { Roles } from 'libs/decorators/role.decorator';
+import { JwtAuthGuard } from 'src/libs/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/libs/guards/role.guard';
+import { Roles } from 'src/libs/decorators/role.decorator';
 import { Role } from 'src/auth/entities/role';
 import { Request } from 'express';
-import { UserByAccessToken } from 'libs/strategies/jwt.strategy';
-import { ApiUnauthorizedResponse } from 'libs/decorators/api-unauthorized-response.decorator';
-import { ApiForbiddenResponse } from 'libs/decorators/api-forbidden-response.decorator';
+import { UserByAccessToken } from 'src/libs/strategies/jwt.strategy';
+import { ApiUnauthorizedResponse } from 'src/libs/decorators/api-unauthorized-response.decorator';
+import { ApiForbiddenResponse } from 'src/libs/decorators/api-forbidden-response.decorator';
 import { ApiGetUserResData } from './schemas/api-get-user-res-data.schema';
 import { ApiPatchUserResData } from './schemas/api-patch-user-res-data.schema';
 import { ApiPatchUserReqBody } from './schemas/api-patch-user-req-body.schema';
 import { ApiGetUserIdResData } from './schemas/api-get-user-id-res-data.schema';
-import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
+import { ApiExpiredTokenResponse } from 'src/libs/decorators/api-expired-token-response.decorator';
+import { ErrorCode } from 'src/libs/http-exceptions/error-codes';
 
 @ApiTags(SwaggerTag.User)
 @ApiBearerAuth()

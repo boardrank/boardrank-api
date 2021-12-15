@@ -1,6 +1,6 @@
-import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
+import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { ApiForbiddenResponse as Response } from '@nestjs/swagger';
-import { ErrorCode } from 'libs/http-exceptions/error-codes';
+import { ErrorCode } from 'src/libs/http-exceptions/error-codes';
 
 export const ApiForbiddenResponse = (errorCode: number) => {
   switch (errorCode) {

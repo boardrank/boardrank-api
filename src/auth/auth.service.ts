@@ -8,18 +8,18 @@ import {
 } from '@nestjs/common';
 
 import { AccessTokenPayloadDto } from './dto/access-token-payload.dto';
-import { ApiAlreadyRegisteredErrorResponse } from 'libs/http-exceptions/api-has-reference-error-response';
+import { ApiAlreadyRegisteredErrorResponse } from 'src/libs/http-exceptions/api-has-reference-error-response';
 import { ApiAuthResponse } from './entities/api-auth-response';
-import { ApiInvalidTokenErrorResponse } from 'libs/http-exceptions/api-invalid-token-error-response';
-import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
+import { ApiInvalidTokenErrorResponse } from 'src/libs/http-exceptions/api-invalid-token-error-response';
+import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
 import { CreateAccessTokenDto } from './dto/create-access-token.dto';
-import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
+import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
 import { UserService } from 'src/user/user.service';
-import { verifyIdToken } from 'libs/auth-google';
+import { verifyIdToken } from 'src/libs/auth-google';
 import { Prisma } from '.prisma/client';
 
 @Injectable()

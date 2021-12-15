@@ -5,8 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiInvalidParamErrorResponse } from 'libs/http-exceptions/api-invalid-param-error-response';
-import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
+import { ApiInvalidParamErrorResponse } from 'src/libs/http-exceptions/api-invalid-param-error-response';
+import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
 import { BoardGameDetail } from './vo/board-game-detail.vo';
 import { BoardGameListItem } from './vo/board-game-list-item.vo';
 import { Prisma } from '.prisma/client';

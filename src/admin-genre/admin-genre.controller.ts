@@ -22,12 +22,12 @@ import {
 } from '@nestjs/common';
 
 import { AdminGenreService } from './admin-genre.service';
-import { ApiExpiredTokenResponse } from 'libs/decorators/api-expired-token-response.decorator';
-import { JwtAuthGuard } from 'libs/guards/jwt-auth.guard';
+import { ApiExpiredTokenResponse } from 'src/libs/decorators/api-expired-token-response.decorator';
+import { JwtAuthGuard } from 'src/libs/guards/jwt-auth.guard';
 import { Role } from 'src/auth/entities/role';
-import { Roles } from 'libs/decorators/role.decorator';
-import { RoleGuard } from 'libs/guards/role.guard';
-import { SwaggerTag } from 'libs/constants';
+import { Roles } from 'src/libs/decorators/role.decorator';
+import { RoleGuard } from 'src/libs/guards/role.guard';
+import { SwaggerTag } from 'src/libs/constants';
 import { ApiPostAdminGenreResData } from './schemas/api-post-admin-genre-res-data.schema';
 import { ApiPostAdminGenreReqBody } from './schemas/api-post-admin-genre-req-body.schema';
 import { ApiPatchAdminGenreIdResData } from './schemas/api-patch-admin-genre-id-res-data.schema';

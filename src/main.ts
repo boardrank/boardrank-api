@@ -1,10 +1,10 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from 'libs/filters/http-exception.filter';
+import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { NestFactory } from '@nestjs/core';
-import { SwaggerTag } from 'libs/constants';
-import extraModels from 'libs/swaggers/extraModels';
+import { SwaggerTag } from 'src/libs/constants';
+import extraModels from 'src/libs/swaggers/extraModels';
 
 export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

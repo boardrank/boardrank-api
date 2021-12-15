@@ -4,13 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { ApiNotFoundErrorResponse } from 'libs/http-exceptions/api-not-found-error-response';
+import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
 import { BoardGameReply } from './vo/board-game-reply.vo';
 import { CreateBoardGameReplyDto } from './dto/create-board-game-reply.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateBoardGameReplyDto } from './dto/update-board-game-reply.dto';
-import { ApiNoPermissionErrorResponse } from 'libs/http-exceptions/api-no-permission-error-response';
+import { ApiNoPermissionErrorResponse } from 'src/libs/http-exceptions/api-no-permission-error-response';
 
 @Injectable()
 export class BoardGameReplyService {

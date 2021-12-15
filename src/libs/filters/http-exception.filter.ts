@@ -9,12 +9,12 @@ import {
 import { JwtPayload, decode } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
-import { ApiExpiredTokenErrorResponse } from 'libs/http-exceptions/api-expired-token-error-response';
-import { ApiForbiddenErrorResponse } from 'libs/http-exceptions/api-forbidden-error-response';
-import { ApiUnauthorizedErrorResponse } from 'libs/http-exceptions/api-unauthorized-error-response';
-import { ApiNoPermissionErrorResponse } from 'libs/http-exceptions/api-no-permission-error-response';
-import { ApiBlockStatusErrorResponse } from 'libs/http-exceptions/api-block-status-error-response';
-import { ApiDormantStatusErrorResponse } from 'libs/http-exceptions/api-dormant-status-error-response';
+import { ApiExpiredTokenErrorResponse } from 'src/libs/http-exceptions/api-expired-token-error-response';
+import { ApiForbiddenErrorResponse } from 'src/libs/http-exceptions/api-forbidden-error-response';
+import { ApiUnauthorizedErrorResponse } from 'src/libs/http-exceptions/api-unauthorized-error-response';
+import { ApiNoPermissionErrorResponse } from 'src/libs/http-exceptions/api-no-permission-error-response';
+import { ApiBlockStatusErrorResponse } from 'src/libs/http-exceptions/api-block-status-error-response';
+import { ApiDormantStatusErrorResponse } from 'src/libs/http-exceptions/api-dormant-status-error-response';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

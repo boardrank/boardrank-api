@@ -16,7 +16,6 @@ import {
 import { AdminBoardGameService } from './admin-board-game.service';
 import {
   ApiBearerAuth,
-  ApiConsumes,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -57,7 +56,6 @@ export class AdminBoardGameController {
   ) {}
 
   @Post()
-  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiPostAdminBoardGameResData) },
@@ -109,7 +107,6 @@ export class AdminBoardGameController {
   }
 
   @Patch(':id')
-  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @ApiOkResponse({
     schema: { $ref: getSchemaPath(ApiPatchAdminBoardGameIdResData) },
@@ -143,7 +140,6 @@ export class AdminBoardGameController {
   }
 
   @Post('upload')
-  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const url = await this.uploadFileService.uploadBoardGameImage(file);

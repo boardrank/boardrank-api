@@ -40,7 +40,6 @@ import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-g
 import { ErrorCode } from 'src/libs/http-exceptions/error-codes';
 import { ApiGetAdminBoardGameIdResData } from './schemas/api-get-admin-board-game-id-res-data.schema';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FirebaseService } from 'src/firebase/firebase.service';
 import { UploadFileService } from 'src/upload-file/upload-file.service';
 
 @ApiTags(SwaggerTag.AdminBoardGame)
@@ -58,13 +57,19 @@ export class AdminBoardGameController {
   ) {}
 
   @Post()
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiPostAdminBoardGameResData) },
   })
   async create(
     @Body() body: ApiPostAdminBoardGameReqBody,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<ApiPostAdminBoardGameResData> {
-    const boardGame = await this.adminBoardGameService.create(body.boardGame);
+    const boardGame = await this.adminBoardGameService.create(
+      body.boardGame,
+      file,
+    );
     return { boardGame };
   }
 
@@ -104,6 +109,8 @@ export class AdminBoardGameController {
   }
 
   @Patch(':id')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
   @ApiOkResponse({
     schema: { $ref: getSchemaPath(ApiPatchAdminBoardGameIdResData) },
   })
@@ -113,10 +120,12 @@ export class AdminBoardGameController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: ApiPatchAdminBoardGameIdReqBody,
+    @UploadedFile() file?: Express.Multer.File,
   ): Promise<ApiPatchAdminBoardGameIdResData> {
     const boardGame = await this.adminBoardGameService.update(
       id,
       body.boardGame,
+      file,
     );
     return { boardGame };
   }

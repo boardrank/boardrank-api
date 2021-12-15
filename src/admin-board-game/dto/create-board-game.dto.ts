@@ -11,9 +11,6 @@ export class CreateBoardGameDto {
   })
   description: string;
 
-  @ApiProperty()
-  thumbnailUrl: string;
-
   @ApiProperty({
     example: 'Dominique Ehrhard',
   })

@@ -9,6 +9,7 @@ import { CreateBoardGameDto } from './dto/create-board-game.dto';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateBoardGameDto } from './dto/update-board-game.dto';
+import { UploadFileService } from 'src/upload-file/upload-file.service';
 
 @Injectable()
 export class AdminBoardGameService {
@@ -22,13 +23,19 @@ export class AdminBoardGameService {
 
   logger = new Logger('AdminBoardGameService');
 
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly uploadFileService: UploadFileService,
+  ) {}
 
-  async create({
-    genreIds,
-    ...createBoardGameDto
-  }: CreateBoardGameDto): Promise<BoardGame> {
+  async create(
+    { genreIds, ...createBoardGameDto }: CreateBoardGameDto,
+    file: Express.Multer.File,
+  ): Promise<BoardGame> {
     try {
+      const thumbnailUrl = await this.uploadFileService.uploadBoardGameImage(
+        file,
+      );
       const { boardGameGenres, ...boardGame } =
         await this.prismaService.boardGame.create({
           select: {
@@ -57,6 +64,7 @@ export class AdminBoardGameService {
           },
           data: {
             ...createBoardGameDto,
+            thumbnailUrl,
             boardGameGenres: {
               create: genreIds.map((id) => ({ genreId: id })),
             },
@@ -158,6 +166,7 @@ export class AdminBoardGameService {
   async update(
     id: number,
     { genreIds, ...updateBoardGameDto }: UpdateBoardGameDto,
+    file?: Express.Multer.File,
   ): Promise<BoardGame> {
     let genreIdsToBeCreated: number[] = [];
     let boardGameGenreidsToBeDeleted: number[] = [];
@@ -188,15 +197,23 @@ export class AdminBoardGameService {
           .map(({ id }) => id);
       }
 
+      const data = {
+        ...updateBoardGameDto,
+        boardGameGenres: {
+          create: genreIdsToBeCreated.map((genreId) => ({ genreId })),
+          delete: boardGameGenreidsToBeDeleted.map((id) => ({ id })),
+        },
+      };
+
+      if (file) {
+        data.thumbnailUrl = await this.uploadFileService.uploadBoardGameImage(
+          file,
+        );
+      }
+
       const { boardGameGenres, ...boardGame } =
         await this.prismaService.boardGame.update({
-          data: {
-            ...updateBoardGameDto,
-            boardGameGenres: {
-              create: genreIdsToBeCreated.map((genreId) => ({ genreId })),
-              delete: boardGameGenreidsToBeDeleted.map((id) => ({ id })),
-            },
-          },
+          data,
           where: { id },
           include: {
             boardGameGenres: {

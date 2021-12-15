@@ -1,4 +1,8 @@
-import { CreateBoardGameDto } from './create-board-game.dto';
-import { PartialType } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
-export class UpdateBoardGameDto extends PartialType(CreateBoardGameDto) {}
+import { CreateBoardGameDto } from './create-board-game.dto';
+
+export class UpdateBoardGameDto extends PartialType(CreateBoardGameDto) {
+  @ApiProperty()
+  thumbnailUrl?: string;
+}

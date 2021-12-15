@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { AdminUser } from './vo/admin-user.vo';
 import { ApiAlreadyRegisteredErrorResponse } from 'src/libs/http-exceptions/api-has-reference-error-response';
 import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
 import { Prisma } from 'prisma/prisma-client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AdminUser } from './vo/admin-user.vo';
 import { UserListItem } from './vo/user-list-item.vo';
 
 @Injectable()

@@ -8,12 +8,15 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { AdminBoardGameService } from './admin-board-game.service';
 import {
   ApiBearerAuth,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -36,6 +39,8 @@ import { ApiDeleteAdminBoardGameIdResData } from './schemas/api-delete-admin-boa
 import { ApiGetAdminBoardGameListResData } from './schemas/api-get-admin-board-game-list-res-data.schema';
 import { ErrorCode } from 'src/libs/http-exceptions/error-codes';
 import { ApiGetAdminBoardGameIdResData } from './schemas/api-get-admin-board-game-id-res-data.schema';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FirebaseService } from 'src/firebase/firebase.service';
 
 @ApiTags(SwaggerTag.AdminBoardGame)
 @ApiBearerAuth()
@@ -46,7 +51,10 @@ import { ApiGetAdminBoardGameIdResData } from './schemas/api-get-admin-board-gam
 @ApiForbiddenResponse(ErrorCode.NoPermission)
 @Controller('admin/board-game')
 export class AdminBoardGameController {
-  constructor(private readonly adminBoardGameService: AdminBoardGameService) {}
+  constructor(
+    private readonly adminBoardGameService: AdminBoardGameService,
+    private readonly firebaseService: FirebaseService,
+  ) {}
 
   @Post()
   @ApiCreatedResponse({
@@ -122,5 +130,14 @@ export class AdminBoardGameController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     const boardGame = await this.adminBoardGameService.remove(+id);
     return { boardGame };
+  }
+
+  @Post('upload')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return {
+      file: null,
+    };
   }
 }

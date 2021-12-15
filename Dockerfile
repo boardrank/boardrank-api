@@ -25,6 +25,7 @@ ENV NODE_ENV production
 ENV DATABASE_URL mysql://fine:fine@192.168.100.130:3306/board_rank_dev
 ENV OAUTH_GOOGLE_CLIENT_ID 47989076113-v9i17kn2i3bku3ko07pu287du8akot88.apps.googleusercontent.com
 ENV JWT_SECRET JWT_SECRET
+ENV FIREBASE_STORAGE_BUCKET board-rank.appspot.com
 
 EXPOSE 3000
 

@@ -21,6 +21,10 @@
 
 ## Usage
 
+### Firebase Service Account Key
+
+Firebase Console에서 서비스 계정 키 생성 후 다운받은 파일을 /src/firebase/serviceAccountKey.json으로 이동
+
 ### Installation
 
 ```bash

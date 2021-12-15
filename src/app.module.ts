@@ -29,6 +29,7 @@ import { UserModule } from './user/user.module';
         DATABASE_URL: Joi.string().required(),
         OAUTH_GOOGLE_CLIENT_ID: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
+        FIREBASE_STORAGE_BUCKET: Joi.string().required(),
       }),
     }),
     BoardGameModule,

@@ -39,3 +39,5 @@ dev-tools
 # Openapi generator cli test
 out
 
+# Firebase Service Account Key
+src/firebase/serviceAccountKey.*

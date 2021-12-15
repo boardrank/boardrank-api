@@ -41,6 +41,7 @@ import { ErrorCode } from 'src/libs/http-exceptions/error-codes';
 import { ApiGetAdminBoardGameIdResData } from './schemas/api-get-admin-board-game-id-res-data.schema';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FirebaseService } from 'src/firebase/firebase.service';
+import { UploadFileService } from 'src/upload-file/upload-file.service';
 
 @ApiTags(SwaggerTag.AdminBoardGame)
 @ApiBearerAuth()
@@ -53,7 +54,7 @@ import { FirebaseService } from 'src/firebase/firebase.service';
 export class AdminBoardGameController {
   constructor(
     private readonly adminBoardGameService: AdminBoardGameService,
-    private readonly firebaseService: FirebaseService,
+    private readonly uploadFileService: UploadFileService,
   ) {}
 
   @Post()
@@ -136,8 +137,9 @@ export class AdminBoardGameController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    const url = await this.uploadFileService.uploadBoardGameImage(file);
     return {
-      file: null,
+      file: url,
     };
   }
 }

@@ -41,3 +41,5 @@ out
 
 # Firebase Service Account Key
 src/firebase/serviceAccountKey.*
+
+temp

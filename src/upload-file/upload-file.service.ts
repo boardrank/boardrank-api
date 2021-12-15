@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { FirebaseService } from 'src/firebase/firebase.service';
+import Jimp from 'jimp/es';
 import fs from 'fs';
-import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ResizeFile {
@@ -57,7 +57,9 @@ export class UploadFileService {
       /**
        * buffer to file
        */
-      await sharp(file.buffer).toFile(filePath);
+      const image = await Jimp.read(file.buffer);
+      await image.writeAsync(filePath);
+
       /**
        * upload to firebase storage
        */
@@ -98,7 +100,11 @@ export class UploadFileService {
           this.resizeQueue.shift();
         const filePath = `temp/${width}/${fileName}`;
         try {
-          await sharp(file.buffer).resize(width).toFile(filePath);
+          const image = await Jimp.read(file.buffer);
+          const { bitmap } = image;
+          const ratio = bitmap.height / bitmap.width;
+          await image.resize(width, width * ratio).writeAsync(filePath);
+
           const url = await this.firebaseService.uploadFile(
             filePath,
             `${baseUrl}/${width}/${fileName}`,

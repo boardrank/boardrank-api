@@ -5,8 +5,6 @@ WORKDIR /app
 
 COPY . .
 
-ARG DATABASE_URL mysql://fine:fine@192.168.100.130:3306/board_rank_dev
-
 RUN yarn --network-timeout 600000 && yarn build 
 RUN rm -rf node_modules && yarn --production --network-timeout 600000
 

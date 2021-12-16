@@ -5,5 +5,5 @@ export class ApiPatchAdminBoardGameIdReqBody {
   @ApiProperty({
     type: () => UpdateBoardGameDto,
   })
-  boardGame: UpdateBoardGameDto;
+  boardGame: string | UpdateBoardGameDto;
 }

@@ -25,12 +25,14 @@ import { ApiInvalidParamErrorResponse } from 'src/libs/http-exceptions/api-inval
 import { ApiInvalidTokenErrorResponse } from 'src/libs/http-exceptions/api-invalid-token-error-response';
 import { ApiNoPermissionErrorResponse } from 'src/libs/http-exceptions/api-no-permission-error-response';
 import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found-error-response';
+import { ApiPatchAdminBoardGameIdReqBody } from 'src/admin-board-game/schemas/api-patch-admin-board-game-id-req-body.schema';
 import { ApiPatchAdminBoardGameIdResData } from 'src/admin-board-game/schemas/api-patch-admin-board-game-id-res-data.schema';
 import { ApiPatchAdminGenreIdResData } from 'src/admin-genre/schemas/api-patch-admin-genre-id-res-data.schema';
 import { ApiPatchAdminGenreRearrangeIdResData } from 'src/admin-genre/schemas/api-patch-admin-genre-rearrange-id-res-data.schema';
 import { ApiPatchAdminUserIdResData } from 'src/admin-user/schemas/api-patch-admin-user-id-res-data.schema';
 import { ApiPatchBoardGameReplyResData } from 'src/board-game-reply/vo/api-patch-board-game-reply-id-res-data.schema';
 import { ApiPatchUserResData } from 'src/user/schemas/api-patch-user-res-data.schema';
+import { ApiPostAdminBoardGameReqBody } from 'src/admin-board-game/schemas/api-post-admin-board-game-req-body.schema';
 import { ApiPostAdminBoardGameResData } from 'src/admin-board-game/schemas/api-post-admin-board-game-res-data.schema';
 import { ApiPostAdminGenreResData } from 'src/admin-genre/schemas/api-post-admin-genre-res-data.schema';
 import { ApiPostAuthRefreshResData } from 'src/auth/schemas/api-post-auth-refresh-res-data.schema';
@@ -66,9 +68,11 @@ export default [
   ApiPatchAdminUserIdResData,
   ApiDeleteAdminUserIdResData,
   // AdminBoardGame
+  ApiPostAdminBoardGameReqBody,
   ApiPostAdminBoardGameResData,
   ApiGetAdminBoardGameListResData,
   ApiGetAdminBoardGameIdResData,
+  ApiPatchAdminBoardGameIdReqBody,
   ApiPatchAdminBoardGameIdResData,
   ApiDeleteAdminBoardGameIdResData,
   // AdminGenre

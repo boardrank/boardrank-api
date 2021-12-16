@@ -45,6 +45,7 @@ export class CreateBoardGameDto {
   age: number;
 
   @ApiProperty({
+    type: [Number],
     example: [3, 4, 5],
   })
   genreIds: number[];

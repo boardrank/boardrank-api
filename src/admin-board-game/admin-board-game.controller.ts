@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -16,6 +17,8 @@ import {
 import { AdminBoardGameService } from './admin-board-game.service';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -40,6 +43,9 @@ import { ErrorCode } from 'src/libs/http-exceptions/error-codes';
 import { ApiGetAdminBoardGameIdResData } from './schemas/api-get-admin-board-game-id-res-data.schema';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadFileService } from 'src/upload-file/upload-file.service';
+import { CreateBoardGameDto } from './dto/create-board-game.dto';
+import { UpdateBoardGameDto } from './dto/update-board-game.dto';
+import { Request } from 'express';
 
 @ApiTags(SwaggerTag.AdminBoardGame)
 @ApiBearerAuth()
@@ -56,16 +62,34 @@ export class AdminBoardGameController {
   ) {}
 
   @Post()
+  @ApiConsumes('application/json', 'multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        boardGame: { $ref: getSchemaPath(CreateBoardGameDto) },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @ApiCreatedResponse({
     schema: { $ref: getSchemaPath(ApiPostAdminBoardGameResData) },
   })
   async create(
+    @Req() req: Request,
     @Body() body: ApiPostAdminBoardGameReqBody,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<ApiPostAdminBoardGameResData> {
+    const newBoardGame =
+      req.headers['content-type'] === 'application/json'
+        ? body.boardGame
+        : JSON.parse(body.boardGame as string);
     const boardGame = await this.adminBoardGameService.create(
-      body.boardGame,
+      newBoardGame,
       file,
     );
     return { boardGame };
@@ -107,6 +131,20 @@ export class AdminBoardGameController {
   }
 
   @Patch(':id')
+  @ApiConsumes('application/json', 'multipart/form-data')
+  @ApiBody({
+    schema: {
+      $ref: getSchemaPath(ApiPatchAdminBoardGameIdReqBody),
+      type: 'object',
+      properties: {
+        boardGame: { $ref: getSchemaPath(UpdateBoardGameDto) },
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
   @ApiOkResponse({
     schema: { $ref: getSchemaPath(ApiPatchAdminBoardGameIdResData) },
@@ -115,13 +153,18 @@ export class AdminBoardGameController {
     AdminBoardGameService.ErrorNotFoundBoardGame.toApiResponseOptions(),
   )
   async update(
+    @Req() req: Request,
     @Param('id', ParseIntPipe) id: number,
     @Body() body: ApiPatchAdminBoardGameIdReqBody,
     @UploadedFile() file?: Express.Multer.File,
   ): Promise<ApiPatchAdminBoardGameIdResData> {
+    const newBoardGame =
+      req.headers['content-type'] === 'application/json'
+        ? body.boardGame
+        : JSON.parse(body.boardGame as string);
     const boardGame = await this.adminBoardGameService.update(
       id,
-      body.boardGame,
+      newBoardGame,
       file,
     );
     return { boardGame };
@@ -140,6 +183,7 @@ export class AdminBoardGameController {
   }
 
   @Post('upload')
+  @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const url = await this.uploadFileService.uploadBoardGameImage(file);

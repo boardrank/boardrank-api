@@ -5,5 +5,5 @@ export class ApiPostAdminBoardGameReqBody {
   @ApiProperty({
     type: () => CreateBoardGameDto,
   })
-  boardGame: CreateBoardGameDto;
+  boardGame: string | CreateBoardGameDto;
 }

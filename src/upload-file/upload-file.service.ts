@@ -15,7 +15,7 @@ interface ResizeFile {
 @Injectable()
 export class UploadFileService {
   logger = new Logger('UploadFileService');
-  prefix = process.env.NODE_ENV === 'production' ? '' : 'dev';
+  prefix = process.env.NODE_ENV === 'production' ? '' : 'dev/';
   resizeQueue: ResizeFile[] = [];
   isResizing = false;
 
@@ -50,7 +50,7 @@ export class UploadFileService {
     widths: number[],
   ) {
     try {
-      const baseUrl = `${this.prefix}/image/${detailPath}`;
+      const baseUrl = `${this.prefix}image/${detailPath}`;
       const fileName = uuidv4() + '.jpeg';
       const filePath = `temp/origin/${fileName}`;
 

@@ -24,13 +24,14 @@ export class UploadFileService {
     if (!fs.existsSync('temp/origin')) fs.mkdirSync('temp/origin');
     if (!fs.existsSync('temp/512')) fs.mkdirSync('temp/512');
     if (!fs.existsSync('temp/256')) fs.mkdirSync('temp/256');
+    if (!fs.existsSync('temp/128')) fs.mkdirSync('temp/128');
     if (!fs.existsSync('temp/96')) fs.mkdirSync('temp/96');
     if (!fs.existsSync('temp/48')) fs.mkdirSync('temp/48');
   }
 
   async uploadBoardGameImage(file: Express.Multer.File) {
     try {
-      return await this.uploadImage(file, 'board-game', [512, 256]);
+      return await this.uploadImage(file, 'board-game', [512, 256, 128]);
     } catch (error) {
       throw error;
     }

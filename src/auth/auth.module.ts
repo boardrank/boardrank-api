@@ -5,6 +5,7 @@ import { JwtStrategy } from 'src/libs/strategies/jwt.strategy';
 import { Module } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
+import { UploadFileModule } from 'src/upload-file/upload-file.module';
 
 export const DynamicJwtModule = JwtModule.register({
   signOptions: {
@@ -13,7 +14,7 @@ export const DynamicJwtModule = JwtModule.register({
 });
 
 @Module({
-  imports: [DynamicJwtModule],
+  imports: [DynamicJwtModule, UploadFileModule],
   controllers: [AuthController],
   providers: [AuthService, PrismaService, UserService, JwtStrategy],
 })

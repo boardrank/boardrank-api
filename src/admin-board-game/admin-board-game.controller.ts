@@ -181,14 +181,4 @@ export class AdminBoardGameController {
     const boardGame = await this.adminBoardGameService.remove(+id);
     return { boardGame };
   }
-
-  @Post('upload')
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const url = await this.uploadFileService.uploadBoardGameImage(file);
-    return {
-      file: url,
-    };
-  }
 }

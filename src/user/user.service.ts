@@ -5,6 +5,7 @@ import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './vo/user.vo';
+import { UploadFileService } from 'src/upload-file/upload-file.service';
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,10 @@ export class UserService {
     '해당 유저를 찾을 수 없습니다.',
   );
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly uploadFileService: UploadFileService,
+  ) {}
 
   async findOneById(id: number): Promise<User> {
     try {
@@ -36,8 +40,18 @@ export class UserService {
     }
   }
 
-  async updateProfile(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateProfile(
+    id: number,
+    updateUserDto: UpdateUserDto,
+    file?: Express.Multer.File,
+  ): Promise<User> {
     try {
+      if (file) {
+        updateUserDto.profileUrl = await this.uploadFileService.uploadProfile(
+          file,
+        );
+      }
+
       return await this.prismaService.user.update({
         select: {
           id: true,

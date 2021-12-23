@@ -8,7 +8,10 @@ import extraModels from 'src/libs/swaggers/extraModels';
 
 export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    cors: true,
+    cors: {
+      credentials: true,
+      origin: /^http(s*):\/\/([a-z\-]+.)*(boardrank.kr|localhost:3000)/i,
+    },
   });
   const globalPrefix = process.env.GLOBAL_PREFIX;
   if (globalPrefix) app.setGlobalPrefix(globalPrefix);

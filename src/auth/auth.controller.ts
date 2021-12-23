@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -9,6 +9,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { Response } from 'express';
 import { SwaggerTag } from 'src/libs/constants';
 import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { AuthService } from './auth.service';
@@ -33,9 +34,14 @@ export class AuthController {
     AuthService.ErrorAlreadyRegistered.toApiResponseOptions(),
   )
   async signUp(
+    @Res({ passthrough: true }) res: Response,
     @Body() body: ApiPostAuthSignUpReqBody,
   ): Promise<ApiPostAuthSignUpResData> {
-    return await this.authService.signUp(body.idToken);
+    const { accessToken, refreshToken } = await this.authService.signUp(
+      body.idToken,
+    );
+    res.cookie('__rt', refreshToken, { httpOnly: true, secure: true });
+    return { accessToken, refreshToken };
   }
 
   @Post('sign-in')
@@ -50,9 +56,14 @@ export class AuthController {
     HttpExceptionFilter.ErrorDormantStatus.toApiResponseOptions(),
   )
   async signIn(
+    @Res({ passthrough: true }) res: Response,
     @Body() body: ApiPostAuthSignInReqBody,
   ): Promise<ApiPostAuthSignInResData> {
-    return await this.authService.signIn(body.idToken);
+    const { accessToken, refreshToken } = await this.authService.signIn(
+      body.idToken,
+    );
+    res.cookie('__rt', refreshToken, { httpOnly: true, secure: true });
+    return { accessToken, refreshToken };
   }
 
   @Post('refresh')
@@ -66,8 +77,13 @@ export class AuthController {
     HttpExceptionFilter.ErrorDormantStatus.toApiResponseOptions(),
   )
   async refresh(
+    @Res({ passthrough: true }) res: Response,
     @Body() body: ApiPostAuthRefreshReqBody,
   ): Promise<ApiPostAuthRefreshResData> {
-    return await this.authService.refresh(body.refreshToken);
+    const { accessToken, refreshToken } = await this.authService.refresh(
+      body.refreshToken,
+    );
+    res.cookie('__rt', refreshToken, { httpOnly: true, secure: true });
+    return { accessToken, refreshToken };
   }
 }

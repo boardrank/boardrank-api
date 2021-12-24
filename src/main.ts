@@ -5,6 +5,7 @@ import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerTag } from 'src/libs/constants';
 import extraModels from 'src/libs/swaggers/extraModels';
+import cookieParser from 'cookie-parser';
 
 export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -40,6 +41,8 @@ export async function bootstrap() {
   SwaggerModule.setup(swaggerPath, app, document);
 
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.use(cookieParser());
 
   await app.listen(process.env.PORT || 3000);
 }

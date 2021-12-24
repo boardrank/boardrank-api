@@ -99,6 +99,14 @@ model BoardGameReply {
   @@map("board_game_reply")
 }
 
+model RefreshToken {
+  id Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  isUsed Boolean @map("is_used") @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
 enum Role {
   ADMIN
   MEMBER

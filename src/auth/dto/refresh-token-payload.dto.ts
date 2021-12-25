@@ -7,7 +7,7 @@ export class RefreshTokenPayloadDto {
   iss: string;
 
   @ApiProperty({
-    description: 'User identifier, PK',
+    description: 'Refresh Token identifier',
   })
-  aud: number;
+  sub: number;
 }

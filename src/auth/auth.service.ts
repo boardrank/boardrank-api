@@ -125,12 +125,42 @@ export class AuthService {
     }
   }
 
-  async issueRefreshToken(id: number): Promise<string> {
+  async issueRefreshToken(
+    userId: number,
+    prevId: number | null = null,
+  ): Promise<string> {
     try {
+      const queries = [];
+      queries.push(
+        this.prismaService.refreshToken.create({
+          select: {
+            id: true,
+          },
+          data: {
+            userId,
+          },
+        }),
+      );
+      if (prevId) {
+        queries.push(
+          this.prismaService.refreshToken.update({
+            data: {
+              isUsed: true,
+            },
+            where: {
+              id: prevId,
+            },
+          }),
+        );
+      }
+
+      const [{ id }] = await this.prismaService.$transaction(queries);
+
       const payload: RefreshTokenPayloadDto = {
         iss: AuthService.ISS,
-        aud: id,
+        sub: id,
       };
+
       return this.jwtService.sign(payload, {
         secret: process.env.JWT_SECRET,
         expiresIn: AuthService.REFRESH_EXPIRES_IN,
@@ -156,12 +186,19 @@ export class AuthService {
 
   async issueTokensByRefreshToken(token: string): Promise<ApiAuthResponse> {
     try {
-      const { aud: id } = await this.jwtService.verifyAsync(token, {
+      const { sub: id } = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
 
+      const { userId, isUsed } =
+        await this.prismaService.refreshToken.findUnique({
+          where: { id },
+        });
+
+      if (isUsed) throw new BadRequestException(AuthService.ErrorInvalidToken);
+
       const user = await this.prismaService.user.findUnique({
-        where: { id },
+        where: { id: userId },
       });
 
       if (!user) {
@@ -173,7 +210,7 @@ export class AuthService {
       }
 
       const [refreshToken, accessToken] = await Promise.all([
-        this.issueRefreshToken(id),
+        this.issueRefreshToken(userId, id),
         this.issueAccessToken(user),
       ]);
 

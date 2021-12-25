@@ -45,7 +45,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
     });
-    return { accessToken, refreshToken };
+    return { accessToken };
   }
 
   @Post('sign-in')
@@ -70,7 +70,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
     });
-    return { accessToken, refreshToken };
+    return { accessToken };
   }
 
   @Post('refresh')
@@ -95,6 +95,6 @@ export class AuthController {
       httpOnly: true,
       secure: true,
     });
-    return { accessToken, refreshToken };
+    return { accessToken };
   }
 }

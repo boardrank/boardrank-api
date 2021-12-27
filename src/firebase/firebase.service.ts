@@ -12,7 +12,7 @@ export class FirebaseService {
         credential: admin.credential.cert({
           projectId: serviceAccountKey.project_id,
           clientEmail: serviceAccountKey.client_id,
-          privateKey: serviceAccountKey.private_key,
+          privateKey: serviceAccountKey.private_key.replace(/\\n/g, '\n'),
         }),
         storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
       });

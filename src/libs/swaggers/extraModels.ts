@@ -41,6 +41,7 @@ import { ApiPostAuthSignUpResData } from 'src/auth/schemas/api-post-auth-sign-up
 import { ApiPostBoardGameReplyResData } from 'src/board-game-reply/vo/api-post-board-game-reply-res-data.schema';
 import { ApiPostBoardGameScoreResData } from 'src/board-game-score/schemas/api-post-board-game-score-res-data.schema';
 import { ApiUnauthorizedErrorResponse } from 'src/libs/http-exceptions/api-unauthorized-error-response';
+import { ApiPatchUserReqBody } from 'src/user/schemas/api-patch-user-req-body.schema';
 
 export default [
   // Auth
@@ -61,7 +62,9 @@ export default [
   ApiGetGenreListResData,
   // User
   ApiGetUserResData,
+  ApiPatchUserReqBody,
   ApiPatchUserResData,
+  ApiPatchUserReqBody,
   ApiGetUserIdResData,
   // AdminUser
   ApiGetAdminUserListResData,

@@ -10,6 +10,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { refreshToken } from 'firebase-admin/app';
 import { SwaggerTag } from 'src/libs/constants';
 import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { AuthService } from './auth.service';
@@ -88,13 +89,18 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @Body() body: ApiPostAuthRefreshReqBody,
   ): Promise<ApiPostAuthRefreshResData> {
-    const { accessToken, refreshToken } = await this.authService.refresh(
-      req.cookies[REFRESH_TOKEN_KEY] || body.refreshToken,
-    );
-    res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
-      httpOnly: true,
-      secure: true,
-    });
-    return { accessToken };
+    try {
+      const { accessToken, refreshToken } = await this.authService.refresh(
+        req.cookies[REFRESH_TOKEN_KEY] || body.refreshToken,
+      );
+      res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
+        httpOnly: true,
+        secure: true,
+      });
+      return { accessToken };
+    } catch (error) {
+      res.clearCookie(REFRESH_TOKEN_KEY);
+      throw error;
+    }
   }
 }

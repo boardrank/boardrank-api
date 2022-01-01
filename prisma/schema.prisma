@@ -100,9 +100,9 @@ model BoardGameReply {
 }
 
 model RefreshToken {
-  id Int @id @default(autoincrement())
-  userId Int @map("user_id")
-  isUsed Boolean @map("is_used") @default(false)
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  isUsed    Boolean  @default(false) @map("is_used")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 }

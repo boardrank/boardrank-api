@@ -15,12 +15,12 @@ import { ApiNotFoundErrorResponse } from 'src/libs/http-exceptions/api-not-found
 import { CreateAccessTokenDto } from './dto/create-access-token.dto';
 import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { JwtService } from '@nestjs/jwt';
+import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
 import { UserService } from 'src/user/user.service';
 import { verifyIdToken } from 'src/libs/auth-google';
-import { Prisma } from '.prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -189,6 +189,8 @@ export class AuthService {
       const { sub: id } = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
+
+      if (!id) throw new BadRequestException(AuthService.ErrorInvalidToken);
 
       const { userId, isUsed } =
         await this.prismaService.refreshToken.findUnique({

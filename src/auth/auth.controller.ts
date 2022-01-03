@@ -116,6 +116,9 @@ export class AuthController {
   @HttpCode(200)
   @ApiOkResponse(null)
   signOut(@Res({ passthrough: true }) res: Response) {
+    if (res.cookie[REFRESH_TOKEN_KEY]) {
+      this.authService.removeRefreshToken(res.cookie[REFRESH_TOKEN_KEY]);
+    }
     res.clearCookie(REFRESH_TOKEN_KEY);
     return null;
   }

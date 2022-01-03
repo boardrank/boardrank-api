@@ -227,4 +227,21 @@ export class AuthService {
       throw error;
     }
   }
+
+  async removeRefreshToken(token: string): Promise<void> {
+    try {
+      const { sub: id } = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+
+      if (!id) return;
+
+      await this.prismaService.refreshToken.update({
+        where: { id },
+        data: { isUsed: true },
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }

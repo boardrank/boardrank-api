@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
@@ -102,5 +110,13 @@ export class AuthController {
       res.clearCookie(REFRESH_TOKEN_KEY);
       throw error;
     }
+  }
+
+  @Delete('sign-out')
+  @HttpCode(200)
+  @ApiOkResponse(null)
+  signOut(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie(REFRESH_TOKEN_KEY);
+    return null;
   }
 }

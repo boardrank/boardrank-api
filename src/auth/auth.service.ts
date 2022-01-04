@@ -21,7 +21,10 @@ import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { Role } from './entities/role';
 import { UserService } from 'src/user/user.service';
 import { verifyIdToken } from 'src/libs/auth-google';
+import { Response } from 'express';
 
+export const REFRESH_TOKEN_KEY = '__rt';
+export const REFRESH_TOKEN_MAX_AGE = 30 * 24 * 60 * 60; // 30d
 @Injectable()
 export class AuthService {
   static ErrorInvalidToken = new ApiInvalidTokenErrorResponse(
@@ -243,5 +246,13 @@ export class AuthService {
     } catch (error) {
       throw error;
     }
+  }
+
+  setRefreshTokenToCookie(res: Response, refreshToken: string) {
+    res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: REFRESH_TOKEN_MAX_AGE,
+    });
   }
 }

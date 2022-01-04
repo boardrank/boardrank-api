@@ -21,7 +21,7 @@ import { Request, Response } from 'express';
 import { refreshToken } from 'firebase-admin/app';
 import { SwaggerTag } from 'src/libs/constants';
 import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
-import { AuthService } from './auth.service';
+import { AuthService, REFRESH_TOKEN_KEY } from './auth.service';
 import { ApiPostAuthRefreshReqBody } from './schemas/api-post-auth-refresh-req-body.schema';
 import { ApiPostAuthRefreshResData } from './schemas/api-post-auth-refresh-res-data.schema';
 import { ApiPostAuthSignInReqBody } from './schemas/api-post-auth-sign-in-req-body.schema';
@@ -29,7 +29,6 @@ import { ApiPostAuthSignInResData } from './schemas/api-post-auth-sign-in-res-da
 import { ApiPostAuthSignUpReqBody } from './schemas/api-post-auth-sign-up-req-body.schema';
 import { ApiPostAuthSignUpResData } from './schemas/api-post-auth-sign-up-res-data.schema';
 
-const REFRESH_TOKEN_KEY = '__rt';
 @ApiTags(SwaggerTag.Authentication)
 @Controller('auth')
 export class AuthController {
@@ -50,10 +49,7 @@ export class AuthController {
     const { accessToken, refreshToken } = await this.authService.signUp(
       body.idToken,
     );
-    res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
-      httpOnly: true,
-      secure: true,
-    });
+    this.authService.setRefreshTokenToCookie(res, refreshToken);
     return { accessToken };
   }
 
@@ -75,10 +71,7 @@ export class AuthController {
     const { accessToken, refreshToken } = await this.authService.signIn(
       body.idToken,
     );
-    res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
-      httpOnly: true,
-      secure: true,
-    });
+    this.authService.setRefreshTokenToCookie(res, refreshToken);
     return { accessToken };
   }
 
@@ -101,10 +94,7 @@ export class AuthController {
       const { accessToken, refreshToken } = await this.authService.refresh(
         req.cookies[REFRESH_TOKEN_KEY] || body.refreshToken,
       );
-      res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
-        httpOnly: true,
-        secure: true,
-      });
+      this.authService.setRefreshTokenToCookie(res, refreshToken);
       return { accessToken };
     } catch (error) {
       res.clearCookie(REFRESH_TOKEN_KEY);

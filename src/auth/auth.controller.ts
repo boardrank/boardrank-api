@@ -88,11 +88,10 @@ export class AuthController {
   async refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-    @Body() body: ApiPostAuthRefreshReqBody,
   ): Promise<ApiPostAuthRefreshResData> {
     try {
       const { accessToken, refreshToken } = await this.authService.refresh(
-        req.cookies[REFRESH_TOKEN_KEY] || body.refreshToken,
+        req.cookies[REFRESH_TOKEN_KEY],
       );
       this.authService.setRefreshTokenToCookie(res, refreshToken);
       return { accessToken };

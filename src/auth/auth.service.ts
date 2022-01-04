@@ -18,13 +18,13 @@ import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '.prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
+import { Response } from 'express';
 import { Role } from './entities/role';
 import { UserService } from 'src/user/user.service';
 import { verifyIdToken } from 'src/libs/auth-google';
-import { Response } from 'express';
 
 export const REFRESH_TOKEN_KEY = '__rt';
-export const REFRESH_TOKEN_MAX_AGE = 30 * 24 * 60 * 60; // 30d
+export const REFRESH_TOKEN_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // 30d
 @Injectable()
 export class AuthService {
   static ErrorInvalidToken = new ApiInvalidTokenErrorResponse(
@@ -253,6 +253,7 @@ export class AuthService {
       httpOnly: true,
       secure: true,
       maxAge: REFRESH_TOKEN_MAX_AGE,
+      sameSite: 'none',
     });
   }
 }

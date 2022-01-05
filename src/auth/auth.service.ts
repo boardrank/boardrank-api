@@ -251,8 +251,9 @@ export class AuthService {
   setRefreshTokenToCookie(res: Response, refreshToken: string) {
     res.cookie(REFRESH_TOKEN_KEY, refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: REFRESH_TOKEN_MAX_AGE,
     });
+    res.setHeader('Access-Control-Expose-Headers', '*');
   }
 }

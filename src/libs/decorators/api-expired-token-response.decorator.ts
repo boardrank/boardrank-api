@@ -1,5 +1,7 @@
 import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
-import { ApiUnauthorizedResponse as Response } from '@nestjs/swagger';
+import { ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 export const ApiExpiredTokenResponse = () =>
-  Response(HttpExceptionFilter.ErrorExpiredToken.toApiResponseOptions());
+  ApiUnauthorizedResponse(
+    HttpExceptionFilter.ErrorExpiredToken.toApiResponseOptions(),
+  );

@@ -18,7 +18,6 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { refreshToken } from 'firebase-admin/app';
 import { SwaggerTag } from 'src/libs/constants';
 import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { AuthService, REFRESH_TOKEN_KEY } from './auth.service';

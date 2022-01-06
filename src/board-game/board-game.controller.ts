@@ -17,7 +17,6 @@ import { Request } from 'express';
 import { ApiGetBoardGameIdResData } from './schemas/api-get-board-game-id-res-data.schema';
 
 @ApiTags(SwaggerTag.BoardGame)
-@ApiBearerAuth()
 @Controller('board-game')
 export class BoardGameController {
   constructor(private readonly boardGameService: BoardGameService) {}

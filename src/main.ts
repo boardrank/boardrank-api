@@ -11,7 +11,7 @@ export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       credentials: true,
-      origin: /^http(s*):\/\/([a-z\-]+.)*(boardrank.kr|localhost:3000)/i,
+      origin: /^http(s?):\/\/([a-z\-]+.)?(boardrank.kr|localhost:3000)/i,
     },
   });
   const globalPrefix = process.env.GLOBAL_PREFIX;

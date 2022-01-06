@@ -13,7 +13,6 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -31,6 +30,7 @@ import { ApiDeleteBoardGameReplyIdResData } from './vo/api-delete-board-game-rep
 import { ApiPatchBoardGameReplyResData } from './vo/api-patch-board-game-reply-id-res-data.schema';
 import { ApiPostBoardGameReplyReqBody } from './vo/api-post-board-game-reply-req-body.schema';
 import { ApiPostBoardGameReplyResData } from './vo/api-post-board-game-reply-res-data.schema';
+import { ApiUnauthorizedResponse } from 'src/libs/decorators/api-unauthorized-response.decorator';
 
 @ApiTags(SwaggerTag.BoardGameReply)
 @ApiBearerAuth()

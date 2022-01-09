@@ -42,6 +42,7 @@ import { ApiPostBoardGameReplyResData } from 'src/board-game-reply/vo/api-post-b
 import { ApiPostBoardGameScoreResData } from 'src/board-game-score/schemas/api-post-board-game-score-res-data.schema';
 import { ApiUnauthorizedErrorResponse } from 'src/libs/http-exceptions/api-unauthorized-error-response';
 import { ApiPatchUserReqBody } from 'src/user/schemas/api-patch-user-req-body.schema';
+import { ApiExpiredTokenErrorResponse } from '../http-exceptions/api-expired-token-error-response';
 
 export default [
   // Auth
@@ -91,6 +92,7 @@ export default [
   ApiInvalidTokenErrorResponse,
   ApiInvalidParamErrorResponse,
   ApiUnauthorizedErrorResponse,
+  ApiExpiredTokenErrorResponse,
   ApiForbiddenErrorResponse,
   ApiNoPermissionErrorResponse,
   ApiBlockStatusErrorResponse,

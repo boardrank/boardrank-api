@@ -22,4 +22,9 @@ export class BoardGameScore {
     example: 3,
   })
   boardGameId: number;
+
+  @ApiProperty({
+    example: '너무 재밌어요!!',
+  })
+  comment: string;
 }

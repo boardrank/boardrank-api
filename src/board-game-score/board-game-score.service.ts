@@ -18,6 +18,7 @@ export class BoardGameScoreService {
   ) {
     try {
       const boardGameScore = await this.prismaService.boardGameScore.findFirst({
+        select: { id: true },
         where: {
           userId,
           boardGameId: createBoardGameScoreDto.boardGameId,

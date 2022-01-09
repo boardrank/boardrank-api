@@ -1,9 +1,9 @@
 import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -17,6 +17,7 @@ import { Role } from 'src/auth/entities/role';
 import { BoardGameScoreService } from './board-game-score.service';
 import { ApiPostBoardGameScoreReqBody } from './schemas/api-post-board-game-score-req-body.schema';
 import { ApiPostBoardGameScoreResData } from './schemas/api-post-board-game-score-res-data.schema';
+import { ApiUnauthorizedResponse } from 'src/libs/decorators/api-unauthorized-response.decorator';
 
 @ApiTags(SwaggerTag.BoardGameScore)
 @ApiBearerAuth()
@@ -32,6 +33,9 @@ export class BoardGameScoreController {
   })
   @ApiUnauthorizedResponse()
   @ApiExpiredTokenResponse()
+  @ApiConflictResponse(
+    BoardGameScoreService.ErrorAlreadyRegistered.toApiResponseOptions(),
+  )
   async create(
     @Req() req: Request,
     @Body() body: ApiPostBoardGameScoreReqBody,

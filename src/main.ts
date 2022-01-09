@@ -4,8 +4,8 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from 'src/libs/filters/http-exception.filter';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerTag } from 'src/libs/constants';
-import extraModels from 'src/libs/swaggers/extraModels';
 import cookieParser from 'cookie-parser';
+import extraModels from 'src/libs/swaggers/extraModels';
 
 export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

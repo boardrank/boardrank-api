@@ -27,4 +27,10 @@ export class BoardGameScore {
     example: '너무 재밌어요!!',
   })
   comment: string;
+
+  @ApiProperty({
+    type: Date,
+    example: '2022-01-09T07:32:50.127Z',
+  })
+  createdAt: Date;
 }

@@ -195,6 +195,7 @@ export class BoardGameService {
                 id: true,
                 score: true,
                 comment: true,
+                createdAt: true,
                 userId: true,
                 boardGameId: true,
                 user: {

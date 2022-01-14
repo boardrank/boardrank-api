@@ -64,24 +64,46 @@ export class BoardGameService {
 
       // [ { boardGameId: 1, _avg: { score: 8 } } ]
       const averageScores = {};
+      const scoreCounts = {};
       (
         await this.prismaService.boardGameScore.groupBy({
           by: ['boardGameId'],
           _avg: {
             score: true,
           },
+          _count: {
+            id: true,
+          },
         })
-      ).forEach(({ boardGameId, _avg: { score } }) => {
+      ).forEach(({ boardGameId, _avg: { score }, _count: { id } }) => {
         averageScores[boardGameId] = score;
+        scoreCounts[boardGameId] = id;
       });
 
-      return boardGames.map(({ boardGameGenres, ...boardGame }) => {
-        return {
-          ...boardGame,
-          genres: boardGameGenres.map(({ genre }) => genre),
-          averageScore: averageScores[boardGame.id] || 0,
-        };
-      });
+      return boardGames
+        .map(({ boardGameGenres, ...boardGame }) => {
+          return {
+            ...boardGame,
+            genres: boardGameGenres.map(({ genre }) => genre),
+            averageScore: averageScores[boardGame.id] || 0,
+          };
+        })
+        .sort((a, b) => {
+          // 1 : 점수 내림차순
+          // 2 : 점수 평가 인원 내림차순
+          // 3 : 가나다순
+          return a.averageScore !== b.averageScore
+            ? a.averageScore > b.averageScore
+              ? -1
+              : 1
+            : (scoreCounts[a.id] || 0) !== (scoreCounts[b.id] || 0)
+            ? (scoreCounts[a.id] || 0) > (scoreCounts[b.id] || 0)
+              ? -1
+              : 1
+            : a.name > b.name
+            ? 1
+            : -1;
+        });
     } catch (error) {
       throw error;
     }
@@ -108,24 +130,43 @@ export class BoardGameService {
 
       // [ { boardGameId: 1, _avg: { score: 8 } } ]
       const averageScores = {};
+      const scoreCounts = {};
       (
         await this.prismaService.boardGameScore.groupBy({
           by: ['boardGameId'],
           _avg: {
             score: true,
           },
+          _count: {
+            id: true,
+          },
         })
-      ).forEach(({ boardGameId, _avg: { score } }) => {
+      ).forEach(({ boardGameId, _avg: { score }, _count: { id } }) => {
         averageScores[boardGameId] = score;
+        scoreCounts[boardGameId] = id;
       });
 
-      return boardGames.map(({ boardGameGenres, ...boardGame }) => {
-        return {
-          ...boardGame,
-          genres: boardGameGenres.map(({ genre }) => genre),
-          averageScore: averageScores[boardGame.id] || 0,
-        };
-      });
+      return boardGames
+        .map(({ boardGameGenres, ...boardGame }) => {
+          return {
+            ...boardGame,
+            genres: boardGameGenres.map(({ genre }) => genre),
+            averageScore: averageScores[boardGame.id] || 0,
+          };
+        })
+        .sort((a, b) => {
+          return a.averageScore !== b.averageScore
+            ? a.averageScore > b.averageScore
+              ? -1
+              : 1
+            : (scoreCounts[a.id] || 0) !== (scoreCounts[b.id] || 0)
+            ? (scoreCounts[a.id] || 0) > (scoreCounts[b.id] || 0)
+              ? -1
+              : 1
+            : a.name > b.name
+            ? 1
+            : -1;
+        });
     } catch (error) {
       throw error;
     }

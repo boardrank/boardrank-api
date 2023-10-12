@@ -11,7 +11,8 @@ export async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       credentials: true,
-      origin: /^http(s?):\/\/([a-z\-]+.)?(boardrank.kr|localhost:3000)/i,
+      origin:
+        /^http(s?):\/\/([a-z\-]+.)?(boardrank.kr|wick.kr|localhost:3000)/i,
     },
   });
   const globalPrefix = process.env.GLOBAL_PREFIX;
@@ -21,11 +22,17 @@ export async function bootstrap() {
   if (process.env.NODE_ENV !== 'production')
     title = `Board Rank(${process.env.NODE_ENV})`;
 
+  let externalDocPath = '/swagger-ui-json';
+
+  if (globalPrefix && globalPrefix !== '') {
+    externalDocPath = `/${globalPrefix}/swagger-ui-json`;
+  }
+
   const documentBuilder = new DocumentBuilder()
     .setTitle(title)
     .setDescription(`Board Rank API for ${process.env.NODE_ENV}`)
     .setVersion('1.0')
-    .setExternalDoc('JSON Specification', '/swagger-ui-json')
+    .setExternalDoc('JSON Specification', externalDocPath)
     .addBearerAuth();
 
   Object.values(SwaggerTag).forEach((value) => documentBuilder.addTag(value));
